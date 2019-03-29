@@ -25,6 +25,8 @@ class Driver
      * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="drivers")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $userId;
 

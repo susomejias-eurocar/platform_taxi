@@ -66,6 +66,13 @@ class User
     private $companys;
 
     /**
+     * @var int
+     *
+     * @ORM\OneToMany(targetEntity="Driver", mappedBy="user_id")
+     */
+    private $drivers;
+
+    /**
      * Get id
      *
      * @return integer 
