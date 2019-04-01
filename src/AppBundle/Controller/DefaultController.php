@@ -8,13 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    /**
-     * @Route("/", name="homepage")
-     * 
-     */
-    public function loginAction(Request $request)
+    public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('login/login.html.twig', array());
+        return $this->render('deafult/index.html.twig', array());
     }
 }
