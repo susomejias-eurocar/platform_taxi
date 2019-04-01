@@ -12,4 +12,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    public function register(User $user){
+
+        $this->_em->persist($user);
+
+    }
 }
