@@ -50,11 +50,17 @@ class Car
     private $version;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="string", length=255)
+     */
+    private $state;
+
+    /**
      * @var int
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="cars")
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
      */
-
     private $company;
 
     /**
@@ -180,5 +186,28 @@ class Car
     public function getCompany()
     {
         return $this->company;
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     * @return Car
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string 
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }
