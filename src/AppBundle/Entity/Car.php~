@@ -50,12 +50,18 @@ class Car
     private $version;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="company_id", type="integer")
+     * @ORM\Column(name="state", type="string", length=255)
      */
-    private $companyId;
+    private $state;
 
+    /**
+     * @var int
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="cars")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     */
+    private $company;
 
     /**
      * Get id
@@ -160,25 +166,25 @@ class Car
     }
 
     /**
-     * Set companyId
+     * Set company
      *
-     * @param integer $companyId
+     * @param \AppBundle\Entity\Company $company
      * @return Car
      */
-    public function setCompanyId($companyId)
+    public function setCompany(\AppBundle\Entity\Company $company = null)
     {
-        $this->companyId = $companyId;
+        $this->company = $company;
 
         return $this;
     }
 
     /**
-     * Get companyId
+     * Get company
      *
-     * @return integer 
+     * @return \AppBundle\Entity\Company 
      */
-    public function getCompanyId()
+    public function getCompany()
     {
-        return $this->companyId;
+        return $this->company;
     }
 }

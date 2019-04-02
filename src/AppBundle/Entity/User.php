@@ -53,7 +53,6 @@ class User implements UserInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="id_permission", type="integer")
      * @ORM\ManyToOne(targetEntity="Permission", inversedBy="user")
      * @ORM\JoinColumn(name="permission_id", referencedColumnName="id")
      */
@@ -62,16 +61,24 @@ class User implements UserInterface
     /**
      * @var int
      *
-     * @ORM\OneToMany(targetEntity="Company", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Company", mappedBy="user")
      */
     private $companys;
 
     /**
      * @var int
      *
-     * @ORM\OneToMany(targetEntity="Driver", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Driver", mappedBy="userId")
      */
     private $drivers;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->companys = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -176,43 +183,12 @@ class User implements UserInterface
     }
 
     /**
-     * Set idPermission
-     *
-     * @param integer $idPermission
-     * @return User
-     */
-    public function setIdPermission($idPermission)
-    {
-        $this->idPermission = $idPermission;
-
-        return $this;
-    }
-
-    /**
-     * Get idPermission
-     *
-     * @return integer 
-     */
-    public function getIdPermission()
-    {
-        return $this->idPermission;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->companys = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Set permission
      *
-     * @param integer $permission
+     * @param \AppBundle\Entity\Permission $permission
      * @return User
      */
-    public function setPermission($permission)
+    public function setPermission(\AppBundle\Entity\Permission $permission = null)
     {
         $this->permission = $permission;
 
@@ -222,7 +198,7 @@ class User implements UserInterface
     /**
      * Get permission
      *
-     * @return integer 
+     * @return \AppBundle\Entity\Permission 
      */
     public function getPermission()
     {

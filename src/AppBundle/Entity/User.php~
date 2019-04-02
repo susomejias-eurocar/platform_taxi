@@ -53,7 +53,6 @@ class User implements UserInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="id_permission", type="integer")
      * @ORM\ManyToOne(targetEntity="Permission", inversedBy="user")
      * @ORM\JoinColumn(name="permission_id", referencedColumnName="id")
      */
@@ -62,14 +61,14 @@ class User implements UserInterface
     /**
      * @var int
      *
-     * @ORM\OneToMany(targetEntity="Company", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Company", mappedBy="user")
      */
     private $companys;
 
     /**
      * @var int
      *
-     * @ORM\OneToMany(targetEntity="Driver", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Driver", mappedBy="userId")
      */
     private $drivers;
 

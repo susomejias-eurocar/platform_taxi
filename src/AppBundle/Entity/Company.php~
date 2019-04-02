@@ -24,11 +24,10 @@ class Company
     /**
      * @var int
      *
-     * @ORM\Column(name="user_id", type="integer")
      * @ORM\ManyToOne(targetEntity="User", inversedBy="companys")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    private $user;
 
     /**
      * @var string
@@ -44,83 +43,27 @@ class Company
      */
     private $address;
 
+    /**
+     * @var int
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Car", mappedBy="company")
+     */
+    private $cars;
 
     /**
-     * Get id
+     * @var int
      *
-     * @return integer 
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Driver", mappedBy="company")
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $drivers;
+
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return Company
+     * Constructor
      */
-    public function setUserId($userId)
+    public function __construct()
     {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Company
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set address
-     *
-     * @param string $address
-     * @return Company
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * Get address
-     *
-     * @return string 
-     */
-    public function getAddress()
-    {
-        return $this->address;
+        $this->cars = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 }
