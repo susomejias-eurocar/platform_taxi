@@ -14,6 +14,10 @@ ajax_register:
     path:      /register_ajax
     defaults:  { _controller: AppBundle:User:registerAjax }
 
+panel:
+    path:      /panel
+    defaults:  { _controller: AppBundle:User:panel }
+
 logout:
     path: /logout
 

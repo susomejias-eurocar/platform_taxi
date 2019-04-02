@@ -187,4 +187,27 @@ class Car
     {
         return $this->company;
     }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     * @return Car
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
 }
