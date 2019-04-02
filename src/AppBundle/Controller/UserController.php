@@ -134,9 +134,19 @@ class UserController extends Controller
 
         $user = $security_token->getUser();
 
-        
+        $usersService = $this->get('app.user_service');
+
+        $isCompany = $usersService->isTypeUser("company",$user->getId());
+
+        $isDriver = $usersService->isTypeUser("company",$user->getId());
+
+
         if($user){
-            return $this->render('user/panel.html.twig', array());
+            if ($isCompany){
+                return $this->render('user/panel.html.twig', array("user_type" => "company"));
+            }elseif($isDriver){
+                return $this->render('user/panel.html.twig', array("user_type" => "driver"));
+            }
         }
 
         //return $this->render('user/panel.html.twig', array());
