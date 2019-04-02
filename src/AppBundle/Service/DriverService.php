@@ -5,7 +5,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use AppBundle\Entity\Driver;
 use Symfony\Component\HttpFoundation\Request;
 
-    class CarService{
+    class DriverService{
 
         private $entityManager;
 
@@ -38,9 +38,7 @@ use Symfony\Component\HttpFoundation\Request;
             var_dump($car);
             */
         }
-
-
-
+        
     }
 
 
