@@ -9,3 +9,12 @@ login:
 register:
     path:      /register
     defaults:  { _controller: AppBundle:User:register }
+
+ajax_register:
+    path:      /register_ajax
+    defaults:  { _controller: AppBundle:User:registerAjax }
+
+logout:
+    path: /logout
+
+
