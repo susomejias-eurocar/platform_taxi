@@ -26,8 +26,8 @@ class CompanyRepository extends EntityRepository
 
     function getAllDrivers($idCompany)
     {
-        $em = $this->getEntityManager();
-        $query = $em->createQuery(
+        $con = $this->getEntityManager();
+        $query = $con->createQuery(
             "SELECT d.name, d.state, car.trademark FROM
             AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u, AppBundle\Entity\Car car
             WHERE u.id=c.user and d.company=c.id and (d.car=car.id or d.car is null) and c.id=:id"

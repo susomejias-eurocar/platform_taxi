@@ -14,21 +14,14 @@ use Symfony\Component\HttpFoundation\Request;
             $this->entityManager = $em;
         }
 
-        public function insertDriver($data){
-
-            //$entityManager = $this->em->getDoctrine()->getManager();
-            $driver = new Driver();
-            $driver->setPlate($data[0]);
-            $driver->setTrademark($data[1]);
-            $driver->setModel($data[2]);
-            $driver->setVersion($data[3]);
-            $driver->setCompanyId($data[4]);
-            $this->entityManager->persist($driver);
+        public function insertCompany($data){
+            $company = new Company();
+            $this->entityManager->persist($company);
             $this->entityManager->flush();
         }
 
         public function getDriversWithoutCar($idCompany){
-            $em = $this->entityManager;
+            $em = $this->entityManager->getConnection();
             $car = $em->getRepository("AppBundle:Company")->getDriversWithoutCar($idCompany);
             return $car;
         }
@@ -70,14 +63,11 @@ use Symfony\Component\HttpFoundation\Request;
         }
 
 
-        public function getAvalaiblerCar($idCompany){
+        public function getAvalaibleCar($idCompany){
             $em = $this->entityManager;
             $car = $em->getRepository("AppBundle:Company")->getAvalaiblerCar($idCompany);
             return $car;
-        }
-        
+        }        
     }
-
-
 
 ?>

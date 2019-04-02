@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
         }
 
         public function insertDriver($data){
-
-            //$entityManager = $this->em->getDoctrine()->getManager();
             $driver = new Driver();
             $driver->setPlate($data[0]);
             $driver->setTrademark($data[1]);
@@ -25,18 +23,12 @@ use Symfony\Component\HttpFoundation\Request;
             $driver->setCompanyId($data[4]);
             $this->entityManager->persist($driver);
             $this->entityManager->flush();
-
         }
 
         public function getDriver($id){
             $em = $this->entityManager;
-            $car = $em->getRepository("AppBundle:Driver")->findOneBy(["id" => $id]);
+            $car = $em->getRepository("AppBundle:Driver")->findOneById($id);
             return $car;
-            /*
-            $em = $this->getDoctrine()->getRepository('AppBundle:Car');
-            $car = $em->getCar(1);
-            var_dump($car);
-            */
         }
         
     }
