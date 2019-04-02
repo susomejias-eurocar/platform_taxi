@@ -1,0 +1,24 @@
+.background-city {
+  background-image: url("../images/city.jpeg");
+}
+
+.transparent {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.inputTransparent {
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: #fff !important;
+}
+
+.boldText {
+  font-weight: bold !important;
+  font-size: 1.2rem;
+}
+
+input:focus {
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: #fff !important;
+  border: none;
+}

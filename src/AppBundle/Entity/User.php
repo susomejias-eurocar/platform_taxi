@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -268,5 +269,26 @@ class User
     public function getDrivers()
     {
         return $this->drivers;
+    }
+
+ 
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+ 
+    public function getSalt()
+    {
+        return null;
+    }
+ 
+    public function getUsername()
+    {
+        return $this->email;
+    }
+ 
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }
