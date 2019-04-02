@@ -23,9 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
         }
 
 
-    }
-
-
 
         public function insertCompany($data){
             $company = new Company();

@@ -134,7 +134,7 @@ class UserController extends Controller
 
         $user = $security_token->getUser();
 
-        $usersService = $this->get('app.user_service');
+        $usersService = $this->get('user_service');
 
         $isCompany = $usersService->isTypeUser("company",$user->getId());
 
@@ -142,7 +142,7 @@ class UserController extends Controller
 
         if($user){
             if ($isCompany){
-                $companyService = $this->get('app.company_service');
+                $companyService = $this->get('company_service');
 
                 $companyName = $companyService->getCompanyName($user->getId());
 
@@ -152,7 +152,6 @@ class UserController extends Controller
             }
         }
 
-        //return $this->render('user/panel.html.twig', array());
     }
 
 }

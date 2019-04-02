@@ -28,7 +28,7 @@ class CompanyRepository extends EntityRepository
 
 
         return $results;
-
+    }
     function getAllCars($idCompany)
     {
         $em = $this->getEntityManager();
