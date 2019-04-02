@@ -1,7 +1,9 @@
 <?php
 
 namespace AppBundle\Repository;
+
 use AppBundle\Entity\Company;
+use AppBundle\Entity\Driver;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,6 +15,104 @@ use Doctrine\ORM\EntityRepository;
 class CompanyRepository extends EntityRepository
 {
 
-    
+    function getAllCars($idCompany)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT car.plate, car.trademark, car.model, car.version FROM AppBundle\Entity\Car car, AppBundle\Entity\Company c WHERE car.company=c.id and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
+
+    function getAllDrivers($idCompany)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT d.name, d.state, car.trademark FROM
+            AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u, AppBundle\Entity\Car car
+            WHERE u.id=c.user and d.company=c.id and (d.car=car.id or d.car is null) and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
+
+    function getDriversWithoutCar($idCompany){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT d.name, d.state, car.trademark FROM
+            AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u, AppBundle\Entity\Car car
+            WHERE u.id=c.user and d.company=c.id and d.car is null and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
+
+    function getDriversWithCar($idCompany){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT d.name, d.state, car.trademark FROM
+            AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u, AppBundle\Entity\Car car
+            WHERE u.id=c.user and d.company=c.id and d.car=car.id and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
+
+    function getStoppedDrivers($idCompany){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT d.name, d.state, car.plate, car.trademark, car.model, car.version FROM
+            AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u, AppBundle\Entity\Car car
+            WHERE u.id=c.user and d.company=c.id and d.state='stopped' and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
+
+
+    function getAvalaibledDrivers($idCompany){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT d.name, d.state, car.plate, car.trademark, car.model, car.version FROM
+            AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u, AppBundle\Entity\Car car
+            WHERE u.id=c.user and d.company=c.id and d.state='avalaible' and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
+
+    function getUnavalaibledDrivers($idCompany){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT d.name, d.state, car.plate, car.trademark, car.model, car.version FROM
+            AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u, AppBundle\Entity\Car car
+            WHERE u.id=c.user and d.company=c.id and d.state='avalaible' and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
+
+    function getDamagedCar($idCompany)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT car.plate, car.trademark, car.model, car.version, car.state FROM AppBundle\Entity\Car car, AppBundle\Entity\Company c WHERE car.state='damaged' and car.company=c.id and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
+
+
+    function getInRepairCar($idCompany)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT car.plate, car.trademark, car.model, car.version, car.state FROM AppBundle\Entity\Car car, AppBundle\Entity\Company c WHERE car.state='in repair' andcar.company=c.id and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
+
+
+    function getAvalaiblerCar($idCompany)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "SELECT car.plate, car.trademark, car.model, car.version, car.state FROM AppBundle\Entity\Car car, AppBundle\Entity\Company c WHERE car.state='avalaible' and car.company=c.id and c.id=:id"
+        )->setParameter("id", $idCompany);
+        return $query->getArrayResult();
+    }
 
 }
