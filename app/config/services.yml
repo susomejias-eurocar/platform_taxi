@@ -10,13 +10,13 @@ services:
     car_service:
         class: AppBundle\Service\CarService
         arguments: [ "@doctrine.orm.entity_manager" ]
-    app.user_service:
+    user_service:
         class:     AppBundle\Service\UserService
         arguments: ["@doctrine.orm.entity_manager"]
-    app.company_service:
+    company_service:
         class:     AppBundle\Service\CompanyService
         arguments: ["@doctrine.orm.entity_manager"] 
-    app.driver_service:
+    driver_service:
         class:     AppBundle\Service\DriverService
         arguments: ["@doctrine.orm.entity_manager"]
              

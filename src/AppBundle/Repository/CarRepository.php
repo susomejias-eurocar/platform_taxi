@@ -13,6 +13,9 @@ use Doctrine\ORM\EntityRepository;
 class CarRepository extends EntityRepository
 {
 
+    public function setState($id, $state){
+        
+    }
 
 
 }
