@@ -22,3 +22,15 @@ input:focus {
   color: #fff !important;
   border: none;
 }
+
+.linkPanel {
+  padding: 20px 0px;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  color: #fff;
+}
+
+#leftPanel a:hover {
+  background: rgba(0, 0, 0, 0.2);
+}

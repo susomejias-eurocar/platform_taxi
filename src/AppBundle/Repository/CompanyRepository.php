@@ -13,6 +13,19 @@ use Doctrine\ORM\EntityRepository;
 class CompanyRepository extends EntityRepository
 {
 
-    
+    // sacar el usuario de una compañia con el id del usuario
+    public function getCompanyName($user_id)
+    {
+        
+        $sql = "SELECT company.name FROM company , user WHERE :user_id = company.user_id";
+        $params = array(
+            'user_id' => $user_id
+        );
+
+        $results = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetchAll();
+
+
+        return $results;
+    }
 
 }
