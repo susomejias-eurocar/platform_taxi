@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\User;
+use AppBundle\Entity\Company;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -48,12 +49,15 @@ class UserController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-            $user = new User();
+            
 
             $email = $request->get('email');
             $password1 = $request->get('password1');
             $password2 = $request->get('password2');
             $phone = $request->get('phone');
+            $companyName = $request->get('companyName');
+            $companyAdress = $request->get('companyAdress'); 
+
     
 
             if ($password1 != $password2){
@@ -61,24 +65,52 @@ class UserController extends Controller
                     "status" => false,
                     "message" => "Las contraseñas no coinciden"
                 );
-            }elseif (empty($email) or empty($phone) or empty($password1) or empty($password2)){
+            }elseif (empty($email) or empty($phone) or empty($password1) or empty($password2) or empty($companyName) or empty($companyAdress)){
                 $response = array(
                     "status" => false,
                     "message" => "Rellene los campos"
                 );
+            }elseif(strlen($phone) < 6){
+
+                $response = array(
+                    "status" => false,
+                    "message" => "Formato del teléfono no válido, mínimo 6 números"
+                );
+
+            }elseif (strlen($password1) < 4){
+                
+                $response = array(
+                    "status" => false,
+                    "message" => "Contraseña demasiado corta, mínimo 4 caractres"
+                );
+
             }else{
 
+
+                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                    array('id'=> 1)
+                );
+                $user = new User();
                 $user->setEmail($email);
                 $user->setPassword($password1);
                 $user->setPhone($phone);
                 $user->setActive(0);
-                $user->setPermission(1);
+                $user->setPermission($permissionFull);
 
                 //$user->setIdPermission(1);
         
                 //$userRepository = $em->getRepository('AppBundle:User');
         
                 $em->persist($user);
+                
+
+                $company = new Company();
+                $company->setUser($user); 
+                $company->setName($companyName);
+                $company->setAddress($companyAdress);
+
+                $em->persist($company);
+
                 $em->flush();
 
                 $response = array(
@@ -91,6 +123,23 @@ class UserController extends Controller
 
             return $result;
 
+    }
+
+    public function panelAction(Request $request)
+    {
+
+        $security_context = $this->get('security.context');
+
+        $security_token = $security_context->getToken();
+
+        $user = $security_token->getUser();
+
+        
+        if($user){
+            return $this->render('user/panel.html.twig', array());
+        }
+
+        //return $this->render('user/panel.html.twig', array());
     }
 
 }
