@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
         }
 
 
-        public function getCompanyName($user_id){
+        public function getCompanyNameAddress($user_id){
 
-            $companyName = $this->entityManager->getRepository("AppBundle:Company")->getCompanyName($user_id);
+            $companyName = $this->entityManager->getRepository("AppBundle:Company")->getCompanyNameAddress($user_id);
 
             return $companyName;
         }
