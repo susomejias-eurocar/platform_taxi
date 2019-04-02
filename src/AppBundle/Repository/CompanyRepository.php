@@ -15,6 +15,20 @@ use Doctrine\ORM\EntityRepository;
 class CompanyRepository extends EntityRepository
 {
 
+    // sacar el usuario de una compañia con el id del usuario
+    public function getCompanyName($user_id)
+    {
+        
+        $sql = "SELECT company.name FROM company , user WHERE :user_id = company.user_id";
+        $params = array(
+            'user_id' => $user_id
+        );
+
+        $results = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetchAll();
+
+
+        return $results;
+
     function getAllCars($idCompany)
     {
         $em = $this->getEntityManager();
@@ -113,6 +127,7 @@ class CompanyRepository extends EntityRepository
             "SELECT car.plate, car.trademark, car.model, car.version, car.state FROM AppBundle\Entity\Car car, AppBundle\Entity\Company c WHERE car.state='avalaible' and car.company=c.id and c.id=:id"
         )->setParameter("id", $idCompany);
         return $query->getArrayResult();
+
     }
 
 }

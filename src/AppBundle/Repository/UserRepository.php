@@ -30,14 +30,6 @@ class UserRepository extends EntityRepository
             return true;
         }
         return false;
-        // $em = $this->getEntityManager();
-        // $connection = $em->getConnection();
-        // $statement = $connection->prepare("SELECT company.id FROM user, company WHERE :user_id = company.user_id");
-        // $statement->bindValue('user_id', $user_id);
-        // $statement->execute();
-        // $results = $statement->fetchAll();
-
-        // return $results;
     }
     
 }

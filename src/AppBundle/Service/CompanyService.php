@@ -14,6 +14,19 @@ use Symfony\Component\HttpFoundation\Request;
             $this->entityManager = $em;
         }
 
+
+        public function getCompanyName($user_id){
+
+            $companyName = $this->entityManager->getRepository("AppBundle:Company")->getCompanyName($user_id);
+
+            return $companyName;
+        }
+
+
+    }
+
+
+
         public function insertCompany($data){
             $company = new Company();
             $this->entityManager->persist($company);
@@ -69,5 +82,6 @@ use Symfony\Component\HttpFoundation\Request;
             return $car;
         }        
     }
+
 
 ?>

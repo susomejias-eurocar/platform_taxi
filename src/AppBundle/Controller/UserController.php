@@ -140,10 +140,13 @@ class UserController extends Controller
 
         $isDriver = $usersService->isTypeUser("company",$user->getId());
 
-
         if($user){
             if ($isCompany){
-                return $this->render('user/panel.html.twig', array("user_type" => "company"));
+                $companyService = $this->get('app.company_service');
+
+                $companyName = $companyService->getCompanyName($user->getId());
+
+                return $this->render('user/panel.html.twig', array("user_type" => "company", "companyName" => $companyName[0]["name"]));
             }elseif($isDriver){
                 return $this->render('user/panel.html.twig', array("user_type" => "driver"));
             }
