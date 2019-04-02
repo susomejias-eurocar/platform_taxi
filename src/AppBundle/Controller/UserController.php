@@ -140,7 +140,6 @@ class UserController extends Controller
 
         $isDriver = $usersService->isTypeUser("company",$user->getId());
 
-
         if($user){
             if ($isCompany){
                 $companyService = $this->get('app.company_service');
