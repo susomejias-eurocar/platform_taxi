@@ -66,7 +66,6 @@ class Driver
      */
     private $company;
 
-
     /**
      * Get id
      *
@@ -75,98 +74,6 @@ class Driver
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return Driver
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set state
-     *
-     * @param string $state
-     * @return Driver
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return string 
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * Set carId
-     *
-     * @param integer $carId
-     * @return Driver
-     */
-    public function setCarId($carId)
-    {
-        $this->carId = $carId;
-
-        return $this;
-    }
-
-    /**
-     * Get carId
-     *
-     * @return integer 
-     */
-    public function getCarId()
-    {
-        return $this->carId;
-    }
-
-    /**
-     * Set companyId
-     *
-     * @param integer $companyId
-     * @return Driver
-     */
-    public function setCompanyId($companyId)
-    {
-        $this->companyId = $companyId;
-
-        return $this;
-    }
-
-    /**
-     * Get companyId
-     *
-     * @return integer 
-     */
-    public function getCompanyId()
-    {
-        return $this->companyId;
     }
 
     /**
@@ -216,49 +123,49 @@ class Driver
     }
 
     /**
-     * Set test
+     * Set state
      *
-     * @param string $test
+     * @param string $state
      * @return Driver
      */
-    public function setTest($test)
+    public function setState($state)
     {
-        $this->test = $test;
+        $this->state = $state;
 
         return $this;
     }
 
     /**
-     * Get test
+     * Get state
      *
      * @return string 
      */
-    public function getTest()
+    public function getState()
     {
-        return $this->test;
+        return $this->state;
     }
 
     /**
-     * Set company
+     * Set userId
      *
-     * @param string $company
+     * @param \AppBundle\Entity\User $userId
      * @return Driver
      */
-    public function setCompany($company)
+    public function setUserId(\AppBundle\Entity\User $userId = null)
     {
-        $this->company = $company;
+        $this->userId = $userId;
 
         return $this;
     }
 
     /**
-     * Get company
+     * Get userId
      *
-     * @return string 
+     * @return \AppBundle\Entity\User 
      */
-    public function getCompany()
+    public function getUserId()
     {
-        return $this->company;
+        return $this->userId;
     }
 
     /**
@@ -282,5 +189,28 @@ class Driver
     public function getCar()
     {
         return $this->car;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \AppBundle\Entity\Company $company
+     * @return Driver
+     */
+    public function setCompany(\AppBundle\Entity\Company $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \AppBundle\Entity\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
     }
 }

@@ -160,35 +160,12 @@ class Car
     }
 
     /**
-     * Set companyId
-     *
-     * @param integer $companyId
-     * @return Car
-     */
-    public function setCompanyId($companyId)
-    {
-        $this->companyId = $companyId;
-
-        return $this;
-    }
-
-    /**
-     * Get companyId
-     *
-     * @return integer 
-     */
-    public function getCompanyId()
-    {
-        return $this->companyId;
-    }
-
-    /**
      * Set company
      *
-     * @param string $company
+     * @param \AppBundle\Entity\Company $company
      * @return Car
      */
-    public function setCompany($company)
+    public function setCompany(\AppBundle\Entity\Company $company = null)
     {
         $this->company = $company;
 
@@ -198,7 +175,7 @@ class Car
     /**
      * Get company
      *
-     * @return string 
+     * @return \AppBundle\Entity\Company 
      */
     public function getCompany()
     {

@@ -70,6 +70,14 @@ class User
      * @ORM\OneToMany(targetEntity="Driver", mappedBy="userId")
      */
     private $drivers;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->companys = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -176,10 +184,10 @@ class User
     /**
      * Set permission
      *
-     * @param integer $permission
+     * @param \AppBundle\Entity\Permission $permission
      * @return User
      */
-    public function setPermission($permission)
+    public function setPermission(\AppBundle\Entity\Permission $permission = null)
     {
         $this->permission = $permission;
 
@@ -189,65 +197,11 @@ class User
     /**
      * Get permission
      *
-     * @return integer 
+     * @return \AppBundle\Entity\Permission 
      */
     public function getPermission()
     {
         return $this->permission;
-    }
-
-    /**
-     * Set companys
-     *
-     * @param \AppBundle\Entity\Company $companys
-     * @return User
-     */
-    public function setCompanys(\AppBundle\Entity\Company $companys = null)
-    {
-        $this->companys = $companys;
-
-        return $this;
-    }
-
-    /**
-     * Get companys
-     *
-     * @return \AppBundle\Entity\Company 
-     */
-    public function getCompanys()
-    {
-        return $this->companys;
-    }
-
-    /**
-     * Set drivers
-     *
-     * @param \AppBundle\Entity\Driver $drivers
-     * @return User
-     */
-    public function setDrivers(\AppBundle\Entity\Driver $drivers = null)
-    {
-        $this->drivers = $drivers;
-
-        return $this;
-    }
-
-    /**
-     * Get drivers
-     *
-     * @return \AppBundle\Entity\Driver 
-     */
-    public function getDrivers()
-    {
-        return $this->drivers;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->companys = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -274,6 +228,16 @@ class User
     }
 
     /**
+     * Get companys
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCompanys()
+    {
+        return $this->companys;
+    }
+
+    /**
      * Add drivers
      *
      * @param \AppBundle\Entity\Driver $drivers
@@ -294,5 +258,15 @@ class User
     public function removeDriver(\AppBundle\Entity\Driver $drivers)
     {
         $this->drivers->removeElement($drivers);
+    }
+
+    /**
+     * Get drivers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDrivers()
+    {
+        return $this->drivers;
     }
 }
