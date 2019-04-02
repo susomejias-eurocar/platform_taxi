@@ -16,10 +16,10 @@ class CompanyRepository extends EntityRepository
 {
 
     // sacar el usuario de una compañia con el id del usuario
-    public function getCompanyName($user_id)
+    public function getCompanyNameAddress($user_id)
     {
         
-        $sql = "SELECT company.name FROM company , user WHERE :user_id = company.user_id";
+        $sql = "SELECT company.name, company.address FROM company , user WHERE :user_id = company.user_id";
         $params = array(
             'user_id' => $user_id
         );
