@@ -51,11 +51,11 @@ class Car
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="company_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="cars")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
      */
-    private $companyId;
 
+    private $company;
 
     /**
      * Get id
@@ -180,5 +180,28 @@ class Car
     public function getCompanyId()
     {
         return $this->companyId;
+    }
+
+    /**
+     * Set company
+     *
+     * @param string $company
+     * @return Car
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return string 
+     */
+    public function getCompany()
+    {
+        return $this->company;
     }
 }

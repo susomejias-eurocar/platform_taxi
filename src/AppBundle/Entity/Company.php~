@@ -24,11 +24,10 @@ class Company
     /**
      * @var int
      *
-     * @ORM\Column(name="user_id", type="integer")
      * @ORM\ManyToOne(targetEntity="User", inversedBy="companys")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    private $user;
 
     /**
      * @var string
@@ -44,6 +43,29 @@ class Company
      */
     private $address;
 
+    /**
+     * @var int
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Car", mappedBy="id")
+     */
+    private $cars;
+
+    /**
+     * @var int
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Driver", mappedBy="id")
+     */
+    private $drivers;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->cars = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -53,29 +75,6 @@ class Company
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return Company
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -122,5 +121,94 @@ class Company
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     * @return Company
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Add cars
+     *
+     * @param \AppBundle\Entity\Car $cars
+     * @return Company
+     */
+    public function addCar(\AppBundle\Entity\Car $cars)
+    {
+        $this->cars[] = $cars;
+
+        return $this;
+    }
+
+    /**
+     * Remove cars
+     *
+     * @param \AppBundle\Entity\Car $cars
+     */
+    public function removeCar(\AppBundle\Entity\Car $cars)
+    {
+        $this->cars->removeElement($cars);
+    }
+
+    /**
+     * Get cars
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCars()
+    {
+        return $this->cars;
+    }
+
+    /**
+     * Add drivers
+     *
+     * @param \AppBundle\Entity\Driver $drivers
+     * @return Company
+     */
+    public function addDriver(\AppBundle\Entity\Driver $drivers)
+    {
+        $this->drivers[] = $drivers;
+
+        return $this;
+    }
+
+    /**
+     * Remove drivers
+     *
+     * @param \AppBundle\Entity\Driver $drivers
+     */
+    public function removeDriver(\AppBundle\Entity\Driver $drivers)
+    {
+        $this->drivers->removeElement($drivers);
+    }
+
+    /**
+     * Get drivers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDrivers()
+    {
+        return $this->drivers;
     }
 }

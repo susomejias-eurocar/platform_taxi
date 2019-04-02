@@ -24,11 +24,24 @@ class Driver
     /**
      * @var int
      *
-     * @ORM\Column(name="user_id", type="integer")
      * @ORM\ManyToOne(targetEntity="User", inversedBy="drivers")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $userId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=255)
+     */
+    private $last_name;
 
     /**
      * @var string
@@ -40,16 +53,19 @@ class Driver
     /**
      * @var int
      *
-     * @ORM\Column(name="car_id", type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Car")
+     * @ORM\JoinColumn(name="car_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
-    private $carId;
+    private $car;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="company_id", type="integer")
+     * @ORM\Column(name="company_id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="drivers")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="user")
      */
-    private $companyId;
+    private $company;
 
 
     /**
@@ -152,5 +168,120 @@ class Driver
     public function getCompanyId()
     {
         return $this->companyId;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Driver
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set last_name
+     *
+     * @param string $lastName
+     * @return Driver
+     */
+    public function setLastName($lastName)
+    {
+        $this->last_name = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get last_name
+     *
+     * @return string 
+     */
+    public function getLastName()
+    {
+        return $this->last_name;
+    }
+
+    /**
+     * Set test
+     *
+     * @param string $test
+     * @return Driver
+     */
+    public function setTest($test)
+    {
+        $this->test = $test;
+
+        return $this;
+    }
+
+    /**
+     * Get test
+     *
+     * @return string 
+     */
+    public function getTest()
+    {
+        return $this->test;
+    }
+
+    /**
+     * Set company
+     *
+     * @param string $company
+     * @return Driver
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return string 
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * Set car
+     *
+     * @param \AppBundle\Entity\Car $car
+     * @return Driver
+     */
+    public function setCar(\AppBundle\Entity\Car $car = null)
+    {
+        $this->car = $car;
+
+        return $this;
+    }
+
+    /**
+     * Get car
+     *
+     * @return \AppBundle\Entity\Car 
+     */
+    public function getCar()
+    {
+        return $this->car;
     }
 }
