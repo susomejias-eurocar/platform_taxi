@@ -30,6 +30,10 @@ use Symfony\Component\HttpFoundation\Request;
             $car = $em->getRepository("AppBundle:Driver")->findOneById($id);
             return $car;
         }
+
+        public function setState($idDriver, $state){
+            $this->entityManager->getRepository("AppBundle:Driver")->setState($idDriver,$state);
+        }
         
     }
 
