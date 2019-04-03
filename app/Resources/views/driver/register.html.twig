@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <main>
+        <div class="container col-lg-12 background-city" style="padding:50px;min-height:100vh;display:flex;align-items:center;" >
+            <div class="card col-lg-4 offset-lg-4 transparent">
+               
+                <div class="card-body">
+                 <h1 class="text-light" style="font-weight:bold; padding:10px">Platform Taxi Proyect</h1>
+
+                    <h3 class="text-light" style="font-weight:bold; padding:10px">Datos Usuario</h3>
+
+                        <div class="form-group">
+                            <label for="email" class="text-light boldText">Email</label>
+                            <input required name="email" type="email" class="form-control inputTransparent" id="email" aria-describedby="emailHelp" placeholder="Introduce email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password1" class="text-light boldText">Contraseña</label>
+                            <input required name="password1" type="password" class="form-control inputTransparent" id="password1" placeholder="Introduce contraseña">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password2" class="text-light boldText">Repita contraseña</label>
+                            <input required name="password2" type="password" class="form-control inputTransparent" id="password2" placeholder="Repita contraseña">
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="phone" class="text-light boldText">Teléfono</label>
+                            <input required name="phone" type="tel" class="form-control inputTransparent" id="phone" placeholder="Introduce teléfono">
+                        </div>
+
+                        <h3 class="text-light" style="font-weight:bold; padding:10px">Datos Conductor</h3>
+
+                        <div class="form-group">
+                            <label for="driverName" class="text-light boldText">Nombre</label>
+                            <input required name="driverName" type="text" class="form-control inputTransparent" id="driverName" placeholder="Repita contraseña">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="driverLastname" class="text-light boldText">Apellidos</label>
+                            <input required name="driverLastName" type="text" class="form-control inputTransparent" id="driverLastName" placeholder="Repita contraseña">
+                        </div>
+
+                        <div>
+                            <label for="car" class="text-light boldText">Asignar coche</label>
+                            <select name="car" id="car">
+                                <option value=NULL>Sin coche</option>
+                                {% for car in cars %}
+                                <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+                        <button  class="btn" style="background:rgba(255, 255, 255, .9);color:#263238;font-weight:bold;font-size:1.1rem" id="btnRegister">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script>
+    $('#btnRegister').click(()=>{
+            $.ajax({
+                url: "{{ path('ajax_register_driver') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: { 
+                    email: $('#email').val() , 
+                    password1: $('#password1').val(), 
+                    password2: $('#password2').val(), 
+                    phone: $("#phone").val(),
+                    driverName: $("#driverName").val(),
+                    driverLastName: $("#driverLastName").val(),
+                    car: $("#car").val()
+                },
+                success: function(result){
+
+                    if (!result.status){
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "error"
+                        )       
+                        console.log(result);       
+                    }else{
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "success"
+                        )    
+
+                        //setTimeout(function(){ window.location.href = "login" }, 1500);
+                        
+                    }
+                    
+                    
+                },
+            });
+    });
+</script>
+
+{% endblock %}
