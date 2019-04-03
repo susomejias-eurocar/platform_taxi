@@ -39,6 +39,11 @@ use Symfony\Component\HttpFoundation\Request;
             */
         }
 
+        public function setState($idCar,$state){
+            $em = $this->entityManager;
+            $em->getRepository("AppBundle:Car")->setState($idCar,$state);
+        }
+
 
 
     }
