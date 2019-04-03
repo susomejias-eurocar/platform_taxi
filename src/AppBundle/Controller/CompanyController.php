@@ -84,8 +84,7 @@ class CompanyController extends Controller
                 $companyService = $this->get('company_service');
 
                 $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
-                $cars = $this->get("company_service")->getCarWithoutDriver($user->getId());
-
+                $cars = $this->get("company_service")->getCarWithoutDriver($companyNameAddress[0]['id']);
                 return $this->render('company/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id']));
             }elseif($isDriver){
                 
