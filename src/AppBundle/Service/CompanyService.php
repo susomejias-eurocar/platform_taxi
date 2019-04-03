@@ -161,6 +161,17 @@ use Symfony\Component\HttpFoundation\Request;
             return $car;
         }
 
+        public function getAvalaibleCar($idCompany){
+            $em = $this->entityManager;
+            $car = $em->getRepository("AppBundle:Company")->getAvalaibleCar($idCompany);
+            return $car;
+        }        
+        public function getCarWithoutDriver($idCompany){
+            $em = $this->entityManager;
+            $car = $em->getRepository("AppBundle:Company")->getCarWithoutDriver($idCompany);
+            return $car;
+        }        
+
     }
 
 
