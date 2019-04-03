@@ -8,11 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Company;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+
 
 class UserController extends Controller
 {
     public function loginAction(Request $request)
-    {//Llamamos al servicio de autenticacion
+    {
+        //Llamamos al servicio de autenticacion
         $authenticationUtils = $this->get('security.authentication_utils');
         
         // conseguir el error del login si falla
@@ -56,7 +59,7 @@ class UserController extends Controller
             $password2 = $request->get('password2');
             $phone = $request->get('phone');
             $companyName = $request->get('companyName');
-            $companyAdress = $request->get('companyAdress'); 
+            $companyAddress = $request->get('companyAdress'); 
 
     
 
@@ -65,7 +68,7 @@ class UserController extends Controller
                     "status" => false,
                     "message" => "Las contraseñas no coinciden"
                 );
-            }elseif (empty($email) or empty($phone) or empty($password1) or empty($password2) or empty($companyName) or empty($companyAdress)){
+            }elseif (empty($email) or empty($phone) or empty($password1) or empty($password2) or empty($companyName) or empty($companyAddress)){
                 $response = array(
                     "status" => false,
                     "message" => "Rellene los campos"
@@ -85,48 +88,58 @@ class UserController extends Controller
                 );
 
             }else{
+                try{
+                    $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                        array('id'=> 1)
+                    );
+                    $user = new User();
+                    $user->setEmail($email);
 
+                    $encoder = $this->container->get('security.password_encoder');
+                    $encoded = $encoder->encodePassword($user, $password1);
 
-                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
-                    array('id'=> 1)
-                );
-                $user = new User();
-                $user->setEmail($email);
+                    $user->setPassword($encoded);
 
-                $encoder = $this->container->get('security.password_encoder');
-                $encoded = $encoder->encodePassword($user, $password1);
+                    $user->setPhone($phone);
+                    $user->setActive(0);
+                    $user->setPermission($permissionFull);
 
-                $user->setPassword($encoded);
+                    $em->persist($user);
+                    
 
-                $user->setPhone($phone);
-                $user->setActive(0);
-                $user->setPermission($permissionFull);
+                    $company = new Company();
+                    $company->setUser($user); 
+                    $company->setName($companyName);
+                    $company->setAddress($companyAddress);
 
-                //$user->setIdPermission(1);
-        
-                //$userRepository = $em->getRepository('AppBundle:User');
-        
-                $em->persist($user);
+                    
+                    $em->persist($company);
+
+                    $em->flush();
+
+                }catch(UniqueConstraintViolationException $e){
+                    $response = array(
+                        "status" => false,
+                        "message" => "El correo ya está registrado"
+                    );
+                    $result->setContent(json_encode($response));
+
+                    return $result;
+                }
                 
 
-                $company = new Company();
-                $company->setUser($user); 
-                $company->setName($companyName);
-                $company->setAddress($companyAdress);
-
-                $em->persist($company);
-
-                $em->flush();
 
                 $response = array(
                     "status" => true,
                     "message" => "Registro correcto"
                 );
+
+                $result->setContent(json_encode($response));
+
+                return $result;
             }
 
-            $result->setContent(json_encode($response));
-
-            return $result;
+            
 
     }
 
