@@ -27,7 +27,7 @@ class Driver
      * @ORM\ManyToOne(targetEntity="User", inversedBy="drivers")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    private $user;
 
     /**
      * @var string
