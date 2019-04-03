@@ -3,8 +3,8 @@
 security:
 
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
-        AppBundle\Entity\User: plaintext
+        Symfony\Component\Security\Core\User\User: sha512
+        AppBundle\Entity\User: sha512
 
     providers:
         our_db_provider:

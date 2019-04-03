@@ -24,7 +24,7 @@ class Car
     /**
      * @var string
      *
-     * @ORM\Column(name="plate", type="string", length=255)
+     * @ORM\Column(name="plate", type="string", length=255, unique=true)
      */
     private $plate;
 
