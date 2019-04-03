@@ -134,7 +134,7 @@ class CompanyRepository extends EntityRepository
         $em = $this->getEntityManager();
         $con = $em->getConnection();
         $sql = "SELECT
-        * 
+        car.id, car.trademark, car.model, car.plate ,car.version
         FROM car, company WHERE car.company_id=company.id
         AND company.id=:id
         AND car.id NOT IN (SELECT car.id
