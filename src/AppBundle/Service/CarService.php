@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
         }
 
         public function insertCar($data){
-
-            //$entityManager = $this->em->getDoctrine()->getManager();
             $car = new Car();
             $car->setPlate($data[0]);
             $car->setTrademark($data[1]);
@@ -25,26 +23,12 @@ use Symfony\Component\HttpFoundation\Request;
             $car->setCompanyId($data[4]);
             $this->entityManager->persist($car);
             $this->entityManager->flush();
-
         }
 
         public function getCar($id){
             $em = $this->entityManager;
             $car = $em->getRepository("AppBundle:Car")->findOneBy(["id" => $id]);
-            $carReturn = new Car();
-            $carReturn->setCompany($car->getCompany());
-            $carReturn->setTrademark($car->getTrademark());
-            $carReturn->setModel($car->getModel());
-            $carReturn->setVersion($car->getVersion());            
-            $carReturn->setPlate($car->getPlate());
-            
-
-            return $carReturn;
-            /*
-            $em = $this->getDoctrine()->getRepository('AppBundle:Car');
-            $car = $em->getCar(1);
-            var_dump($car);
-            */
+            return $car;
         }
 
         public function setState($idCar,$state){
