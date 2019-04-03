@@ -25,7 +25,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, unique=true)
      */
     private $email;
 
@@ -44,9 +44,9 @@ class User implements UserInterface
     private $active;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="phone", type="integer")
+     * @ORM\Column(name="phone", type="string", length=20)
      */
     private $phone;
 
