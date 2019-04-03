@@ -53,7 +53,7 @@ class Driver
     /**
      * @var int
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Car")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Car", cascade={"persist"})
      * @ORM\JoinColumn(name="car_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $car;
