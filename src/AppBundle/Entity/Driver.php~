@@ -53,7 +53,7 @@ class Driver
     /**
      * @var int
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Car")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Car", cascade={"persist"})
      * @ORM\JoinColumn(name="car_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $car;
@@ -212,5 +212,28 @@ class Driver
     public function getCompany()
     {
         return $this->company;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     * @return Driver
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
