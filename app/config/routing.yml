@@ -42,14 +42,25 @@ list_cars:
     path:   /listDivers/{state}
     defaults:  { _controller: AppBundle:Company:listCars }      
 
-
 driver_register:
     path:   /register_driver
     defaults:   { _controller: AppBundle:Company:registerDriver }
 
+asign_car_driver:
+    path:   /asignCar
+    defaults:   { _controller: AppBundle:Company:asignCar }
+
 ajax_register_driver:
     path:   /ajax_register_driver
     defaults:   { _controller: AppBundle:Company:addDriver }
+
+car_register:
+    path:   /register_car
+    defaults:   { _controller: AppBundle:Company:registerCar }
+
+ajax_register_car:
+    path:   /ajax_register_car
+    defaults:   { _controller: AppBundle:Company:addCar}
 
 panel:
     path:      /panel
