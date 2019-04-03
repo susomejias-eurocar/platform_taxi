@@ -31,7 +31,15 @@ use Symfony\Component\HttpFoundation\Request;
         public function getCar($id){
             $em = $this->entityManager;
             $car = $em->getRepository("AppBundle:Car")->findOneBy(["id" => $id]);
-            return $car;
+            $carReturn = new Car();
+            $carReturn->setCompany($car->getCompany());
+            $carReturn->setTrademark($car->getTrademark());
+            $carReturn->setModel($car->getModel());
+            $carReturn->setVersion($car->getVersion());            
+            $carReturn->setPlate($car->getPlate());
+            
+
+            return $carReturn;
             /*
             $em = $this->getDoctrine()->getRepository('AppBundle:Car');
             $car = $em->getCar(1);
