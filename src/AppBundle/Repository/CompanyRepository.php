@@ -248,7 +248,7 @@ class CompanyRepository extends EntityRepository
         return $results;
     }
 
-    public function addCarToCompany(Request $request){
+    public function addCarToCompany($idCar, $idCompany){
 
 
 

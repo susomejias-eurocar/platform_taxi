@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;;
+use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Entity\User;
+use AppBundle\Entity\Driver;
 
 class CompanyController extends Controller
 {
@@ -54,7 +56,7 @@ class CompanyController extends Controller
 
                 $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
 
-                return $this->render('company/content-panel.html.twig', array("user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress ));
+                return $this->render('company/content-panel.html.twig', array("user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id'] ));
             }elseif($isDriver){
                 
                 return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
@@ -65,8 +67,31 @@ class CompanyController extends Controller
     }
    public function registerDriverAction(Request $request)
     {
-        $cars = $this->get("company_service")->getCarWithoutDriver(1);
-        return $this->render('driver/register.html.twig', array("cars"=>$cars));
+        $security_context = $this->get('security.context');
+
+        $security_token = $security_context->getToken();
+
+        $user = $security_token->getUser();
+
+        $usersService = $this->get('user_service');
+
+        $isCompany = $usersService->isTypeUser("company",$user->getId());
+
+        $isDriver = $usersService->isTypeUser("company",$user->getId());
+
+        if($user){
+            if ($isCompany){
+                $companyService = $this->get('company_service');
+
+                $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
+                $cars = $this->get("company_service")->getCarWithoutDriver(1);
+
+                return $this->render('company/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress));
+            }elseif($isDriver){
+                
+                return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
+            }
+        }    
     }
 
     public function addDriverAction(Request $request)

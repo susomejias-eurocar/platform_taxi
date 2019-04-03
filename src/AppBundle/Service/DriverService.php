@@ -27,8 +27,8 @@ use Symfony\Component\HttpFoundation\Request;
 
         public function getDriver($id){
             $em = $this->entityManager;
-            $car = $em->getRepository("AppBundle:Driver")->findOneById($id);
-            return $car;
+            $driver = $em->getRepository("AppBundle:Driver")->findOneById($id);
+            return $driver;
         }
 
         public function setState($idDriver, $state){
