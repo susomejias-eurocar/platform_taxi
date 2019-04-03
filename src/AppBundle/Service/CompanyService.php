@@ -22,6 +22,11 @@ use Symfony\Component\HttpFoundation\Request;
             return $companyName;
         }
 
+        public function getAllCars($params,$idCompany)
+        {
+            $cars = $this->entityManager->getRepository("AppBundle:Company")->getAllCars($params,$idCompany);
+            return $cars;
+        }
 
 
         public function insertCompany($data){

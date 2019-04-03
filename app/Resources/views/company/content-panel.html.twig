@@ -1,0 +1,165 @@
+{% extends './user/panel.html.twig' %}
+
+
+{% block content %}
+
+<div class="col col-lg-10" style="padding: 30px">
+
+<h1>Datatable Cars company and Office</h1>
+
+{# <div class="input-group col-4" style="padding: 30px 0px">
+    <div class="input-group-prepend" >
+        <div class="input-group-text" style="background: #563D7C; color:#fff">@</div>
+    </div>
+    <input type="text" class="form-control search-data-field" data-field='employeeName'  placeholder="{{'Employee name' | trans}}" >
+</div> #}
+
+{# <div style="padding: 10px; margin-bottom: 15px">
+    <label>Employee office name search: <label>
+    <input class = "form-control search-data-field" type="text" data-field='employeeOffice' placeholder="{{'Employee office' | trans}}">
+</div> #}
+
+{# <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
+<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
+<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
+<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}"> #}
+
+    <table id="carsTable" class="table table-hover">
+        <tr>
+            <thead style="background:#F4C05C">
+                <th scope="col" class="text-light">Matrícula</th>
+                <th scope="col" class="text-light">Marca</th>
+                <th scope="col" class="text-light">Modelo</th>
+                <th scope="col" class="text-light">Versión</th>
+                <th scope="col" class="text-light">Estado</th>
+            </thead>
+        </tr>
+        <tbody style="color: #000">
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+
+
+{
+
+
+let init = function(){
+
+function loadFunctionDataTable(){
+
+    // Variable auxilair
+    let time = null;
+
+    $('.search-data-field').keyup(function(){
+        clearInterval(time);
+            time = setTimeout(function(){
+            // Creamos la variable de búsquedas
+                let searchs = new Object();
+                // Limpiamos el tiempo
+                clearInterval(time);
+                    $('.search-data-field').each(function(){
+                        searchs[$(this).data('field')] = $(this).val();
+                    });
+                    carsTableTable.search(JSON.stringify(searchs)).draw();
+                },500);
+        });
+}
+
+function loadStylesForSelect(){
+    $("select").addClass("form-control").css({
+        "margin-bottom" : "20px"
+    });
+}
+
+//Inicializar la tabla
+let carsTable = $("#carsTable").DataTable({
+    dom: 'Blrtip',
+    buttons: [
+        {
+            extend: 'copyHtml5',
+        },
+        {
+            extend: 'excelHtml5',
+            messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
+            title: 'Data export'
+        },
+        {
+            extend: 'csvHtml5',
+        },
+        {
+            extend: 'pdfHtml5',
+            orientation: 'landscape',
+            pageSize: 'LEGAL',
+        }
+    ],
+    rowId: 'idRow',
+    responsive: false,
+    autoWidth: false,
+    "processing": true,
+    "serverSide": true,
+    "pagingType": "full_numbers",
+    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "{{('Todos')|trans}}"]],
+    language: {
+        "sProcessing":     "{{ ('Procesando...') | trans }}",
+        "sLengthMenu":     "{{ ('Mostrar _MENU_ registros') | trans }}",
+        "sZeroRecords":    "{{ ('No se encontraron resultados') | trans }}",
+        "sEmptyTable":     "{{ ('Ningún dato disponible en esta tabla') | trans }}",
+        "sInfo":           "{{ ('Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros') | trans }}",
+        "sInfoEmpty":      "{{ ('Mostrando registros del 0 al 0 de un total de 0 registros') | trans }}",
+        "sInfoFiltered":   "{{ ('(filtrado de un total de _MAX_ registros)') | trans }}",
+        "sInfoPostFix":    "",
+        "sSearch":         "{{ ('Buscar:') | trans }}",
+        "sUrl":            "",
+        "sInfoThousands":  ",",
+        "sLoadingRecords": "{{ ('Cargando...') | trans }}",
+        "oPaginate": {
+        "sFirst":    "{{ ('Primero') | trans }}",
+        "sLast":     "{{ ('Último') | trans }}",
+        "sNext":     "{{ ('Siguiente') | trans }}",
+        "sPrevious": "{{ ('Anterior') | trans }}"
+        },
+        "oAria": {
+        "sSortAscending":  "{{ (': Activar para ordenar la columna de manera ascendente') | trans }}",
+        "sSortDescending": "{{ (': Activar para ordenar la columna de manera descendente') | trans }}"
+        }
+    },
+    ajax: {
+        url: "{{path('list_all_cars')}}",
+        type: "POST",
+        data: {
+            // pasamos datos si es necesario
+        }
+    },
+    columns: [
+
+        {data:'plate'},
+        {data:'trademark'},
+        {data:'model'},
+        {data:'version'},
+        {data:'state'},
+    ],
+    
+    drawCallback: function(settings) {
+        //loadFunctionsOfButtons();
+        //loadStylesForSelect();
+    },
+    initComplete: function(settings){
+        //loadStylesForSelect();
+        //loadFunctionDataTable();
+    }
+});
+}
+
+$(init)
+
+}
+
+</script>
+{% endblock %}

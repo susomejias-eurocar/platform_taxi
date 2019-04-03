@@ -3,39 +3,23 @@
 {% block main %}
 
     <div class="row row-lg_12" style="min-height:100vh">
-        <div class="col col-lg-2" id="leftPanel" style="background:#263238;padding:0px">
+        {% block infoPanel %}
+                {% include './company/info-panel.html.twig' %}
+        {% endblock %}
+            {% block content %}
 
-
-            <div style="background:#F4C05C;width:100%;display:flex;flex-direction:column;align-items:center;padding:20px">
-                
-                <img src="https://cdn.iconscout.com/icon/free/png-256/avatar-372-456324.png" height="90px"/>
-                <p style="padding:10px,10px;color:#fff">
-                {% block username %}
-                    <p style="color:#fff;font-weight:bold">{{ app.user.username }}</p>
-                    <p style="color:#fff;font-weight:bold;padding-bottom:3px;margin:0px">{{ companyName }}</p>
-                    <p style="color:#fff;font-weight:bold;padding:0px">({{ companyAddress }})</p>
-                     <a href="{{ path('logout') }}" class="row" style="padding: 5px 0px;display:flex;flex-direction:row;justify-content:center;text-decoration:none;text-align:center;color:#fff">
-                     <img src="{{ asset('images/logout.svg') }}" height="30px"/>
-                     </a>
-                {% endblock %}
-                </p>
-            </div>
-
-            {% block panelOptions %}
-
-
-                <a href="#" class="row option" style="padding:20px 0px;display:flex;flex-direction:row;justify-content:center;text-decoration:none;text-align:center;color:#fff">Opción1</a>
-                <a href="#" class="row option" style="padding:20px 0px;display:flex;flex-direction:row;justify-content:center;text-decoration:none;text-align:center;color:#fff">Opción2</a>
-                <a href="#" class="row option" style="padding:20px 0px;display:flex;flex-direction:row;justify-content:center;text-decoration:none;text-align:center;color:#fff">Opción3</a>
-               
-
-            {% endblock %}
-        </div>
-
-        <div class="col col-lg-10" style="background:#fff;">
-
-        </div>
+    
+        {% endblock %}
     </div>
 
 
+
+
+
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+{% endblock %}
+
