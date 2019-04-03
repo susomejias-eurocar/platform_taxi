@@ -30,6 +30,7 @@ security:
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
             # activate different ways to authenticate
 
             # http_basic: ~
