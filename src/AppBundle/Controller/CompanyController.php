@@ -140,8 +140,7 @@ class CompanyController extends Controller
                 $companyService = $this->get('company_service');
 
                 $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
-                $cars = $this->get("company_service")->getCarWithoutDriver(1);
-
+                $cars = $this->get("company_service")->getCarWithoutDriver($companyNameAddress[0]['id']);
                 return $this->render('company/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id']));
             }elseif($isDriver){
                 
@@ -251,4 +250,36 @@ class CompanyController extends Controller
         $drivers = $service->getAvalaibledDrivers(1);
         return new JsonResponse($drivers);
     }
+
+    public function asignCarAction(){
+            
+        $security_context = $this->get('security.context');
+
+        $security_token = $security_context->getToken();
+
+        $user = $security_token->getUser();
+
+        $usersService = $this->get('user_service');
+
+        $companyService = $this->get('company_service');
+
+        $isCompany = $usersService->isTypeUser("company",$user->getId());
+
+        $isDriver = $usersService->isTypeUser("company",$user->getId());
+
+        if($user){
+            if ($isCompany){
+                $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
+                $cars = $companyService->getCarWithoutDriver($user->getId());
+                $drivers = $companyService->getDriversWithoutCar($user->getId());
+                
+
+                return $this->render('car/content-panel-asignCar.html.twig', array("drivers"=> $drivers, "cars"=>$cars,"user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id']));
+            }elseif($isDriver){
+                
+                return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
+            }
+        }   
+    }
+
 }

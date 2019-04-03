@@ -59,7 +59,7 @@ class Car
     /**
      * @var int
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="cars")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $company;
 

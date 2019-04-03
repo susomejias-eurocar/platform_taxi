@@ -45,9 +45,12 @@ list_cars:
 
 #DRIVER ROUTING
 
+
+
 driver_register:
     path:   /register_driver
     defaults:   { _controller: AppBundle:Company:registerDriver }
+
 
 show_drivers:
     path:   /driverShow
@@ -57,9 +60,22 @@ list_all_drivers:
     path:   /listAllDrivers
     defaults:  { _controller: AppBundle:Company:listDrivers }
 
+asign_car_driver:
+    path:   /asignCar
+    defaults:   { _controller: AppBundle:Company:asignCar }
+
+
 ajax_register_driver:
     path:   /ajax_register_driver
     defaults:   { _controller: AppBundle:Company:addDriver }
+
+car_register:
+    path:   /register_car
+    defaults:   { _controller: AppBundle:Company:registerCar }
+
+ajax_register_car:
+    path:   /ajax_register_car
+    defaults:   { _controller: AppBundle:Company:addCar}
 
 panel:
     path:      /panel
