@@ -13,9 +13,10 @@ use Doctrine\ORM\EntityRepository;
 class CarRepository extends EntityRepository
 {
 
-    public function setState($id, $state){
-        
+    public function setState($idCar, $state){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            "UPDATE AppBundle\Entity\Car car SET car.state=:state WHERE car.id=:id"
+        )->setParameters(["state" => $state, "id" => $idCar])->execute();        
     }
-
-
 }

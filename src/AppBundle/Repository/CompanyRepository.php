@@ -221,13 +221,36 @@ class CompanyRepository extends EntityRepository
     }
 
 
-    function getAvalaiblerCar($idCompany)
+    function getAvalaibleCar($idCompany)
     {
         $em = $this->getEntityManager();
         $query = $em->createQuery(
             "SELECT car.plate, car.trademark, car.model, car.version, car.state FROM AppBundle\Entity\Car car, AppBundle\Entity\Company c WHERE car.state='avalaible' and car.company=c.id and c.id=:id"
         )->setParameter("id", $idCompany);
         return $query->getArrayResult();
+
+    }
+
+    function getCarWithoutDriver($idCompany){
+        $em = $this->getEntityManager();
+        $con = $em->getConnection();
+        $sql = "SELECT
+        car.id, car.trademark, car.model, car.plate ,car.version
+        FROM car, company WHERE car.company_id=company.id
+        AND company.id=:id
+        AND car.id NOT IN (SELECT car.id
+        FROM car, driver
+        WHERE car.id=driver.car_id)";
+        $query = $con->prepare($sql);
+        $query->bindValue("id",$idCompany);
+        $query->execute();
+        $results = $query->fetchAll();
+        return $results;
+    }
+
+    public function addCarToCompany(Request $request){
+
+
 
     }
 

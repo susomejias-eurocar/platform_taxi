@@ -43,6 +43,14 @@ list_cars:
     defaults:  { _controller: AppBundle:Company:listCars }      
 
 
+driver_register:
+    path:   /register_driver
+    defaults:   { _controller: AppBundle:Company:registerDriver }
+
+ajax_register_driver:
+    path:   /ajax_register_driver
+    defaults:   { _controller: AppBundle:Company:addDriver }
+
 panel:
     path:      /panel
     defaults:  { _controller: AppBundle:User:panel }

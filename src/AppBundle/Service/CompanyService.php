@@ -36,7 +36,7 @@ use Symfony\Component\HttpFoundation\Request;
         }
 
         public function getDriversWithoutCar($idCompany){
-            $em = $this->entityManager->getConnection();
+            $em = $this->entityManager;
             $car = $em->getRepository("AppBundle:Company")->getDriversWithoutCar($idCompany);
             return $car;
         }
@@ -80,7 +80,13 @@ use Symfony\Component\HttpFoundation\Request;
 
         public function getAvalaibleCar($idCompany){
             $em = $this->entityManager;
-            $car = $em->getRepository("AppBundle:Company")->getAvalaiblerCar($idCompany);
+            $car = $em->getRepository("AppBundle:Company")->getAvalaibleCar($idCompany);
+            return $car;
+        }        
+
+        public function getCarWithoutDriver($idCompany){
+            $em = $this->entityManager;
+            $car = $em->getRepository("AppBundle:Company")->getCarWithoutDriver($idCompany);
             return $car;
         }        
     }
