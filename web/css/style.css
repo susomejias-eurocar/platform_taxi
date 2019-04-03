@@ -32,9 +32,9 @@ input:focus {
 }
 
 #leftPanel .option {
+  padding: 20px 0px;
+  display: block;
+  text-align: center;
+  color: #fff;
   text-decoration: none;
-}
-
-#leftPanel .option:hover {
-  background: rgba(0, 0, 0, 0.2);
 }
