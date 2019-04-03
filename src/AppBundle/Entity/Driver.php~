@@ -25,7 +25,7 @@ class Driver
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="drivers")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $user;
 
@@ -62,7 +62,7 @@ class Driver
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="drivers")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $company;
 

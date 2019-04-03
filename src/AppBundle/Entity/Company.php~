@@ -25,7 +25,7 @@ class Company
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="companys")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $user;
 
