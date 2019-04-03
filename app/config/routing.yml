@@ -9,3 +9,31 @@ login:
 register:
     path:      /register
     defaults:  { _controller: AppBundle:User:register }
+
+
+list_cars:
+    path:   /listAllCars
+    defaults:  { _controller: AppBundle:Company:listCars }
+
+list_cars:
+    path:   /listCars/{state}
+    defaults:  { _controller: AppBundle:Company:listCars }
+list_cars:
+    path:   /listAllDrivers
+    defaults:  { _controller: AppBundle:Company:listCars }
+
+list_cars:
+    path:   /listDivers/{state}
+    defaults:  { _controller: AppBundle:Company:listCars }      
+
+ajax_register:
+    path:      /register_ajax
+    defaults:  { _controller: AppBundle:User:registerAjax }
+
+panel:
+    path:      /panel
+    defaults:  { _controller: AppBundle:User:panel }
+
+logout:
+    path: /logout
+

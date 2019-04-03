@@ -55,6 +55,13 @@ class Permission
      * @ORM\OneToMany(targetEntity="User", mappedBy="permission")
      */
     private $user;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -156,13 +163,6 @@ class Permission
     public function getRemove()
     {
         return $this->remove;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

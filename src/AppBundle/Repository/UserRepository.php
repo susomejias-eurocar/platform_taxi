@@ -12,9 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
-    public function register(User $user){
+    public function isTypeUser($table, $user_id)
+    {
 
-        $this->_em->persist($user);
+        
+        
+        $sql = "SELECT ".$table.".id FROM user, ". $table ." WHERE :user_id = ". $table .".user_id";
+        $params = array(
+            'user_id' => $user_id,
+            'table' => $table
+        );
 
+        $results = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetchAll();
+
+
+        if ($results[0]["id"]){
+            return true;
+        }
+        return false;
     }
+    
 }

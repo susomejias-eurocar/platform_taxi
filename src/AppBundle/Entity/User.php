@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -52,7 +53,6 @@ class User
     /**
      * @var int
      *
-     * @ORM\Column(name="id_permission", type="integer")
      * @ORM\ManyToOne(targetEntity="Permission", inversedBy="user")
      * @ORM\JoinColumn(name="permission_id", referencedColumnName="id")
      */
@@ -61,16 +61,24 @@ class User
     /**
      * @var int
      *
-     * @ORM\OneToMany(targetEntity="Company", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Company", mappedBy="user")
      */
     private $companys;
 
     /**
      * @var int
      *
-     * @ORM\OneToMany(targetEntity="Driver", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Driver", mappedBy="userId")
      */
     private $drivers;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->companys = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -175,43 +183,12 @@ class User
     }
 
     /**
-     * Set idPermission
-     *
-     * @param integer $idPermission
-     * @return User
-     */
-    public function setIdPermission($idPermission)
-    {
-        $this->idPermission = $idPermission;
-
-        return $this;
-    }
-
-    /**
-     * Get idPermission
-     *
-     * @return integer 
-     */
-    public function getIdPermission()
-    {
-        return $this->idPermission;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->companys = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Set permission
      *
-     * @param integer $permission
+     * @param \AppBundle\Entity\Permission $permission
      * @return User
      */
-    public function setPermission($permission)
+    public function setPermission(\AppBundle\Entity\Permission $permission = null)
     {
         $this->permission = $permission;
 
@@ -221,7 +198,7 @@ class User
     /**
      * Get permission
      *
-     * @return integer 
+     * @return \AppBundle\Entity\Permission 
      */
     public function getPermission()
     {
@@ -292,5 +269,26 @@ class User
     public function getDrivers()
     {
         return $this->drivers;
+    }
+
+ 
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+ 
+    public function getSalt()
+    {
+        return null;
+    }
+ 
+    public function getUsername()
+    {
+        return $this->email;
+    }
+ 
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }

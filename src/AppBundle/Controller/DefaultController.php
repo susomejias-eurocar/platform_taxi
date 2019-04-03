@@ -10,6 +10,7 @@ class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
-        return $this->render('deafult/index.html.twig', array());
+        return $this->redirect('login');
     }
+
 }
