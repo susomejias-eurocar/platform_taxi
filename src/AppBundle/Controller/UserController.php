@@ -92,7 +92,12 @@ class UserController extends Controller
                 );
                 $user = new User();
                 $user->setEmail($email);
-                $user->setPassword($password1);
+
+                $encoder = $this->container->get('security.password_encoder');
+                $encoded = $encoder->encodePassword($user, $password1);
+
+                $user->setPassword($encoded);
+
                 $user->setPhone($phone);
                 $user->setActive(0);
                 $user->setPermission($permissionFull);
