@@ -11,31 +11,12 @@ use AppBundle\Entity\Driver;
 
 class CompanyController extends Controller
 {
-    public function listCarsAction(Request $request)
-    {
 
-        $security_context = $this->get('security.context');
-
-        $security_token = $security_context->getToken();
-
-        $user = $security_token->getUser();
-
-        $companyService = $this->get('company_service');
-
-        $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
-
-        $companyService = $this->get('company_service');
-
-        $params = $request->request->all();
-        $getAllCarsCompany = $companyService->getAllCars($params,$companyNameAddress[0]["id"]);
-
-        $response = new Response();
-
-        $response->setContent(json_encode($getAllCarsCompany));
-        return $response;
-
-    }
-
+    /**
+     * Show the view for the datatable.
+     *
+     * @return void
+     */
     public function showCarsAction()
     {
         $security_context = $this->get('security.context');
@@ -54,18 +35,53 @@ class CompanyController extends Controller
             if ($isCompany){
                 $companyService = $this->get('company_service');
 
-                $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
+                $getCompanyInfo = $companyService->getCompanyInfo($user->getId());
 
-                return $this->render('company/content-panel-showCars.html.twig', array("user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id'] ));
+                return $this->render('company/content-panel-showCars.html.twig', array("user_type" => "company", "companyName" => $getCompanyInfo[0]["name"], "companyAddress"=> $getCompanyInfo[0]["address"], "companyId" => $getCompanyInfo[0]['id'] ));
             }elseif($isDriver){
                 
                 return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
             }
         }
-
-        //return $this->render('company/content-panel.html.twig', array("user_type" => "company"));
     }
 
+    /**
+     * Make a request for ajax and get all the cars of a company.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function listCarsAction(Request $request)
+    {
+
+        $security_context = $this->get('security.context');
+
+        $security_token = $security_context->getToken();
+
+        $user = $security_token->getUser();
+
+        $companyService = $this->get('company_service');
+
+        $getCompanyInfo = $companyService->getCompanyInfo($user->getId());
+
+        $companyService = $this->get('company_service');
+
+        $params = $request->request->all();
+        $getAllCarsCompany = $companyService->getAllCars($params,$getCompanyInfo[0]["id"]);
+
+        $response = new Response();
+
+        $response->setContent(json_encode($getAllCarsCompany));
+        return $response;
+
+    }
+
+
+    /**
+     * Show the view for the datatable.
+     *
+     * @return void
+     */
     public function showDriversAction()
     {
         $security_context = $this->get('security.context');
@@ -84,18 +100,23 @@ class CompanyController extends Controller
             if ($isCompany){
                 $companyService = $this->get('company_service');
 
-                $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
+                $getCompanyInfo = $companyService->getCompanyInfo($user->getId());
 
-                return $this->render('company/content-panel-showDrivers.html.twig', array("user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id'] ));
+                return $this->render('company/content-panel-showDrivers.html.twig', array("user_type" => "company", "companyName" => $getCompanyInfo[0]["name"], "companyAddress"=> $getCompanyInfo[0]["address"], "companyId" => $getCompanyInfo[0]['id'] ));
             }elseif($isDriver){
                 
                 return $this->render('company/content-panel-showDrivers.html.twig', array("user_type" => "driver"));
             }
         }
 
-        //return $this->render('company/content-panel.html.twig', array("user_type" => "company"));
     }
 
+    /**
+     * Make a request for ajax and get all the drivers of a company.
+     *
+     * @param Request $request
+     * @return void
+     */
     public function listDriversAction(Request $request)
     {
 
@@ -107,12 +128,12 @@ class CompanyController extends Controller
 
         $companyService = $this->get('company_service');
 
-        $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
+        $getCompanyInfo = $companyService->getCompanyInfo($user->getId());
 
         $companyService = $this->get('company_service');
 
         $params = $request->request->all();
-        $getAllDriversCompany = $companyService->getAllDrivers($params,$companyNameAddress[0]["id"]);
+        $getAllDriversCompany = $companyService->getAllDrivers($params,$getCompanyInfo[0]["id"]);
 
         $response = new Response();
 
@@ -121,7 +142,13 @@ class CompanyController extends Controller
 
     }
 
-   public function registerDriverAction(Request $request)
+    /**
+     * Show view to create a driver.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function registerDriverAction(Request $request)
     {
         $security_context = $this->get('security.context');
 
@@ -139,9 +166,9 @@ class CompanyController extends Controller
             if ($isCompany){
                 $companyService = $this->get('company_service');
 
-                $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
-                $cars = $this->get("company_service")->getCarWithoutDriver($companyNameAddress[0]['id']);
-                return $this->render('company/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id']));
+                $getCompanyInfo = $companyService->getCompanyInfo($user->getId());
+                $cars = $this->get("company_service")->getCarWithoutDriver($getCompanyInfo[0]['id']);
+                return $this->render('company/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $getCompanyInfo[0]["name"], "companyAddress"=> $getCompanyInfo[0]["address"], "companyId" => $getCompanyInfo[0]['id']));
             }elseif($isDriver){
                 
                 return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
@@ -149,6 +176,12 @@ class CompanyController extends Controller
         }    
     }
 
+    /**
+     * Receives form data by ajax by post
+     *
+     * @param Request $request
+     * @return void
+     */
     public function addDriverAction(Request $request)
     {
 
@@ -244,6 +277,11 @@ class CompanyController extends Controller
         return $result;
     }
 
+    /**
+     * Get all avalaible driverss
+     *
+     * @return void
+     */
     public function listAllDriversAction()
     {
         $service = $this->container->get('company_service');
@@ -251,7 +289,12 @@ class CompanyController extends Controller
         return new JsonResponse($drivers);
     }
 
-    public function asignCarAction(){
+    /**
+     * Assign a car to a driver
+     *
+     * @return void
+     */
+    public function assignCarAction(){
             
         $security_context = $this->get('security.context');
 
@@ -269,12 +312,12 @@ class CompanyController extends Controller
 
         if($user){
             if ($isCompany){
-                $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
+                $getCompanyInfo = $companyService->getCompanyInfo($user->getId());
                 $cars = $companyService->getCarWithoutDriver($user->getId());
                 $drivers = $companyService->getDriversWithoutCar($user->getId());
                 
 
-                return $this->render('car/content-panel-asignCar.html.twig', array("drivers"=> $drivers, "cars"=>$cars,"user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id']));
+                return $this->render('car/content-panel-asignCar.html.twig', array("drivers"=> $drivers, "cars"=>$cars,"user_type" => "company", "companyName" => $getCompanyInfo[0]["name"], "companyAddress"=> $getCompanyInfo[0]["address"], "companyId" => $getCompanyInfo[0]['id']));
             }elseif($isDriver){
                 
                 return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));

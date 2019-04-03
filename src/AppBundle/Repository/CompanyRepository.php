@@ -15,6 +15,17 @@ use PDO;
 class CompanyRepository extends EntityRepository
 {
 
+    /**
+     * Execute query
+     *
+     * @param [type] $query
+     * @param [type] $parameters
+     * @param [type] $where
+     * @param [type] $groupBy
+     * @param [type] $orderBy
+     * @param [type] $having
+     * @return void
+     */
     public function executeQuery($query, $parameters, $where = null, $groupBy = null, $orderBy = null, $having = null){
         
         /** @var EntityManager $em */
@@ -46,6 +57,13 @@ class CompanyRepository extends EntityRepository
 
     }
 
+    /**
+     * Get all cars of company
+     *
+     * @param [type] $params
+     * @param [type] $company_id
+     * @return void
+     */
     public function getAllCars($params, $company_id){
 
         //$search = json_decode($params['search']['value'], true);
@@ -113,12 +131,16 @@ class CompanyRepository extends EntityRepository
 
     }
 
+    /**
+     * Get all drivers of company
+     *
+     * @param [type] $params
+     * @param [type] $company_id
+     * @return void
+     */
     public function getAllDrivers($params, $company_id){
 
         //$search = json_decode($params['search']['value'], true);
-
-        // var_dump($params);
-        // die();
 
         // dump($params);
         // die();
@@ -180,8 +202,13 @@ class CompanyRepository extends EntityRepository
 
 
 
-    // sacar el usuario de una compañia con el id del usuario
-    public function getCompanyNameAddress($user_id)
+    /**
+     * Get info of company by user id.
+     *
+     * @param [type] $user_id
+     * @return void
+     */
+    public function getCompanyInfo($user_id)
     {
         
         $sql = "SELECT company.id,company.name, company.address FROM company , user WHERE :user_id = company.user_id";
@@ -194,25 +221,6 @@ class CompanyRepository extends EntityRepository
 
         return $results;
     }
-    // function getAllCars($idCompany)
-    // {
-    //     $em = $this->getEntityManager();
-    //     $query = $em->createQuery(
-    //         "SELECT car.plate, car.trademark, car.model, car.version FROM AppBundle\Entity\Car car, AppBundle\Entity\Company c WHERE car.company=c.id and c.id=:id"
-    //     )->setParameter("id", $idCompany);
-    //     return $query->getArrayResult();
-    // }
-
-    // function getAllDrivers($idCompany)
-    // {
-    //     $con = $this->getEntityManager();
-    //     $query = $con->createQuery(
-    //         "SELECT d.name, d.state, car.trademark FROM
-    //         AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u, AppBundle\Entity\Car car
-    //         WHERE u.id=c.user and d.company=c.id and (d.car=car.id or d.car is null) and c.id=:id"
-    //     )->setParameter("id", $idCompany);
-    //     return $query->getArrayResult();
-    // }
 
     function getDriversWithoutCar($idCompany){
         $em = $this->getEntityManager();
