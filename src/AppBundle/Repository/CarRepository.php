@@ -19,6 +19,4 @@ class CarRepository extends EntityRepository
             "UPDATE AppBundle\Entity\Car car SET car.state=:state WHERE car.id=:id"
         )->setParameters(["state" => $state, "id" => $idCar])->execute();        
     }
-
-
 }
