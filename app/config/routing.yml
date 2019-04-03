@@ -26,13 +26,14 @@ new_car:
     path:   /car/new
     defaults:  { _controller: AppBundle:Car:new }
 
-show_car:
-    path:   /carShow
-    defaults:  { _controller: AppBundle:Company:showCars }
 
 new_car:
     path:   /car/newAjax
     defaults:  { _controller: AppBundle:Car:newAjax }
+
+show_car:
+    path:   /carShow
+    defaults:  { _controller: AppBundle:Company:showCars }
 
 list_all_cars:
     path:   /listAllCars
@@ -42,10 +43,19 @@ list_cars:
     path:   /listDivers/{state}
     defaults:  { _controller: AppBundle:Company:listCars }      
 
+#DRIVER ROUTING
 
 driver_register:
     path:   /register_driver
     defaults:   { _controller: AppBundle:Company:registerDriver }
+
+show_drivers:
+    path:   /driverShow
+    defaults:  { _controller: AppBundle:Company:showDrivers }
+
+list_all_drivers:
+    path:   /listAllDrivers
+    defaults:  { _controller: AppBundle:Company:listDrivers }
 
 ajax_register_driver:
     path:   /ajax_register_driver

@@ -34,6 +34,12 @@ use Symfony\Component\HttpFoundation\Request;
             return $cars;
         }
 
+        public function getAllDrivers($params,$idCompany)
+        {
+            $drivers = $this->entityManager->getRepository("AppBundle:Company")->getAllDrivers($params,$idCompany);
+            return $drivers;
+        }
+
 
         public function insertCompany($data){
             $company = new Company();

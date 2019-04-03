@@ -56,7 +56,7 @@ class CompanyController extends Controller
 
                 $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
 
-                return $this->render('company/content-panel.html.twig', array("user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id'] ));
+                return $this->render('company/content-panel-showCars.html.twig', array("user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id'] ));
             }elseif($isDriver){
                 
                 return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
@@ -65,6 +65,62 @@ class CompanyController extends Controller
 
         //return $this->render('company/content-panel.html.twig', array("user_type" => "company"));
     }
+
+    public function showDriversAction()
+    {
+        $security_context = $this->get('security.context');
+
+        $security_token = $security_context->getToken();
+
+        $user = $security_token->getUser();
+
+        $usersService = $this->get('user_service');
+
+        $isCompany = $usersService->isTypeUser("company",$user->getId());
+
+        $isDriver = $usersService->isTypeUser("company",$user->getId());
+
+        if($user){
+            if ($isCompany){
+                $companyService = $this->get('company_service');
+
+                $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
+
+                return $this->render('company/content-panel-showDrivers.html.twig', array("user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id'] ));
+            }elseif($isDriver){
+                
+                return $this->render('company/content-panel-showDrivers.html.twig', array("user_type" => "driver"));
+            }
+        }
+
+        //return $this->render('company/content-panel.html.twig', array("user_type" => "company"));
+    }
+
+    public function listDriversAction(Request $request)
+    {
+
+        $security_context = $this->get('security.context');
+
+        $security_token = $security_context->getToken();
+
+        $user = $security_token->getUser();
+
+        $companyService = $this->get('company_service');
+
+        $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
+
+        $companyService = $this->get('company_service');
+
+        $params = $request->request->all();
+        $getAllDriversCompany = $companyService->getAllDrivers($params,$companyNameAddress[0]["id"]);
+
+        $response = new Response();
+
+        $response->setContent(json_encode($getAllDriversCompany));
+        return $response;
+
+    }
+
    public function registerDriverAction(Request $request)
     {
         $security_context = $this->get('security.context');
