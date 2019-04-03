@@ -14,6 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
             $this->entityManager = $em;
         }
 
+        public function getCompany($id){
+            $em = $this->entityManager;
+            $car = $em->getRepository("AppBundle:Company")->findOneBy(["id" => $id]);
+            return $car;
+        }
+
 
         public function getCompanyNameAddress($user_id){
 

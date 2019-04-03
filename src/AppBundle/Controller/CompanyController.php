@@ -86,7 +86,7 @@ class CompanyController extends Controller
                 $companyNameAddress = $companyService->getCompanyNameAddress($user->getId());
                 $cars = $this->get("company_service")->getCarWithoutDriver(1);
 
-                return $this->render('company/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress));
+                return $this->render('company/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $companyNameAddress[0]["name"], "companyAddress"=> $companyNameAddress[0]["address"], "companyId" => $companyNameAddress[0]['id']));
             }elseif($isDriver){
                 
                 return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
@@ -115,6 +115,7 @@ class CompanyController extends Controller
         $driverName = $request->get('driverName');
         $driverLastName = $request->get('driverLastName');
         $idCar = $request->get('car');
+        $idCompany = $request->get('idCompany');
         if($idCar==0)
             $car = null;
         else
@@ -171,6 +172,7 @@ class CompanyController extends Controller
             $driver->setLastName($driverLastName);
             $driver->setCar($car);
             $driver->setState('register');
+            $driver->setCompany($this->container->get('company_service')->getCompany($idCompany));
 
             $em->persist($driver);
 
