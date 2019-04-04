@@ -25,14 +25,14 @@ ajax_register:
 
 # CAR ROUTING
 
-new_car:
+register_car:
     path:   company/car/new
-    defaults:  { _controller: AppBundle:Car:new }
+    defaults:  { _controller: AppBundle:Company:registerCar }
 
 
-new_car:
-    path:   company/car/newAjax
-    defaults:  { _controller: AppBundle:Car:newAjax }
+add_car:
+    path:   company/car/addCar
+    defaults:  { _controller: AppBundle:Company:addCar }
 
 # Go to view for cars datatable 
 show_car:
