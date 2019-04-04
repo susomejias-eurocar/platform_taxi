@@ -12,8 +12,8 @@
 
 
                         <div class="form-group">
-                            <label for="car" class="text-light boldText">Conductor: </label>
-                            <select name="car" id="car">
+                            <label for="drivers" class="text-light boldText">Conductor: </label>
+                            <select name="drivers" id="drivers">
                                 <option value=NULL>Sin coche</option>
                                 {% for car in cars %}
                                 <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
@@ -23,8 +23,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="car" class="text-light boldText">Coche: </label>
-                            <select name="car" id="car">
+                            <label for="cars" class="text-light boldText">Coche: </label>
+                            <select name="cars" id="cars">
                                 <option value=NULL>Sin coche</option>
                                 {% for car in cars %}
                                 <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
@@ -45,6 +45,22 @@
 {{ parent() }}
 
 <script>
+
+    let $cars = $("#cars");
+    let $drivers = $("#drivers");
+
+    if($cars.length == 1){
+        $('#btnRegister').prop("disabled",true);
+        $cars.prop("disabled", true);
+        $("#cars option:first").text("No existen coches disponibles");
+    }
+    if($drivers.length == 1){
+        $('#btnRegister').prop("disabled",true);
+        $drivers.prop("disabled", true);
+        $("#drivers option:first").text("No existen conductores disponibles");
+    }
+
+
     $('#btnRegister').click(()=>{
             $.ajax({
                 url: "{{ path('ajax_register_driver') }}",
