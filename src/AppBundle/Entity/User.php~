@@ -61,17 +61,17 @@ class User implements UserInterface
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Company", inversedBy="user")
+     * @ORM\ManyToOne(targetEntity="Company", inversedBy="users")
      */
     private $companys;
 
     /**
      * @var int
      *
-     * @ORM\OneToMany(targetEntity="Driver", mappedBy="userId")
+     * @ORM\OneToMany(targetEntity="Driver", mappedBy="user")
      */
     private $drivers;
-    
+
         /**
      * Set password
      *

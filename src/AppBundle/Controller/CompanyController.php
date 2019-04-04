@@ -467,22 +467,22 @@ class CompanyController extends Controller
 
         $companyService = $this->get('company_service');
 
-        $isCompany = $usersService->isTypeUser("company",$user->getId());
+        //$isCompany = $usersService->isTypeUser("company",$user->getId());
 
-        $isDriver = $usersService->isTypeUser("company",$user->getId());
+        //$isDriver = $usersService->isTypeUser("company",$user->getId());
 
-        if($user){
-            if ($isCompany){
-                $getCompanyInfo = $companyService->getCompanyInfo($user->getId());
-                $cars = $companyService->getCarWithoutDriver($getCompanyInfo[0]['id']);
-                $drivers = $companyService->getDriversWithoutCar($getCompanyInfo[0]['id']);
+        //if($user){
+            //if ($isCompany){
+                $companyId = $user->getCompanys()->getId();
+                $cars = $companyService->getCarWithoutDriver($companyId);
+                $drivers = $companyService->getDriversWithoutCar($companyId);
 
-                return $this->render('car/content-panel-asignCar.html.twig', array("drivers"=> $drivers, "cars"=>$cars,"user_type" => "company", "companyName" => $getCompanyInfo[0]["name"], "companyAddress"=> $getCompanyInfo[0]["address"], "companyId" => $getCompanyInfo[0]['id']));
-            }elseif($isDriver){
-                
-                return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
-            }
-        }   
+                return $this->render('car/content-panel-asignCar.html.twig', array("drivers"=> $drivers, "cars"=>$cars,"user_type" => "company",  "companyId" => $companyId));
+            //}elseif($isDriver){
+              //  
+                //return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
+            //}
+        //}   
     }
 
     public function asignCarAction(Request $request){
@@ -500,11 +500,11 @@ class CompanyController extends Controller
         $idDriver = $request->get('idDriver');
         $idCar = $request->get('idCar');
 
-        $companyService = $this->get('company_service')->asignCarToCompany($idDriver,$idCar);
+        $this->get('company_service')->asignCarToCompany($idDriver,$idCar);
         
         $response = array(
             "status" => true,
-            "message" => "Registro correcto"
+            "message" => "Se ha asignado el coche al conductor"
         );
         
 

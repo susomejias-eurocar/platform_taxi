@@ -52,6 +52,13 @@ class Permission
     /**
      * @var int
      *
+     * @ORM\Column(name="list", type="integer")
+     */
+    private $list;
+
+    /**
+     * @var int
+     *
      * @ORM\OneToMany(targetEntity="User", mappedBy="permission")
      */
     private $user;
@@ -196,5 +203,28 @@ class Permission
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set list
+     *
+     * @param integer $list
+     * @return Permission
+     */
+    public function setList($list)
+    {
+        $this->list = $list;
+
+        return $this;
+    }
+
+    /**
+     * Get list
+     *
+     * @return integer 
+     */
+    public function getList()
+    {
+        return $this->list;
     }
 }

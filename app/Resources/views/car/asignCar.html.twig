@@ -2,19 +2,19 @@
 
 {% block main %}
     <main>
-        <div class="container col-lg-12 background-city" style="padding:50px;min-height:100vh;display:flex;align-items:center;" >
+        <div class="container col-lg-12" style="padding:50px;min-height:100vh;display:flex;align-items:center;" >
             <div class="card col-lg-4 offset-lg-4 transparent">
                
                 <div class="card-body">
-                 <h1 class="text-light" style="font-weight:bold; padding:10px">Platform Taxi Proyect</h1>
+                 <h1 class="text-light" style="font-weight:bold; padding:10px">Asignar coche</h1>
 
-                    <h3 class="text-light" style="font-weight:bold; padding:10px">Asignar coche</h3>
+                    <!--<h3 class="text-light" style="font-weight:bold; padding:10px">Asignar coche</h3>-->
 
 
                         <div class="form-group">
                             <label for="drivers" class="text-light boldText">Conductor: </label>
                             <select name="drivers" id="drivers">
-                                <option value=NULL>Sin coche</option>
+                                <option value=NULL>Selecciona un conductor</option>
                                 {% for driver in drivers %}
                                 <option value={{driver['id']}}>{{driver['name']}} {{driver['last_name']}}</option>
                                 {% endfor %}
@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <label for="cars" class="text-light boldText">Coche: </label>
                             <select name="cars" id="cars">
-                                <option value=NULL>Sin coche</option>
+                                <option value=NULL>Selecciona un coche</option>
                                 {% for car in cars %}
                                 <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
                                 {% endfor %}
@@ -33,7 +33,7 @@
                             </select>
                         </div>
 
-                        <button  class="btn" style="background:rgba(255, 255, 255, .9);color:#263238;font-weight:bold;font-size:1.1rem" id="btnRegister">Registrar</button>
+                        <button  class="btn" style="background:rgba(255, 255, 255, .9);color:#263238;font-weight:bold;font-size:1.1rem" id="btnAsign">Asignar</button>
                 </div>
             </div>
         </div>
@@ -48,40 +48,45 @@
 
     let $cars = $("#cars");
     let $drivers = $("#drivers");
-    if($cars.children('option').length < 2){
-        $('#btnRegister').prop("disabled",true);
+    $('#btnAsign').prop("disabled",true);
+    if($cars.children('option').length < 2){        
         $cars.prop("disabled", true);
         $("#cars option:first").text("No existen coches disponibles");
     }
     if($drivers.children('option').length < 2){
-        $('#btnRegister').prop("disabled",true);
         $drivers.prop("disabled", true);
         $("#drivers option:first").text("No existen conductores disponibles");
     }
 
     $cars.change(function (e) { 
         e.preventDefault();
-        
+        if($cars.prop('selectedIndex')==0)
+            $('#btnAsign').prop("disabled",true);
+        else
+            checkSelect();
     });
 
     $drivers.change(function (e) { 
         e.preventDefault();
-        
+        if($drivers.prop('selectedIndex')==0)
+            $('#btnAsign').prop("disabled",true);
+        else
+            checkSelect();            
     });
 
-    $('#btnRegister').click(()=>{
+    function checkSelect(){
+        if($drivers.prop('selectedIndex')!=0 && $cars.prop('selectedIndex')!=0)
+            $('#btnAsign').prop("disabled",false);
+    }
+
+    $('#btnAsign').click(()=>{
             $.ajax({
-                url: "{{ path('ajax_register_driver') }}",
+                url: "{{ path('asign_car_driver') }}",
                 type: 'POST',
                 dataType: 'json',
                 data: { 
-                    email: $('#email').val() , 
-                    password1: $('#password1').val(), 
-                    password2: $('#password2').val(), 
-                    phone: $("#phone").val(),
-                    driverName: $("#driverName").val(),
-                    driverLastName: $("#driverLastName").val(),
-                    car: $("#car").val(),
+                    idDriver: $('#drivers').val() , 
+                    idCar: $('#cars').val(), 
                     idCompany: {{ companyId }}
                 },
                 success: function(result){
