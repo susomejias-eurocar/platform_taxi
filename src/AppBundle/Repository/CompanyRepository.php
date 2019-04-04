@@ -66,7 +66,7 @@ class CompanyRepository extends EntityRepository
      */
     public function getAllCars($params, $company_id){
 
-        //$search = json_decode($params['search']['value'], true);
+        $search = json_decode($params['search']['value'], true);
 
         // var_dump($params);
         // die();
@@ -89,16 +89,20 @@ class CompanyRepository extends EntityRepository
 
         $query = "SELECT ca.plate,ca.trademark,ca.model,ca.version,ca.state FROM car as ca, company as co where ca.company_id = co.id and ca.company_id = :company_id";
 
-        $queryCount = "SELECT COUNT(*) as total FROM car as ca, company as co where ca.company_id = co.id";
+        $queryCount = "SELECT COUNT(*) as total FROM car as ca, company as co where ca.company_id = co.id AND co.id = :company_id";
 
-        // if (isset($search["employeeName"]) AND $search["employeeName"]){
-        //     $where .= " AND e.name LIKE '%". $search["employeeName"] ."%'";
-        // }
+        if (isset($search["plate"]) AND $search["plate"]){
+            $where .= " AND ca.plate LIKE '%". $search["plate"] ."%'";
+        }
+
+        if (isset($search["model"]) AND $search["model"]){
+            $where .= " AND ca.model LIKE '%". $search["model"] ."%'";
+        }
 
         
-        // if (isset($search["employeeOffice"]) AND $search["employeeOffice"]){
-        //     $where .= " AND office_name LIKE '%". $search["employeeOffice"] ."%'";
-        // }
+        if (isset($search["state"]) AND $search["state"]){
+            $where .= " AND ca.state LIKE '%". $search["state"] ."%'";
+        }
 
         //CREAMOS EL ORDER BY CON EL LIMIT aparte
         $limit=" ";
@@ -140,7 +144,7 @@ class CompanyRepository extends EntityRepository
      */
     public function getAllDrivers($params, $company_id){
 
-        //$search = json_decode($params['search']['value'], true);
+        $search = json_decode($params['search']['value'], true);
 
         // dump($params);
         // die();
@@ -158,16 +162,20 @@ class CompanyRepository extends EntityRepository
 
         $query = "SELECT d.name, d.last_name, d.state FROM driver as d, company as co where d.company_id = co.id and d.company_id = :company_id";
 
-        $queryCount = "SELECT COUNT(*) as total FROM driver as d, company as co where d.company_id = co.id";
+        $queryCount = "SELECT COUNT(*) as total FROM driver as d, company as co where d.company_id = co.id AND co.id = :company_id";
 
-        // if (isset($search["employeeName"]) AND $search["employeeName"]){
-        //     $where .= " AND e.name LIKE '%". $search["employeeName"] ."%'";
-        // }
+        if (isset($search["name"]) AND $search["name"]){
+            $where .= " AND d.name LIKE '%". $search["name"] ."%'";
+        }
 
         
-        // if (isset($search["employeeOffice"]) AND $search["employeeOffice"]){
-        //     $where .= " AND office_name LIKE '%". $search["employeeOffice"] ."%'";
-        // }
+        if (isset($search["last_name"]) AND $search["last_name"]){
+            $where .= " AND d.last_name LIKE '%". $search["last_name"] ."%'";
+        }
+
+        if (isset($search["state"]) AND $search["state"]){
+            $where .= " AND d.state LIKE '%". $search["state"] ."%'";
+        }
 
         //CREAMOS EL ORDER BY CON EL LIMIT aparte
         $limit=" ";
