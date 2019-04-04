@@ -26,62 +26,62 @@ ajax_register:
 # CAR ROUTING
 
 new_car:
-    path:   /car/new
+    path:   company/car/new
     defaults:  { _controller: AppBundle:Car:new }
 
 
 new_car:
-    path:   /car/newAjax
+    path:   company/car/newAjax
     defaults:  { _controller: AppBundle:Car:newAjax }
 
 # Go to view for cars datatable 
 show_car:
-    path:   /carShow
+    path:   company/car/show
     defaults:  { _controller: AppBundle:Company:showCars }
 
 # Obtain all cars with ajax
 list_all_cars:
-    path:   /listAllCars
+    path:   company/listAllCars
     defaults:  { _controller: AppBundle:Company:listCars }
 
 # Obtain all cars filtering with state
 list_cars:
-    path:   /listDivers/{state}
+    path:   company/listDivers/{state}
     defaults:  { _controller: AppBundle:Company:listCars }      
 
 
 # Go to view for drivers datatable 
 show_drivers:
-    path:   /driverShow
+    path:   company/driverShow
     defaults:  { _controller: AppBundle:Company:showDrivers }
 
 # Obtain all drivers with ajax
 list_all_drivers:
-    path:   /listAllDrivers
+    path:   company/listAllDrivers
     defaults:  { _controller: AppBundle:Company:listDrivers }
 
 # Show form view for register driver
 driver_register:
-    path:   /register_driver
+    path:   company/register_driver
     defaults:   { _controller: AppBundle:Company:registerDriver }
 
 # Register driver with ajax
 ajax_register_driver:
-    path:   /ajax_register_driver
+    path:   company/ajax_register_driver
     defaults:   { _controller: AppBundle:Company:addDriver }
 
 asign_car_driver:
-    path:   /asignCar
+    path:   company/asignCar
     defaults:   { _controller: AppBundle:Company:asignCar }
 
 # Show form view for register car
 car_register:
-    path:   /register_car
+    path:   company/register_car
     defaults:   { _controller: AppBundle:Company:registerCar }
 
 # Register car with ajax
 ajax_register_car:
-    path:   /ajax_register_car
+    path:   company/ajax_register_car
     defaults:   { _controller: AppBundle:Company:addCar}
 
 #Show panel view

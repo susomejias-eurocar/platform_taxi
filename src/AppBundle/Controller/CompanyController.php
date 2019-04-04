@@ -69,6 +69,7 @@ class CompanyController extends Controller
         $params = $request->request->all();
         $getAllCarsCompany = $companyService->getAllCars($params,$getCompanyInfo[0]["id"]);
 
+
         $response = new Response();
 
         $response->setContent(json_encode($getAllCarsCompany));
