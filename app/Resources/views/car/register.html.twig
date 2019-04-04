@@ -15,23 +15,23 @@
                             <input required name="plate" type="plate" class="form-control" id="plate" aria-describedby="emailHelp" placeholder="Introduce la matrícula">
                         </div>
                         <div class="form-group">
-                            <label for="marca" class=" boldText">Marca</label>
-                            <input required name="marca" type="text" class="form-control" id="marca" placeholder="Introduce la marca">
+                            <label for="trademark" class=" boldText">Marca</label>
+                            <input required name="trademark" type="text" class="form-control" id="trademark" placeholder="Introduce la marca">
                         </div>
 
                         <div class="form-group">
-                            <label for="modelo" class=" boldText">Modelo</label>
-                            <input required name="modelo" type="password" class="form-control" id="modelo" placeholder="Repita el modelo">
+                            <label for="model" class=" boldText">Modelo</label>
+                            <input required name="model" type="text" class="form-control" id="model" placeholder="Introduce el modelo">
                         </div> 
 
                         <div class="form-group">
                             <label for="version" class=" boldText">Versión</label>
-                            <input required name="version" type="tel" class="form-control" id="version" placeholder="Introduce teléfono">
+                            <input required name="version" type="tel" class="form-control" id="version" placeholder="Introduce la versión">
                         </div>
 
                         <div>
-                            <label for="car" class=" boldText">Estado</label>
-                            <select class="form-control" style="margin-bottom:20px" name="car" id="car">
+                            <label for="state" class=" boldText">Estado</label>
+                            <select class="form-control" style="margin-bottom:20px" name="state" id="state">
                                 <option value="avalaible">Disponible</option>                                
                                 <option value="damaged">Averiado</option>
                                 <option value="in repair">En reparación</option>                                
@@ -51,19 +51,18 @@
 {{ parent() }}
 
 <script>
+
     $('#btnRegister').click(()=>{
             $.ajax({
-                url: "{{ path('ajax_register_driver') }}",
+                url: "{{ path('add_car') }}",
                 type: 'POST',
                 dataType: 'json',
                 data: { 
-                    email: $('#email').val() , 
-                    password1: $('#password1').val(), 
-                    password2: $('#password2').val(), 
-                    phone: $("#phone").val(),
-                    driverName: $("#driverName").val(),
-                    driverLastName: $("#driverLastName").val(),
-                    car: $("#car").val(),
+                    plate: $('#plate').val() , 
+                    trademark: $('#trademark').val(), 
+                    model: $('#model').val(), 
+                    version: $("#version").val(),
+                    state: $("#state").val(),
                     idCompany: {{ companyId }}
                 },
                 success: function(result){
