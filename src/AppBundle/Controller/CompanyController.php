@@ -9,9 +9,117 @@ use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Driver;
 use AppBundle\Entity\Car;
+use AppBundle\Entity\Company;
 
 class CompanyController extends Controller
 {
+
+    public function registerAction(Request $request)
+    {
+        return $this->render('user/register.html.twig', array());
+    }
+
+    public function registerAjaxAction(Request $request)
+    {
+
+        $result = new Response();
+
+
+        $response = array(
+            "status" => false,
+            "message" => "ERROR"
+        );
+
+        
+
+        $em = $this->getDoctrine()->getManager();
+
+            
+
+            $email = $request->get('email');
+            $password1 = $request->get('password1');
+            $password2 = $request->get('password2');
+            $phone = $request->get('phone');
+            $companyName = $request->get('companyName');
+            $companyAddress = $request->get('companyAdress'); 
+
+    
+
+            if ($password1 != $password2){
+                $response = array(
+                    "status" => false,
+                    "message" => "Las contraseñas no coinciden"
+                );
+            }elseif (empty($email) or empty($phone) or empty($password1) or empty($password2) or empty($companyName) or empty($companyAddress)){
+                $response = array(
+                    "status" => false,
+                    "message" => "Rellene los campos"
+                );
+            }elseif(strlen($phone) < 6){
+
+                $response = array(
+                    "status" => false,
+                    "message" => "Formato del teléfono no válido, mínimo 6 números"
+                );
+
+            }elseif (strlen($password1) < 4){
+                
+                $response = array(
+                    "status" => false,
+                    "message" => "Contraseña demasiado corta, mínimo 4 caractres"
+                );
+
+            }else{
+                try{
+                    $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                        array('id'=> 1)
+                    );
+
+                    $company = new Company();
+                    $company->setName($companyName);
+                    $company->setAddress($companyAddress);
+
+                    $em->persist($company);
+
+                    $user = new User();
+                    $user->setEmail($email);
+
+                    $encoder = $this->container->get('security.password_encoder');
+                    $encoded = $encoder->encodePassword($user, $password1);
+
+                    $user->setPassword($encoded);
+
+                    $user->setPhone($phone);
+                    $user->setActive(0);
+                    $user->setCompanys($company);
+                    $user->setPermission($permissionFull);
+
+                    $em->persist($user);
+                    
+                    $em->flush();
+
+                }catch(UniqueConstraintViolationException $e){
+                    $response = array(
+                        "status" => false,
+                        "message" => "El correo ya está registrado"
+                    );
+                    $result->setContent(json_encode($response));
+
+                    return $result;
+                }
+                
+
+
+                $response = array(
+                    "status" => true,
+                    "message" => "Registro correcto"
+                );
+
+                $result->setContent(json_encode($response));
+
+                return $result;
+            }
+    }
 
     /**
      * Show the view for the datatable.
@@ -417,7 +525,9 @@ class CompanyController extends Controller
 
 
         $idDriver = $request->get('idDriver');
-        $idVar = $request->get('idCar');
+        $idCar = $request->get('idCar');
+
+        $companyService = $this->get('company_service')->asignCarToCompany($idDriver,$idCar);
         
         $response = array(
             "status" => true,

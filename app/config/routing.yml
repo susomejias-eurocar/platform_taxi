@@ -15,12 +15,12 @@ logout:
 # Go to show form for register
 register:
     path:      /register
-    defaults:  { _controller: AppBundle:User:register }
+    defaults:  { _controller: AppBundle:Company:register }
 
 #Go to obtain data with register form
 ajax_register:
     path:      /register_ajax
-    defaults:  { _controller: AppBundle:User:registerAjax }
+    defaults:  { _controller: AppBundle:Company:registerAjax }
 
 
 # CAR ROUTING

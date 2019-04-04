@@ -27,7 +27,7 @@ class Company
      * @ORM\OneToMany(targetEntity="User", mappedBy="companys")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $user;
+    private $users;
 
     /**
      * @var string
@@ -233,5 +233,15 @@ class Company
     public function removeUser(\AppBundle\Entity\User $user)
     {
         $this->user->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

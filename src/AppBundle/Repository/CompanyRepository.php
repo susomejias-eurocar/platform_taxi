@@ -208,7 +208,7 @@ class CompanyRepository extends EntityRepository
      * @param [type] $user_id
      * @return void
      */
-    public function getCompanyInfo($user_id)
+    /*public function getCompanyInfo($user_id)
     {
         
         $sql = "SELECT company.id,company.name, company.address FROM company , user WHERE :user_id = company.user_id";
@@ -220,7 +220,7 @@ class CompanyRepository extends EntityRepository
 
 
         return $results;
-    }
+    }*/
 
     function getDriversWithoutCar($idCompany){
         $em = $this->getEntityManager();

@@ -6,6 +6,7 @@
                 <img src="https://cdn.iconscout.com/icon/free/png-256/avatar-372-456324.png" height="90px"/>
                 <p style="padding:10px,10px;color:#fff">
                 {% block username %}
+                dump(app.user);
                     <p style="color:#fff;font-weight:bold">{{ app.user.username }}</p>
                     <p style="color:#fff;font-weight:bold;padding-bottom:3px;margin:0px">{{ companyName }}</p>
                     <p style="color:#fff;font-weight:bold;padding:0px">({{ companyAddress }})</p>
