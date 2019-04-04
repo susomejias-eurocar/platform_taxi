@@ -225,8 +225,8 @@ class CompanyRepository extends EntityRepository
     function getDriversWithoutCar($idCompany){
         $em = $this->getEntityManager();
         $query = $em->createQuery(
-            "SELECT d.name, d.state, car.trademark FROM
-            AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u, AppBundle\Entity\Car car
+            "SELECT d.id, d.name, d.last_name, d.state FROM
+            AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u
             WHERE u.id=c.user and d.company=c.id and d.car is null and c.id=:id"
         )->setParameter("id", $idCompany);
         return $query->getArrayResult();
@@ -307,12 +307,13 @@ class CompanyRepository extends EntityRepository
         $em = $this->getEntityManager();
         $con = $em->getConnection();
         $sql = "SELECT
-        car.id, car.trademark, car.model, car.plate ,car.version
-        FROM car, company WHERE car.company_id=company.id
-        AND company.id=:id
-        AND car.id NOT IN (SELECT car.id
-        FROM car, driver
-        WHERE car.id=driver.car_id)";
+                car.id, car.trademark, car.model, car.plate ,car.version
+            FROM car
+            JOIN company as c on c.id=car.company_id            
+                WHERE c.id=:id
+                AND car.id NOT IN (SELECT car.id
+                    FROM car
+                    JOIN driver as d on car.id=d.car_id)";
         $query = $con->prepare($sql);
         $query->bindValue("id",$idCompany);
         $query->execute();
@@ -320,10 +321,19 @@ class CompanyRepository extends EntityRepository
         return $results;
     }
 
-    public function addCarToCompany($idCar, $idCompany){
-
-
-
+    public function asignCarToCompany($idDriver, $idCar){
+        $em = $this->getEntityManager();
+        $con = $em->getConnection();
+        $sql = "UPDATE
+        driver
+        set car_id=:idCar
+        where id=:idDriver";
+        $query = $con->prepare($sql);
+        $query->bindValue("idCar",$idCar);
+        $query->bindValue("id",$idDriver);
+        $query->execute();
+        $results = $query->fetchAll();
+        return $results;
     }
 
 }
