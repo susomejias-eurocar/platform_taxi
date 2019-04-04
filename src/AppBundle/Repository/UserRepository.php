@@ -12,14 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
-    public function isTypeUser($table, $user_id)
+    public function isTypeUser($table, $companyId)
     {
 
         
         
-        $sql = "SELECT ".$table.".id FROM user, ". $table ." WHERE :user_id = ". $table .".user_id";
+        $sql = "SELECT ".$table.".id FROM company, ". $table ." WHERE :company_id = ". $table .".companys_id";
         $params = array(
-            'user_id' => $user_id,
+            'company_id' => $companyId,
             'table' => $table
         );
 

@@ -291,4 +291,17 @@ class User implements UserInterface
     {
         // TODO: Implement eraseCredentials() method.
     }
+
+    /**
+     * Set companys
+     *
+     * @param \AppBundle\Entity\Company $companys
+     * @return User
+     */
+    public function setCompanys(\AppBundle\Entity\Company $companys = null)
+    {
+        $this->companys = $companys;
+
+        return $this;
+    }
 }

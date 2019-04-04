@@ -32,116 +32,7 @@ class UserController extends Controller
     }
 
 
-    public function registerAction(Request $request)
-    {
-        return $this->render('user/register.html.twig', array());
-    }
 
-    public function registerAjaxAction(Request $request)
-    {
-
-        $result = new Response();
-
-
-        $response = array(
-            "status" => false,
-            "message" => "ERROR"
-        );
-
-        
-
-        $em = $this->getDoctrine()->getManager();
-
-            
-
-            $email = $request->get('email');
-            $password1 = $request->get('password1');
-            $password2 = $request->get('password2');
-            $phone = $request->get('phone');
-            $companyName = $request->get('companyName');
-            $companyAddress = $request->get('companyAdress'); 
-
-    
-
-            if ($password1 != $password2){
-                $response = array(
-                    "status" => false,
-                    "message" => "Las contraseñas no coinciden"
-                );
-            }elseif (empty($email) or empty($phone) or empty($password1) or empty($password2) or empty($companyName) or empty($companyAddress)){
-                $response = array(
-                    "status" => false,
-                    "message" => "Rellene los campos"
-                );
-            }elseif(strlen($phone) < 6){
-
-                $response = array(
-                    "status" => false,
-                    "message" => "Formato del teléfono no válido, mínimo 6 números"
-                );
-
-            }elseif (strlen($password1) < 4){
-                
-                $response = array(
-                    "status" => false,
-                    "message" => "Contraseña demasiado corta, mínimo 4 caractres"
-                );
-
-            }else{
-                try{
-                    $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
-                        array('id'=> 1)
-                    );
-                    $user = new User();
-                    $user->setEmail($email);
-
-                    $encoder = $this->container->get('security.password_encoder');
-                    $encoded = $encoder->encodePassword($user, $password1);
-
-                    $user->setPassword($encoded);
-
-                    $user->setPhone($phone);
-                    $user->setActive(0);
-                    $user->setPermission($permissionFull);
-
-                    $em->persist($user);
-                    
-
-                    $company = new Company();
-                    $company->setUser($user); 
-                    $company->setName($companyName);
-                    $company->setAddress($companyAddress);
-
-                    
-                    $em->persist($company);
-
-                    $em->flush();
-
-                }catch(UniqueConstraintViolationException $e){
-                    $response = array(
-                        "status" => false,
-                        "message" => "El correo ya está registrado"
-                    );
-                    $result->setContent(json_encode($response));
-
-                    return $result;
-                }
-                
-
-
-                $response = array(
-                    "status" => true,
-                    "message" => "Registro correcto"
-                );
-
-                $result->setContent(json_encode($response));
-
-                return $result;
-            }
-
-            
-
-    }
 
     public function panelAction(Request $request)
     {
@@ -160,11 +51,11 @@ class UserController extends Controller
 
         if($user){
             if ($isCompany){
-                $companyService = $this->get('company_service');
+                //$companyService = $this->get('company_service');
 
-                $companyInfo = $companyService->getCompanyInfo($user->getId());
-
-                return $this->render('user/panel.html.twig', array("user_type" => "company", "companyName" => $companyInfo[0]["name"], "companyAddress"=> $companyInfo[0]["address"], "companyId" => $companyInfo[0]['id'] ));
+                //$companyInfo = $companyService->getCompanyInfo($user->getId());
+                return $this->render('user/panel.html.twig', array());
+                //return $this->render('user/panel.html.twig', array("user_type" => "company", "companyName" => $companyInfo[0]["name"], "companyAddress"=> $companyInfo[0]["address"], "companyId" => $companyInfo[0]['id'] ));
             }elseif($isDriver){
                 
                 return $this->render('user/panel.html.twig', array("user_type" => "driver"));
