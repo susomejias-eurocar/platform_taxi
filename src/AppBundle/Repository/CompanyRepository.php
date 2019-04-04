@@ -227,7 +227,7 @@ class CompanyRepository extends EntityRepository
         $query = $em->createQuery(
             "SELECT d.id, d.name, d.last_name, d.state FROM
             AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u
-            WHERE u.id=c.user and d.company=c.id and d.car is null and c.id=:id"
+            WHERE c.id=u.companys and d.company=c.id and d.car is null and c.id=:id"
         )->setParameter("id", $idCompany);
         return $query->getArrayResult();
     }
@@ -324,6 +324,7 @@ class CompanyRepository extends EntityRepository
     public function asignCarToCompany($idDriver, $idCar){
         $em = $this->getEntityManager();
         $con = $em->getConnection();
+        $car = $em->getRepository("AppBundle:Car");
         $sql = "UPDATE
         driver
         set car_id=:idCar
@@ -332,8 +333,6 @@ class CompanyRepository extends EntityRepository
         $query->bindValue("idCar",$idCar);
         $query->bindValue("idDriver",$idDriver);
         $query->execute();
-        $results = $query->fetchAll();
-        return $results;
     }
 
 }

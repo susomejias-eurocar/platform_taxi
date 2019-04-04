@@ -52,6 +52,13 @@ class Permission
     /**
      * @var int
      *
+     * @ORM\Column(name="list", type="integer")
+     */
+    private $list;
+
+    /**
+     * @var int
+     *
      * @ORM\OneToMany(targetEntity="User", mappedBy="permission")
      */
     private $user;
