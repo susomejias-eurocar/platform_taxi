@@ -71,12 +71,54 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="Driver", mappedBy="userId")
      */
     private $drivers;
+    
+        /**
+     * Set password
+     *
+     * @param string $password
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string 
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+ 
+    public function getSalt()
+    {
+        return null;
+    }
+ 
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->companys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -114,29 +156,6 @@ class User implements UserInterface
     }
 
     /**
-     * Set password
-     *
-     * @param string $password
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string 
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
      * Set active
      *
      * @param boolean $active
@@ -162,7 +181,7 @@ class User implements UserInterface
     /**
      * Set phone
      *
-     * @param integer $phone
+     * @param string $phone
      * @return User
      */
     public function setPhone($phone)
@@ -175,7 +194,7 @@ class User implements UserInterface
     /**
      * Get phone
      *
-     * @return integer 
+     * @return string 
      */
     public function getPhone()
     {
@@ -206,32 +225,22 @@ class User implements UserInterface
     }
 
     /**
-     * Add companys
+     * Set companys
      *
      * @param \AppBundle\Entity\Company $companys
      * @return User
      */
-    public function addCompany(\AppBundle\Entity\Company $companys)
+    public function setCompanys(\AppBundle\Entity\Company $companys = null)
     {
-        $this->companys[] = $companys;
+        $this->companys = $companys;
 
         return $this;
     }
 
     /**
-     * Remove companys
-     *
-     * @param \AppBundle\Entity\Company $companys
-     */
-    public function removeCompany(\AppBundle\Entity\Company $companys)
-    {
-        $this->companys->removeElement($companys);
-    }
-
-    /**
      * Get companys
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \AppBundle\Entity\Company 
      */
     public function getCompanys()
     {
@@ -269,39 +278,5 @@ class User implements UserInterface
     public function getDrivers()
     {
         return $this->drivers;
-    }
-
- 
-    public function getRoles()
-    {
-        return array('ROLE_USER');
-    }
- 
-    public function getSalt()
-    {
-        return null;
-    }
- 
-    public function getUsername()
-    {
-        return $this->email;
-    }
- 
-    public function eraseCredentials()
-    {
-        // TODO: Implement eraseCredentials() method.
-    }
-
-    /**
-     * Set companys
-     *
-     * @param \AppBundle\Entity\Company $companys
-     * @return User
-     */
-    public function setCompanys(\AppBundle\Entity\Company $companys = null)
-    {
-        $this->companys = $companys;
-
-        return $this;
     }
 }

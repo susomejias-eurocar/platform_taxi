@@ -330,7 +330,7 @@ class CompanyRepository extends EntityRepository
         where id=:idDriver";
         $query = $con->prepare($sql);
         $query->bindValue("idCar",$idCar);
-        $query->bindValue("id",$idDriver);
+        $query->bindValue("idDriver",$idDriver);
         $query->execute();
         $results = $query->fetchAll();
         return $results;
