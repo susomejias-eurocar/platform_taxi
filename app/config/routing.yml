@@ -74,6 +74,10 @@ asign_car_driver:
     path:   company/asignCar
     defaults:   { _controller: AppBundle:Company:asignCar }
 
+asign_car_to_driver:
+    path: company/asignCarToDriver
+    defaults:   { _controller: AppBundle:Company:asignCarToDriver}
+
 # Show form view for register car
 car_register:
     path:   company/register_car

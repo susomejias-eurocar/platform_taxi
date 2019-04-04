@@ -71,49 +71,8 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="Driver", mappedBy="userId")
      */
     private $drivers;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->companys = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
+    
+        /**
      * Set password
      *
      * @param string $password
@@ -136,142 +95,6 @@ class User implements UserInterface
         return $this->password;
     }
 
-    /**
-     * Set active
-     *
-     * @param boolean $active
-     * @return User
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-
-        return $this;
-    }
-
-    /**
-     * Get active
-     *
-     * @return boolean 
-     */
-    public function getActive()
-    {
-        return $this->active;
-    }
-
-    /**
-     * Set phone
-     *
-     * @param integer $phone
-     * @return User
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    /**
-     * Get phone
-     *
-     * @return integer 
-     */
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    /**
-     * Set permission
-     *
-     * @param \AppBundle\Entity\Permission $permission
-     * @return User
-     */
-    public function setPermission(\AppBundle\Entity\Permission $permission = null)
-    {
-        $this->permission = $permission;
-
-        return $this;
-    }
-
-    /**
-     * Get permission
-     *
-     * @return \AppBundle\Entity\Permission 
-     */
-    public function getPermission()
-    {
-        return $this->permission;
-    }
-
-    /**
-     * Add companys
-     *
-     * @param \AppBundle\Entity\Company $companys
-     * @return User
-     */
-    public function addCompany(\AppBundle\Entity\Company $companys)
-    {
-        $this->companys[] = $companys;
-
-        return $this;
-    }
-
-    /**
-     * Remove companys
-     *
-     * @param \AppBundle\Entity\Company $companys
-     */
-    public function removeCompany(\AppBundle\Entity\Company $companys)
-    {
-        $this->companys->removeElement($companys);
-    }
-
-    /**
-     * Get companys
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCompanys()
-    {
-        return $this->companys;
-    }
-
-    /**
-     * Add drivers
-     *
-     * @param \AppBundle\Entity\Driver $drivers
-     * @return User
-     */
-    public function addDriver(\AppBundle\Entity\Driver $drivers)
-    {
-        $this->drivers[] = $drivers;
-
-        return $this;
-    }
-
-    /**
-     * Remove drivers
-     *
-     * @param \AppBundle\Entity\Driver $drivers
-     */
-    public function removeDriver(\AppBundle\Entity\Driver $drivers)
-    {
-        $this->drivers->removeElement($drivers);
-    }
-
-    /**
-     * Get drivers
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDrivers()
-    {
-        return $this->drivers;
-    }
-
- 
     public function getRoles()
     {
         return array('ROLE_USER');
@@ -286,22 +109,9 @@ class User implements UserInterface
     {
         return $this->email;
     }
- 
+
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
-    }
-
-    /**
-     * Set companys
-     *
-     * @param \AppBundle\Entity\Company $companys
-     * @return User
-     */
-    public function setCompanys(\AppBundle\Entity\Company $companys = null)
-    {
-        $this->companys = $companys;
-
-        return $this;
     }
 }
