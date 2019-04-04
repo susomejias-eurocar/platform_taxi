@@ -416,81 +416,14 @@ class CompanyController extends Controller
         $em = $this->getDoctrine()->getManager();
 
 
-        $email = $request->get('email');
-        $password1 = $request->get('password1');
-        $password2 = $request->get('password2');
-        $phone = $request->get('phone');
-        $driverName = $request->get('driverName');
-        $driverLastName = $request->get('driverLastName');
-        $idCar = $request->get('car');
-        $idCompany = $request->get('idCompany');
-        if($idCar==0)
-            $car = null;
-        else
-            $car = $this->container->get('car_service')->getCar($idCar);
-
-
-
-        if ($password1 != $password2) {
-            $response = array(
-                "status" => false,
-                "message" => "Las contraseñas no coinciden"
-            );
-        } elseif (empty($email) or empty($phone) or empty($password1) or empty($password2) or empty($driverName) or empty($driverLastName)) {
-            $response = array(
-                "status" => false,
-                "message" => "Rellene los campos"
-            );
-        } elseif (strlen($phone) < 6) {
-
-            $response = array(
-                "status" => false,
-                "message" => "Formato del teléfono no válido, mínimo 6 números"
-            );
-        } elseif (strlen($password1) < 4) {
-
-            $response = array(
-                "status" => false,
-                "message" => "Contraseña demasiado corta, mínimo 4 caractres"
-            );
-        } else {
-
-
-            $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
-                array('id' => 1)
-            );
-            $user = new User();
-            $user->setEmail($email);
-
-            $encoder = $this->container->get('security.password_encoder');
-            $encoded = $encoder->encodePassword($user, $password1);
-
-            $user->setPassword($encoded);
-
-            $user->setPhone($phone);
-            $user->setActive(1);
-            $user->setPermission($permissionFull);
-
-            $em->persist($user);
-
-
-            $driver = new Driver();
-            $driver->setUser($user);
-            $driver->setName($driverName);
-            $driver->setLastName($driverLastName);
-            $driver->setCar($car);
-            $driver->setState('register');
-            $driver->setCompany($this->container->get('company_service')->getCompany($idCompany));
-
-            $em->persist($driver);
-
-            $em->flush();
-
-            $response = array(
-                "status" => true,
-                "message" => "Registro correcto"
-            );
-        }
+        $idDriver = $request->get('idDriver');
+        $idVar = $request->get('idCar');
+        
+        $response = array(
+            "status" => true,
+            "message" => "Registro correcto"
+        );
+        
 
         $result->setContent(json_encode($response));
 

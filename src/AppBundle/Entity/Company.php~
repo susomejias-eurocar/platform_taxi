@@ -24,7 +24,7 @@ class Company
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="companys")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="companys")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $user;

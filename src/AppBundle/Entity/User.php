@@ -61,7 +61,7 @@ class User implements UserInterface
     /**
      * @var int
      *
-     * @ORM\OneToMany(targetEntity="Company", mappedBy="user")
+     * @ORM\ManyToOne(targetEntity="Company", inversedBy="user")
      */
     private $companys;
 
@@ -290,5 +290,18 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * Set companys
+     *
+     * @param \AppBundle\Entity\Company $companys
+     * @return User
+     */
+    public function setCompanys(\AppBundle\Entity\Company $companys = null)
+    {
+        $this->companys = $companys;
+
+        return $this;
     }
 }

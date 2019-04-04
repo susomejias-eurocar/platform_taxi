@@ -24,7 +24,7 @@ class Company
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="companys")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="companys")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $user;
@@ -210,5 +210,28 @@ class Company
     public function getDrivers()
     {
         return $this->drivers;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     * @return Company
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->user[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->user->removeElement($user);
     }
 }

@@ -61,7 +61,7 @@ class User implements UserInterface
     /**
      * @var int
      *
-     * @ORM\OneToMany(targetEntity="Company", mappedBy="user")
+     * @ORM\ManyToOne(targetEntity="Company", inversedBy="user")
      */
     private $companys;
 
