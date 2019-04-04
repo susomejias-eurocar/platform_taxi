@@ -5,18 +5,32 @@
 
 <h1>Conductores de la compañia</h1>
 
-{# <div class="input-group col-4" style="padding: 30px 0px">
+<div class="row">
+<div class="input-group col-3" style="padding: 30px 15px;height:100% ">
     <div class="input-group-prepend" >
-        <div class="input-group-text" style="background: #563D7C; color:#fff">@</div>
+        <div class="input-group-text" style="background: #F4C05C; color:#fff;height:100%">@</div>
     </div>
-    <input type="text" class="form-control search-data-field" data-field='employeeName'  placeholder="{{'Employee name' | trans}}" >
-</div> #}
+    <input type="text" class="form-control search-data-field" data-field='name'  placeholder="{{'Introduce nombre' | trans}}" >
+</div>
 
-{# <div style="padding: 10px; margin-bottom: 15px">
-    <label>Employee office name search: <label>
-    <input class = "form-control search-data-field" type="text" data-field='employeeOffice' placeholder="{{'Employee office' | trans}}">
-</div> #}
+<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+    <div class="input-group-prepend" >
+        <div class="input-group-text" style="background: #F4C05C; color:#fff;height:100%">@</div>
+    </div>
+    <input type="text" class="form-control search-data-field" data-field='last_name'  placeholder="{{'Introduce apellidos' | trans}}" >
+</div>
 
+<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+    <div class="input-group-prepend" style="height:100%" >
+        <div class="input-group-text" style="background: #F4C05C; color:#fff">@</div>
+    </div>
+    <select class="form-control search-data-field styleSelectDatatables" data-field='state'>
+        <option value="">Seleccione Estado</option>
+        <option value="parado">Parado</option>
+        <option value="register">Register</option>
+    </select>
+</div>
+</div>
 {# <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
 <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
 <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
@@ -53,19 +67,40 @@ function loadFunctionDataTable(){
     // Variable auxilair
     let time = null;
 
-    $('.search-data-field').keyup(function(){
-        clearInterval(time);
-            time = setTimeout(function(){
-            // Creamos la variable de búsquedas
-                let searchs = new Object();
-                // Limpiamos el tiempo
+   $('.search-data-field').each(function( index ) {
+
+    if ($( this ).prop('nodeName').toUpperCase() === "INPUT"){
+            $(this).keyup(function(){
+                    clearInterval(time);
+                        time = setTimeout(function(){
+                        // Creamos la variable de búsquedas
+                            let searchs = new Object();
+                            // Limpiamos el tiempo
+                            clearInterval(time);
+                                $('.search-data-field').each(function(){
+                                    searchs[$(this).data('field')] = $(this).val();
+                                });
+                                driversTable.search(JSON.stringify(searchs)).draw();
+                            },500);
+                });
+        }else if($( this ).prop('nodeName').toUpperCase() === "SELECT"){
+            $(this).change(function(){
                 clearInterval(time);
-                    $('.search-data-field').each(function(){
-                        searchs[$(this).data('field')] = $(this).val();
-                    });
-                    driversTable.search(JSON.stringify(searchs)).draw();
-                },500);
-        });
+                    time = setTimeout(function(){
+                        // Creamos la variable de búsquedas
+                        let searchs = new Object();
+                        // Limpiamos el tiempo
+                        clearInterval(time);
+                            $('.search-data-field').each(function(){
+                                searchs[$(this).data('field')] = $(this).val();
+                            });
+                            driversTable.search(JSON.stringify(searchs)).draw();
+                        },500);
+            }) 
+        }
+        console.log($( this ).prop('nodeName'));
+    });
+    
 }
 
 function loadStylesForSelect(){
@@ -145,7 +180,7 @@ let driversTable = $("#driversTable").DataTable({
     },
     initComplete: function(settings){
         //loadStylesForSelect();
-        //loadFunctionDataTable();
+        loadFunctionDataTable();
     }
 });
 }

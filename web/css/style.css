@@ -38,3 +38,7 @@ input:focus {
   color: #fff;
   text-decoration: none;
 }
+
+.styleSelectDatatable {
+  margin: 0px !important;
+}
