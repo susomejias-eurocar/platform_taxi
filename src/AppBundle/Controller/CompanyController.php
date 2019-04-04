@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Driver;
+use AppBundle\Entity\Car;
 
 class CompanyController extends Controller
 {
@@ -169,7 +170,7 @@ class CompanyController extends Controller
 
                 $getCompanyInfo = $companyService->getCompanyInfo($user->getId());
                 $cars = $this->get("company_service")->getCarWithoutDriver($getCompanyInfo[0]['id']);
-                return $this->render('company/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $getCompanyInfo[0]["name"], "companyAddress"=> $getCompanyInfo[0]["address"], "companyId" => $getCompanyInfo[0]['id']));
+                return $this->render('company/content-panel-createDriver.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $getCompanyInfo[0]["name"], "companyAddress"=> $getCompanyInfo[0]["address"], "companyId" => $getCompanyInfo[0]['id']));
             }elseif($isDriver){
                 
                 return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
@@ -290,12 +291,90 @@ class CompanyController extends Controller
         return new JsonResponse($drivers);
     }
 
-    /**
+    public function registerCarAction(){
+        $security_context = $this->get('security.context');
+
+        $security_token = $security_context->getToken();
+
+        $user = $security_token->getUser();
+
+        $usersService = $this->get('user_service');
+
+        $isCompany = $usersService->isTypeUser("company",$user->getId());
+
+        $isDriver = $usersService->isTypeUser("company",$user->getId());
+
+        if($user){
+            if ($isCompany){
+                $companyService = $this->get('company_service');
+
+                $getCompanyInfo = $companyService->getCompanyInfo($user->getId());
+                $cars = $this->get("company_service")->getCarWithoutDriver($getCompanyInfo[0]['id']);
+                return $this->render('car/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyName" => $getCompanyInfo[0]["name"], "companyAddress"=> $getCompanyInfo[0]["address"], "companyId" => $getCompanyInfo[0]['id']));
+            }elseif($isDriver){
+                
+                return $this->render('driver/content-panel.html.twig', array("user_type" => "driver"));
+            }
+        }  
+    }
+
+    public function addCarAction(Request $request){
+        $result = new Response();
+
+
+        $response = array(
+            "status" => false,
+            "message" => "ERROR"
+        );
+
+        $em = $this->getDoctrine()->getManager();
+
+
+        $plate = $request->get('plate');
+        $trademark = $request->get('trademark');
+        $model = $request->get('model');
+        $version = $request->get('version');
+        $state = $request->get('state');
+        $idCompany = $request->get('idCompany');
+
+        if (empty($plate) or empty($trademark) or empty($model) or empty($version) or empty($state)) {
+            $response = array(
+                "status" => false,
+                "message" => "Rellene los campos"
+            );
+        }else {
+            $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                array('id' => 1)
+            );
+            $car = new Car();
+            $car->setPlate($plate);
+            $car->setTrademark($trademark);
+            $car->setModel($model);
+            $car->setVersion($version);
+            $car->setState($state);
+            $car->setCompany($this->container->get('company_service')->getCompany($idCompany));
+
+            $em->persist($car);
+
+            $em->flush();
+
+            $response = array(
+                "status" => true,
+                "message" => "Registro correcto"
+            );
+        }
+
+        $result->setContent(json_encode($response));
+
+        return $result;
+    }
+
+        /**
      * Assign a car to a driver
      *
      * @return void
      */
-    public function assignCarAction(){
+    public function asignCarAction(){
             
         $security_context = $this->get('security.context');
 
