@@ -172,6 +172,15 @@ use Symfony\Component\HttpFoundation\Request;
             return $car;
         }        
 
+        public function asignCarToCompany($idDriver, $idCar){
+            $em = $this->entityManager;
+            $car = $em->getRepository("AppBundle:Company")->asignCarToCompany($idDriver,$idCar);
+            return $car;
+
+        }
+
+        
+
     }
 
 
