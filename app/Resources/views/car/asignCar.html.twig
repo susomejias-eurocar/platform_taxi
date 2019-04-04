@@ -15,8 +15,8 @@
                             <label for="drivers" class="text-light boldText">Conductor: </label>
                             <select name="drivers" id="drivers">
                                 <option value=NULL>Sin coche</option>
-                                {% for car in cars %}
-                                <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
+                                {% for driver in drivers %}
+                                <option value={{driver['id']}}>{{driver['name']}} {{driver['last_name']}}</option>
                                 {% endfor %}
 
                             </select>
@@ -48,18 +48,26 @@
 
     let $cars = $("#cars");
     let $drivers = $("#drivers");
-
-    if($cars.length == 1){
+    if($cars.children('option').length < 2){
         $('#btnRegister').prop("disabled",true);
         $cars.prop("disabled", true);
         $("#cars option:first").text("No existen coches disponibles");
     }
-    if($drivers.length == 1){
+    if($drivers.children('option').length < 2){
         $('#btnRegister').prop("disabled",true);
         $drivers.prop("disabled", true);
         $("#drivers option:first").text("No existen conductores disponibles");
     }
 
+    $cars.change(function (e) { 
+        e.preventDefault();
+        
+    });
+
+    $drivers.change(function (e) { 
+        e.preventDefault();
+        
+    });
 
     $('#btnRegister').click(()=>{
             $.ajax({
