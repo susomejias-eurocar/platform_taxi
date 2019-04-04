@@ -1,34 +1,43 @@
 {% extends './user/panel.html.twig' %}
 
 {% block content %}
-<div class="col col-lg-10" style="padding:50px">
+<div class="col col-lg-10" style="padding:30px">
 
 <h1>Coches de la compañia</h1>
+<div class="row" style="padding:20px 15px">
+    <a href="{{ path('register_car') }}" class="btn bg-success text-light boldText">Crear nuevo coche</a>
+</diV>
 <div class="row">
 <div class="input-group col-3" style="padding: 30px 15px;height:100% ">
     <div class="input-group-prepend" >
-        <div class="input-group-text" style="background: #F4C05C; color:#fff;height:100%">@</div>
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Matrícula</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='plate'  placeholder="{{'Introduce Matrícula' | trans}}" >
 </div>
 
 <div class="input-group col-3" style="padding: 30px 15px; height:100%">
     <div class="input-group-prepend" >
-        <div class="input-group-text" style="background: #F4C05C; color:#fff;height:100%">@</div>
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Modelo</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='model'  placeholder="{{'Introduce Modelo' | trans}}" >
 </div>
 
 <div class="input-group col-3" style="padding: 30px 15px; height:100%">
     <div class="input-group-prepend" style="height:100%" >
-        <div class="input-group-text" style="background: #F4C05C; color:#fff">@</div>
+        <div class="input-group-text" style="background: #263238; color:#fff;%"><b>Estado</b></div>
     </div>
     <select class="form-control search-data-field styleSelectDatatables" data-field='state'>
         <option value="">Seleccione Estado</option>
         <option value="Bueno">Bueno</option>
+        <option value="Dañado">Dañado</option>
+        <option value="En reparación">En reparación</option>
     </select>
 </div>
+
+
 </div>
+
+
 
 
 {# <div style="padding: 10px; margin-bottom: 15px">
@@ -43,7 +52,7 @@
 
     <table id="carsTable" class="table table-hover">
         <tr>
-            <thead style="background:#F4C05C">
+            <thead style="background:#263238">
                 <th scope="col" class="text-light">Matrícula</th>
                 <th scope="col" class="text-light">Marca</th>
                 <th scope="col" class="text-light">Modelo</th>
@@ -179,11 +188,32 @@ let carsTable = $("#carsTable").DataTable({
     },
     columns: [
 
-        {data:'plate'},
+        {data:'plate', render: function(data, type, row, meta){
+            let html = `<span style="border-radius:3px;background:#263238;color:#fff;padding:7px; font-weight:bold">${data}</span>`;
+
+
+            return html;
+        }},
         {data:'trademark'},
         {data:'model'},
         {data:'version'},
-        {data:'state'},
+        {data:'state', render: function(data, type, row, meta){
+            let html = ``;
+
+            console.log(data);
+            if (data.toLowerCase() == "bueno"){
+
+                html += `<span style="border-radius:3px;background:green;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+                //$(data).css("color", "green");
+            }else if (data.toLowerCase() == "averiado"){
+
+                html += `<span style="border-radius:3px;background:red;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+            }else if (data.toLowerCase() == "en reparación"){
+                html += `<span style="border-radius:3px;background:orange;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+            }
+
+            return html;
+        }},
     ],
     
     drawCallback: function(settings) {
