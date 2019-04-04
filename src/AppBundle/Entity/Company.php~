@@ -234,4 +234,14 @@ class Company
     {
         $this->user->removeElement($user);
     }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 }
