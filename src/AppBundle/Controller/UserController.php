@@ -67,23 +67,13 @@ class UserController extends Controller
 
         $usersService = $this->get('user_service');
 
-        // $isCompany = $usersService->isTypeUser("company",$user->getId());
-
-        // $isDriver = $usersService->isTypeUser("company",$user->getId());
-
         if($user){
-            // if ($isCompany){
-            //     //$companyService = $this->get('company_service');
-
-            //     //$companyInfo = $companyService->getCompanyInfo($user->getId());
-            //     return $this->render('user/panel.html.twig', array());
-            //     //return $this->render('user/panel.html.twig', array("user_type" => "company", "companyName" => $companyInfo[0]["name"], "companyAddress"=> $companyInfo[0]["address"], "companyId" => $companyInfo[0]['id'] ));
-            // }elseif($isDriver){
+            if($this->get('security.context')->isGranted('ROLE_COMPANY')){
+                return $this->render('user/panel.html.twig', array());
+            }else if ($this->get('security.context')->isGranted('ROLE_DRIVER')){
                 
-            //     return $this->render('user/panel.html.twig', array("user_type" => "driver"));
-            // }
+            }
 
-            return $this->render('user/panel.html.twig', array());
         }
         $hasError = false;
     }

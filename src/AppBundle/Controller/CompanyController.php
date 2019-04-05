@@ -75,6 +75,7 @@ class CompanyController extends Controller
                     $company->setAddress($companyAddress);
                     $em->persist($company);
                     $user = new User();
+                    $user->setRoles(array("ROLE_COMPANY"));
                     $user->setEmail($email);
                     $encoder = $this->container->get('security.password_encoder');
                     $encoded = $encoder->encodePassword($user, $password1);
@@ -195,11 +196,11 @@ class CompanyController extends Controller
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
-        // $isCompany = $usersService->isTypeUser("company",$user->getId());
-        // $isDriver = $usersService->isTypeUser("company",$user->getId());
         if($user){
-            return $this->render('company/content-panel-showCars.html.twig', array("user_type" => "company"));
-        }
+            if ($this->get('security.context')->isGranted('ROLE_COMPANY')) {
+                return $this->render('company/content-panel-showCars.html.twig', array("user_type" => "company"));
+            }
+        }   
     }
 
     /**
@@ -331,6 +332,7 @@ class CompanyController extends Controller
                 array('id' => 1)
             );
             $user = new User();
+            $user->setRoles(array("ROLE_DRIVER"));
             $user->setEmail($email);
             $encoder = $this->container->get('security.password_encoder');
             $encoded = $encoder->encodePassword($user, $password1);
@@ -338,6 +340,7 @@ class CompanyController extends Controller
             $user->setPhone($phone);
             $user->setActive(1);
             $user->setPermission($permissionFull);
+            $user->setCompanys($this->container->get('company_service')->getCompany($idCompany));
             $em->persist($user);
             $driver = new Driver();
             $driver->setUser($user);
