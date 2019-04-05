@@ -39,6 +39,9 @@ class CompanyController extends Controller
             "message" => "ERROR"
         );
         $em = $this->getDoctrine()->getManager();
+        $name = $request->get('name');
+        $lastName = $request->get('lastName');
+
             $email = $request->get('email');
             $password1 = $request->get('password1');
             $password2 = $request->get('password2');
@@ -75,6 +78,9 @@ class CompanyController extends Controller
                     $company->setAddress($companyAddress);
                     $em->persist($company);
                     $user = new User();
+                    $user->setName($name);
+                    $user->setLastName($lastName);
+
                     $user->setRoles(array("ROLE_COMPANY"));
                     $user->setEmail($email);
                     $encoder = $this->container->get('security.password_encoder');
@@ -121,6 +127,8 @@ class CompanyController extends Controller
             "message" => "ERROR"
         );
         $em = $this->getDoctrine()->getManager();
+            $name = $request->get('name');
+            $lastName = $request->get('lastName');
             $email = $request->get('email');
             $password1 = $request->get('password1');
             $password2 = $request->get('password2');
@@ -156,11 +164,12 @@ class CompanyController extends Controller
                     $company = $em->getRepository('AppBundle:Company')->findOneBy(
                         array('id'=> $companyId)
                     );
-                    dump($company);
-                    $user = new User();
-                    $user->setEmail($email);
+                    $user = new User();                    
                     $encoder = $this->container->get('security.password_encoder');
                     $encoded = $encoder->encodePassword($user, $password1);
+                    $user->setName($name);
+                    $user->setLastName($lastName);
+                    $user->setEmail($email);
                     $user->setPassword($encoded);
                     $user->setPhone($phone);
                     $user->setActive(0);
@@ -332,6 +341,8 @@ class CompanyController extends Controller
                 array('id' => 1)
             );
             $user = new User();
+            $user->setName($driverName);
+            $user->setLastName($driverLastName);
             $user->setRoles(array("ROLE_DRIVER"));
             $user->setEmail($email);
             $encoder = $this->container->get('security.password_encoder');
@@ -344,11 +355,8 @@ class CompanyController extends Controller
             $em->persist($user);
             $driver = new Driver();
             $driver->setUser($user);
-            $driver->setName($driverName);
-            $driver->setLastName($driverLastName);
             $driver->setCar($car);
             $driver->setState('register');
-            $driver->setCompany($this->container->get('company_service')->getCompany($idCompany));
             $em->persist($driver);
             $em->flush();
             $response = array(

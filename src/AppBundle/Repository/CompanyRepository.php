@@ -213,13 +213,21 @@ class CompanyRepository extends EntityRepository
 
     function getDriversWithoutCar($idCompany){
         $em = $this->getEntityManager();
-        $query = $em->createQuery(
-            "SELECT d.id, d.name, d.last_name, d.state FROM
-            AppBundle\Entity\Driver d, AppBundle\Entity\Company c, AppBundle\Entity\User u
-            WHERE c.id=u.companys and d.company=c.id and d.car is null and c.id=:id"
-        )->setParameter("id", $idCompany);
-        return $query->getArrayResult();
+        $con = $em->getConnection();
+        $sql = "SELECT driver.id,user.name, user.last_name, driver.state
+            FROM user, driver, company
+            WHERE company.id=:id
+                AND user.id=driver.user_id
+                AND user.companys_id=company.id
+                AND driver.car_id IS NULL;";
+        $query = $con->prepare($sql);
+        $query->bindValue("id",$idCompany);
+        $query->execute();
+        $results = $query->fetchAll();
+        return $results;
     }
+
+
 
     function getDriversWithCar($idCompany){
         $em = $this->getEntityManager();
@@ -312,7 +320,6 @@ class CompanyRepository extends EntityRepository
 
     public function asignCarToCompany($idDriver, $idCar){
         $em = $this->getEntityManager();
-        $con = $em->getConnection();
         $car = $em->getRepository("AppBundle:Car")->findOneById($idCar);
         $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
         $driver->setCar($car);

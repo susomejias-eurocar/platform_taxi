@@ -28,8 +28,8 @@
     </div>
     <select class="form-control search-data-field styleSelectDatatables" data-field='state'>
         <option value="">Seleccione Estado</option>
-        <option value="Bueno">Bueno</option>
-        <option value="Dañado">Dañado</option>
+        <option value="Disponible">Disponible</option>
+        <option value="Averiado">Averiado</option>
         <option value="En reparación">En reparación</option>
     </select>
 </div>
@@ -205,7 +205,7 @@ let carsTable = $("#carsTable").DataTable({
             let html = ``;
 
             console.log(data);
-            if (data.toLowerCase() == "bueno"){
+            if (data.toLowerCase() == "disponible"){
 
                 html += `<span style="border-radius:3px;background:green;color:#fff;padding:7px; font-weight:bold">${data}</span>`
                 //$(data).css("color", "green");

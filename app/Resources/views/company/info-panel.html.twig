@@ -21,6 +21,7 @@
                     <a href="{{ path('show_car') }}" class="row option">Coches</a>
                     <a href="{{ path('show_drivers') }}" class="row option" >Conductores</a>
                     <a href="{{path('driver_register') }}" class="row option">Crear conductor</a>
+                    <a href="{{path('register_user') }}" class="row option">Crear usuario</a>
                     <a href="{{path('register_car') }}" class="row option">Crear coche</a>
                     <a href="{{path('asign_car_to_driver') }}" class="row option">Asignar coche</a>
                 {% elseif is_granted('ROLE_DRIVER') %}
