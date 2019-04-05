@@ -118,13 +118,7 @@ let init = function(){
 
 function loadFunctionDataTable(){
 
-    $(".edit").click(function(){
-        location.href = "{{ path('rutaEdit', {'id':" + $(this).attr("dataId") + "}) }}"
-    });
 
-    $(".delete").click(function(){
-        location.href = "{{ path('rutaDelete', {'id':" + $(this).attr("dataId") + "}) }}"
-    });
     
 }
 
@@ -227,9 +221,12 @@ let carsTable = $("#carsTable").DataTable({
         }},
         {data:'', render: function(data, type, row, meta){
             let html = ``;
-
-                html += "<a href=\"{{ path('rutaEdit', {'id': " + row.id + "}) }}\" style=\"border-radius:3px;background:#007BFF;color:#fff;padding:7px; font-weight:bold\">Editar</a>";
-                html += "<a href=\"{{ path('rutaEdit', {'id': " + row.id + "}) }}\" style=\"border-radius:3px;background:#007BFF;color:#fff;padding:7px; font-weight:bold\">Editar</a>";
+            let pathEdit = "{{ path('edit_car', {'idCar': 'pepe'}) }}";
+            let pathDelete = "{{ path('delete_car', {'idCar': 'pepe'}) }}";
+            pathEdit=pathEdit.replace("pepe", row.id);
+            pathDelete=pathDelete.replace("pepe", row.id);
+                html += "<a href='"+ pathEdit +"' style=\"border-radius:3px;background:#007BFF;color:#fff;padding:7px; font-weight:bold\">Editar</a>";
+                html += "<a href='" + pathDelete + "' style=\"border-radius:3px;background:red;color:#fff;padding:7px; font-weight:bold;margin-left:5px;\">Eliminar</a>";
 
             return html;
         }}
