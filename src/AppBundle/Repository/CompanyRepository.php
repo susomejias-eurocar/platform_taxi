@@ -151,17 +151,25 @@ class CompanyRepository extends EntityRepository
             0 => 'name',
             1 => 'last_name',
             2 => 'state',
+            2=> 'plate'
         );
         // Inicializamos los strings que van a concatenar la consulta.
         $where = $query = $queryCount = $orderBy = $groupBy =  $having = "";
         $parameters = array();
-        $query = "SELECT d.name, d.last_name, d.state FROM driver as d, company as co where d.company_id = co.id and d.company_id = :company_id";
-        $queryCount = "SELECT COUNT(*) as total FROM driver as d, company as co where d.company_id = co.id AND co.id = :company_id";
+        $query = "SELECT u.name, u.last_name,d.state, c.plate 
+        FROM user as u, driver as d, car as c
+        WHERE u.id = d.user_id
+        AND d.car_id = c.id
+        AND u.companys_id = :company_id";
+        $queryCount = "SELECT COUNT(*) as total 
+        FROM driver AS d, user as u 
+        where u.id = d.user_id    
+        AND u.companys_id = :company_id";
         if (isset($search["name"]) AND $search["name"]){
-            $where .= " AND d.name LIKE '%". $search["name"] ."%'";
+            $where .= " AND u.name LIKE '%". $search["name"] ."%'";
         }
         if (isset($search["last_name"]) AND $search["last_name"]){
-            $where .= " AND d.last_name LIKE '%". $search["last_name"] ."%'";
+            $where .= " AND u.last_name LIKE '%". $search["last_name"] ."%'";
         }
         if (isset($search["state"]) AND $search["state"]){
             $where .= " AND d.state LIKE '%". $search["state"] ."%'";
