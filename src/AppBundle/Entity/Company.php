@@ -65,6 +65,7 @@ class Company
     {
         $this->cars = new \Doctrine\Common\Collections\ArrayCollection();
         $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
 
     /**

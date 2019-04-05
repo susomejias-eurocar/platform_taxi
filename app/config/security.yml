@@ -26,10 +26,15 @@ security:
             logout:
                 path: logout
                 target: login
+    role_hierarchy:
+        ROLE_COMPANY: [ROLE_COMPANY]
+        ROLE_DRIVER: [ROLE_DRIVER]
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/company, roles: ROLE_COMPANY }
+        - { path: ^/driver, roles: ROLE_DRIVER }
 
             # activate different ways to authenticate
 

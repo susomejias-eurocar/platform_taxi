@@ -82,6 +82,7 @@ class CompanyController extends Controller
                     $em->persist($company);
 
                     $user = new User();
+                    $user->setRoles(array("ROLE_SUPER_ADMIN"));
                     $user->setEmail($email);
 
                     $encoder = $this->container->get('security.password_encoder');
@@ -330,6 +331,7 @@ class CompanyController extends Controller
                 array('id' => 1)
             );
             $user = new User();
+            $user->setRoles(array("ROLE_ADMIN"));
             $user->setEmail($email);
 
             $encoder = $this->container->get('security.password_encoder');

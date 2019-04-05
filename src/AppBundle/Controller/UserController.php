@@ -45,6 +45,8 @@ class UserController extends Controller
 
         $usersService = $this->get('user_service');
 
+        
+
         // $isCompany = $usersService->isTypeUser("company",$user->getId());
 
         // $isDriver = $usersService->isTypeUser("company",$user->getId());
