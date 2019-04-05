@@ -87,7 +87,7 @@ class CompanyRepository extends EntityRepository
 
         $parameters = array();
 
-        $query = "SELECT ca.plate,ca.trademark,ca.model,ca.version,ca.state FROM car as ca, company as co where ca.company_id = co.id and ca.company_id = :company_id";
+        $query = "SELECT ca.id,ca.plate,ca.trademark,ca.model,ca.version,ca.state FROM car as ca, company as co where ca.company_id = co.id and ca.company_id = :company_id";
 
         $queryCount = "SELECT COUNT(*) as total FROM car as ca, company as co where ca.company_id = co.id AND co.id = :company_id";
 
@@ -156,7 +156,7 @@ class CompanyRepository extends EntityRepository
         // Inicializamos los strings que van a concatenar la consulta.
         $where = $query = $queryCount = $orderBy = $groupBy =  $having = "";
         $parameters = array();
-        $query = "SELECT u.name, u.last_name,d.state, c.plate 
+        $query = "SELECT d.id,u.name, u.last_name,d.state, c.plate 
         FROM user as u, driver as d, car as c
         WHERE u.id = d.user_id
         AND d.car_id = c.id
