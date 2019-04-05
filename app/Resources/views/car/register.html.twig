@@ -59,7 +59,7 @@
 
     $('#btnRegister').click(()=>{
 
-        if($('#btnRegister').val()=="Registrar")
+        if($('#btnRegister').text()=="Registrar")
             urlAjax = "{{ path('add_car') }}";
         else
             urlAjax = "{{ path('edit_car_ajax') }}";
