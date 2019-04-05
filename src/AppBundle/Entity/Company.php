@@ -50,12 +50,12 @@ class Company
      */
     private $cars;
 
-    /**
+    /*
      * @var int
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Driver", mappedBy="company")
-     */
-    private $drivers;
+     
+    private $drivers;*/
 
 
     /**
