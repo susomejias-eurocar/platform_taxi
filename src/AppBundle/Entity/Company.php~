@@ -50,12 +50,12 @@ class Company
      */
     private $cars;
 
-    /**
+    /*
      * @var int
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Driver", mappedBy="company")
-     */
-    private $drivers;
+     
+    private $drivers;*/
 
 
     /**
@@ -65,6 +65,7 @@ class Company
     {
         $this->cars = new \Doctrine\Common\Collections\ArrayCollection();
         $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
 
     /**
