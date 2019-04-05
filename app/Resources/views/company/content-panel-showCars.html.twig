@@ -121,8 +121,8 @@ function loadFunctionDataTable(){
     //attr('type').each);
 }
 
-function loadStylesForSelect(){
-    $("select").addClass("form-control").css({
+function loadStyles(){
+    $(".dt-buttons").css({
         "margin-bottom" : "20px"
     });
 }
@@ -133,19 +133,23 @@ let carsTable = $("#carsTable").DataTable({
     buttons: [
         {
             extend: 'copyHtml5',
+            className: 'btn-info'
         },
         {
             extend: 'excelHtml5',
             messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
-            title: 'Data export'
+            title: 'Data export',
+            className: 'btn-success'
         },
         {
             extend: 'csvHtml5',
+            className: 'btn-secondary'
         },
         {
             extend: 'pdfHtml5',
             orientation: 'landscape',
             pageSize: 'LEGAL',
+            className: 'btn-danger'
         }
     ],
     rowId: 'idRow',
@@ -218,10 +222,10 @@ let carsTable = $("#carsTable").DataTable({
     
     drawCallback: function(settings) {
         //loadFunctionsOfButtons();
-        loadStylesForSelect();
+        loadStyles();
     },
     initComplete: function(settings){
-        //loadStylesForSelect();
+        loadStyles();
         loadFunctionDataTable();
     }
 });
