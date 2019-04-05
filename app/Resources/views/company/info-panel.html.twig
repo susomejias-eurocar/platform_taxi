@@ -17,7 +17,6 @@
             </div>
 
             {% block panelOptions %}
-
                 {% if is_granted('ROLE_COMPANY') %}
                     <a href="{{ path('show_car') }}" class="row option">Coches</a>
                     <a href="{{ path('show_drivers') }}" class="row option" >Conductores</a>
@@ -27,7 +26,6 @@
                 {% elseif is_granted('ROLE_DRIVER') %}
                     {#<a href="{{ path('show_car') }}" class="row option">Coches</a>#}
                     <a href="#" class="row option" >Opción taxista</a>
-                    
                 {% endif %}
             {% endblock %}
 </div>

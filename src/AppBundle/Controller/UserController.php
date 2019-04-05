@@ -9,6 +9,7 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\Company;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 
 class UserController extends Controller
@@ -19,7 +20,19 @@ class UserController extends Controller
         $authenticationUtils = $this->get('security.authentication_utils');
         
         // conseguir el error del login si falla
-        $error = $authenticationUtils->getLastAuthenticationError();
+        $hasError = false;
+        try{
+            $error = $authenticationUtils->getLastAuthenticationError();
+        }catch(Exception $e){
+            if($e instanceof BadCredentialsException)
+                $hasError = true;
+        }
+        
+        //dump($error['BadCredentialsException']);
+        
+        //if(strtolower($error['message'])=="bad credentials.")
+            //$hasError = true;
+
 
         // ultimo nombre de usuario que se ha intentado identificar
         $lastUsername = $authenticationUtils->getLastUsername();
@@ -28,7 +41,16 @@ class UserController extends Controller
                 'user/login.html.twig', array(
                     'last_username' => $lastUsername,
                     'error' => $error,
-        ));
+                    'hasError' => $hasError
+        ));        
+    }
+
+    public function loginFailureAction()
+    {        
+        return $this->render(
+                'user/login.html.twig', array(
+                    'msgError' => 'Usuario o contraseña incorrecta'
+        ));        
     }
 
 
@@ -53,7 +75,7 @@ class UserController extends Controller
             }
 
         }
-
+        $hasError = false;
     }
 
 }

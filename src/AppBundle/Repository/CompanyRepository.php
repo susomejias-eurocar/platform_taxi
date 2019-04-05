@@ -143,9 +143,7 @@ class CompanyRepository extends EntityRepository
      * @return void
      */
     public function getAllDrivers($params, $company_id){
-
         $search = json_decode($params['search']['value'], true);
-
         // dump($params);
         // die();
         // Definimos las columnas
@@ -154,58 +152,41 @@ class CompanyRepository extends EntityRepository
             1 => 'last_name',
             2 => 'state',
         );
-
         // Inicializamos los strings que van a concatenar la consulta.
         $where = $query = $queryCount = $orderBy = $groupBy =  $having = "";
-
         $parameters = array();
-
         $query = "SELECT d.name, d.last_name, d.state FROM driver as d, company as co where d.company_id = co.id and d.company_id = :company_id";
-
         $queryCount = "SELECT COUNT(*) as total FROM driver as d, company as co where d.company_id = co.id AND co.id = :company_id";
-
         if (isset($search["name"]) AND $search["name"]){
             $where .= " AND d.name LIKE '%". $search["name"] ."%'";
         }
-
-        
         if (isset($search["last_name"]) AND $search["last_name"]){
             $where .= " AND d.last_name LIKE '%". $search["last_name"] ."%'";
         }
-
         if (isset($search["state"]) AND $search["state"]){
             $where .= " AND d.state LIKE '%". $search["state"] ."%'";
         }
-
         //CREAMOS EL ORDER BY CON EL LIMIT aparte
         $limit=" ";
-        
         if($params['length'] != -1 ){
             $limit="  LIMIT ".$params['start']." ,".$params['length']." ";
         }
-        
         $orderBy .= " ORDER BY ". $columns[$params['order'][0]['column']]."   ".$params['order'][0]['dir'] . $limit;
-
         // CREAMOS EL GROUP BY aparte
         $groupBy .= " GROUP BY d.id";
-
         $parameters = array();
         $parameters[":company_id"] = $company_id;
-
         // Ejecutamos todas las consultas que nos hacen falta para realizar el datatable
         $totalRecord = $this->executeQuery($queryCount, $parameters);   
         $totalRecordFilter = $this->executeQuery($queryCount, $parameters, $where);
         $data = $this->executeQuery($query, $parameters, $where, $groupBy, $orderBy, $having);
-
         $result = array (
             'draw'              => intval($params['draw']),
             'recordsTotal'      => $totalRecord[0]['total'],
             'recordsFiltered'   => $totalRecordFilter[0]['total'],
             'data'              => $data
         );
-
         return $result;
-
     }
 
 
@@ -332,15 +313,11 @@ class CompanyRepository extends EntityRepository
     public function asignCarToCompany($idDriver, $idCar){
         $em = $this->getEntityManager();
         $con = $em->getConnection();
-        $car = $em->getRepository("AppBundle:Car");
-        $sql = "UPDATE
-        driver
-        set car_id=:idCar
-        where id=:idDriver";
-        $query = $con->prepare($sql);
-        $query->bindValue("idCar",$idCar);
-        $query->bindValue("idDriver",$idDriver);
-        $query->execute();
+        $car = $em->getRepository("AppBundle:Car")->findOneById($idCar);
+        $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
+        $driver->setCar($car);
+        $em->persist($driver);
+        $em->flush();
     }
 
 }
