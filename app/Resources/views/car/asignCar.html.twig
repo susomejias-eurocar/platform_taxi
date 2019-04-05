@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label for="cars" class="boldText">Coche: </label>
                         <select class="form-control" name="cars" id="cars">
-                                <option value=NULL>Selecciona un coche</option>
+                            <option value=NULL>Selecciona un coche</option>
                             {% for car in cars %}
                                 <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
                             {% endfor %}

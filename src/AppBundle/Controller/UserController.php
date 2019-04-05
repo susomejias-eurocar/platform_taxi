@@ -71,11 +71,12 @@ class UserController extends Controller
             if($this->get('security.context')->isGranted('ROLE_COMPANY')){
                 return $this->render('user/panel.html.twig', array());
             }else if ($this->get('security.context')->isGranted('ROLE_DRIVER')){
-                
+                return $this->render('user/panel.html.twig', array());
             }
 
         }
         $hasError = false;
+        return $this->redirect("logout");
     }
 
 }

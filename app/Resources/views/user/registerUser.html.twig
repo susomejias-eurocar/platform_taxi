@@ -12,6 +12,16 @@
                     <!--<h3 class="text-light" style="font-weight:bold; padding:10px">Datos Usuario</h3>-->
 
                         <div class="form-group">
+                            <label for="name" class="boldText">Nombre</label>
+                            <input required name="name" type="name" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Introduce tu nombre">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName" class="boldText">Apellidos</label>
+                            <input required name="lastName" type="lastName" class="form-control" id="lastName" aria-describedby="lastNameHelp" placeholder="Introduce tus apellidos">
+                        </div>
+
+                        <div class="form-group">
                             <label for="email" class="boldText">Email</label>
                             <input required name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Introduce email">
                         </div>
@@ -57,6 +67,8 @@
                 type: 'POST',
                 dataType: 'json',
                 data: { 
+                    name: $('#name').val() , 
+                    lastName: $('#lastName').val() , 
                     email: $('#email').val() , 
                     password1: $('#password1').val(), 
                     password2: $('#password2').val(), 
