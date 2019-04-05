@@ -72,6 +72,22 @@ class User implements UserInterface
      */
     private $drivers;
 
+    /**
+    * @ORM\Column(type="json_array")
+    */
+    private $roles = array();
+
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
         /**
      * Set password
      *
@@ -93,11 +109,6 @@ class User implements UserInterface
     public function getPassword()
     {
         return $this->password;
-    }
-
-    public function getRoles()
-    {
-        return array('ROLE_USER');
     }
  
     public function getSalt()
