@@ -8,6 +8,11 @@ login:
     path:      /login
     defaults:  { _controller: AppBundle:User:login }
 
+# Go to login page
+login_failure:
+    path:      /loginFailure
+    defaults:  { _controller: AppBundle:User:loginFailure }  
+
 # Go to close session
 logout:
     path: /logout
@@ -22,6 +27,13 @@ ajax_register:
     path:      /register_ajax
     defaults:  { _controller: AppBundle:Company:registerAjax }
 
+register_user:
+    path:   company/register_user
+    defaults:  { _controller: AppBundle:Company:registerUser }
+
+ajax_register_user:
+    path:   company/register_user_ajax
+    defaults:  { _controller: AppBundle:Company:registerUserAjax }    
 
 # CAR ROUTING
 
