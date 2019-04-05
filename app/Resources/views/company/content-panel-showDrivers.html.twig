@@ -65,9 +65,7 @@
 
 let init = function(){
 
-function loadFunctionDataTable(){
-
-    // Variable auxilair
+ // Variable auxilair
     let time = null;
 
    $('.search-data-field').each(function( index ) {
@@ -101,8 +99,10 @@ function loadFunctionDataTable(){
                         },500);
             }) 
         }
-        console.log($( this ).prop('nodeName'));
     });
+function loadFunctionDataTable(){
+
+    
     
 }
 
@@ -198,16 +198,21 @@ let driversTable = $("#driversTable").DataTable({
 
 
             return html;
+        }},
+        {data:'', render: function(data, type, row, meta){
+            let html = ``;
+
+                html += "<a href=\"{{ path('rutaEdit', {'id': " + row.id + "}) }}\" style=\"border-radius:3px;background:#007BFF;color:#fff;padding:7px; font-weight:bold\">Editar</a>";
+                html += "<a href=\"{{ path('rutaEdit', {'id': " + row.id + "}) }}\" style=\"border-radius:3px;background:#007BFF;color:#fff;padding:7px; font-weight:bold\">Editar</a>";
+
+            return html;
         }}
     ],
     
     drawCallback: function(settings) {
         //loadFunctionsOfButtons();
-        loadStyles();
-    },
-    initComplete: function(settings){
-        loadStyles();
         loadFunctionDataTable();
+        loadStyles();
     }
 });
 }
