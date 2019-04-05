@@ -10,6 +10,7 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\Driver;
 use AppBundle\Entity\Car;
 use AppBundle\Entity\Company;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CompanyController extends Controller
 {
@@ -33,7 +34,6 @@ class CompanyController extends Controller
      */
     public function registerAjaxAction(Request $request)
     {
-        $result = new Response();
         $response = array(
             "status" => false,
             "message" => "ERROR"
@@ -104,8 +104,7 @@ class CompanyController extends Controller
                     "status" => true,
                     "message" => "Registro correcto"
                 );
-                $result->setContent(json_encode($response));
-                return $result;
+                return new JsonResponse($response);
             }
     }
 
@@ -121,7 +120,6 @@ class CompanyController extends Controller
 
     public function registerUserAjaxAction(Request $request)
     {
-        $result = new Response();
         $response = array(
             "status" => false,
             "message" => "ERROR"
@@ -189,8 +187,9 @@ class CompanyController extends Controller
                     "status" => true,
                     "message" => "Registro correcto"
                 );
-                $result->setContent(json_encode($response));
-                return $result;
+
+                return new JsonResponse($response);
+
             }
     }
 
@@ -298,7 +297,6 @@ class CompanyController extends Controller
      */
     public function addDriverAction(Request $request)
     {
-        $result = new Response();
         $response = array(
             "status" => false,
             "message" => "ERROR"
@@ -364,8 +362,7 @@ class CompanyController extends Controller
                 "message" => "Registro correcto"
             );
         }
-        $result->setContent(json_encode($response));
-        return $result;
+        return new JsonResponse($response);
     }
 
     /**
@@ -396,7 +393,6 @@ class CompanyController extends Controller
     }
 
     public function addCarAction(Request $request){
-        $result = new Response();
         $response = array(
             "status" => false,
             "message" => "ERROR"
@@ -431,8 +427,7 @@ class CompanyController extends Controller
                 "message" => "Registro correcto"
             );
         }
-        $result->setContent(json_encode($response));
-        return $result;
+        return new JsonResponse($response);
     }
 
     /**
@@ -453,7 +448,6 @@ class CompanyController extends Controller
     }
 
     public function asignCarAction(Request $request){
-        $result = new Response();
         $response = array(
             "status" => false,
             "message" => "ERROR"
@@ -466,7 +460,6 @@ class CompanyController extends Controller
             "status" => true,
             "message" => "Se ha asignado el coche al conductor"
         );
-        $result->setContent(json_encode($response));
-        return $result;
+        return new JsonResponse($response);
     }
 }
