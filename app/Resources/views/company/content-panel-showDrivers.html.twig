@@ -44,6 +44,7 @@
                 <th scope="col" class="text-light">Nombre</th>
                 <th scope="col" class="text-light">Apellidos</th>
                 <th scope="col" class="text-light">Estado</th>
+                <th scope="col" class="text-light">Matrícula del coche asignado</th>
             </thead>
         </tr>
         <tbody style="color: #000">
@@ -189,6 +190,12 @@ let driversTable = $("#driversTable").DataTable({
 
                 html += `<span style="border-radius:3px;background:red;color:#fff;padding:7px; font-weight:bold">${data}</span>`
             }
+
+            return html;
+        }},
+        {data:'plate', render: function(data, type, row, meta){
+            let html = `<span style="border-radius:3px;background:#263238;color:#fff;padding:7px; font-weight:bold">${data}</span>`;
+
 
             return html;
         }}
