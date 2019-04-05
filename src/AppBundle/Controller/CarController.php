@@ -17,7 +17,6 @@ class CarController extends Controller
         $security_context = $this->get('security.context');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
-        $usersService = $this->get('user_service');
         $companyId = $user->getCompanys()->getId();
         $car = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:car")->findOneById($idCar);        
         return $this->render('car/content-panel-createCar.html.twig', array("car"=>$car,"user_type" => "company", "companyId" => $companyId,"carId" => $car->getid()));
@@ -40,6 +39,7 @@ class CarController extends Controller
         $car->setState($state);
         $em->persist($car);
         $em->flush();
+
 
         $response = array(
             "status" => true,
