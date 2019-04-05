@@ -51,6 +51,18 @@ show_car:
     path:   company/car/show
     defaults:  { _controller: AppBundle:Company:showCars }
 
+edit_car:
+    path: company/car/edit/{idCar}
+    defaults:  { _controller: AppBundle:Car:edit }
+
+edit_car_ajax:
+    path: company/car/edit_ajax/
+    defaults:  { _controller: AppBundle:Car:editAjax }
+
+delete_car:
+    path: company/car/delete/{idCar}
+    defaults:  { _controller: AppBundle:Car:delete }
+    
 # Obtain all cars with ajax
 list_all_cars:
     path:   company/listAllCars
