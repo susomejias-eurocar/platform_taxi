@@ -1,33 +1,35 @@
 {% extends './user/panel.html.twig' %}
 
 {% block content %}
-<div class="col col-lg-10" style="padding:50px">
+<div class="col col-lg-10" style="padding:30px">
 
 <h1>Conductores de la compañia</h1>
-
+<div class="row" style="padding:20px 15px">
+    <a href="{{ path('driver_register') }}" class="btn bg-success text-light boldText">Crear nuevo conductor</a>
+</diV>
 <div class="row">
 <div class="input-group col-3" style="padding: 30px 15px;height:100% ">
     <div class="input-group-prepend" >
-        <div class="input-group-text" style="background: #F4C05C; color:#fff;height:100%">@</div>
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Nombre</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='name'  placeholder="{{'Introduce nombre' | trans}}" >
 </div>
 
 <div class="input-group col-3" style="padding: 30px 15px; height:100%">
     <div class="input-group-prepend" >
-        <div class="input-group-text" style="background: #F4C05C; color:#fff;height:100%">@</div>
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Apellidos</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='last_name'  placeholder="{{'Introduce apellidos' | trans}}" >
 </div>
 
 <div class="input-group col-3" style="padding: 30px 15px; height:100%">
     <div class="input-group-prepend" style="height:100%" >
-        <div class="input-group-text" style="background: #F4C05C; color:#fff">@</div>
+        <div class="input-group-text" style="background: #263238; color:#fff"><b>Estado</b></div>
     </div>
     <select class="form-control search-data-field styleSelectDatatables" data-field='state'>
         <option value="">Seleccione Estado</option>
-        <option value="parado">Parado</option>
-        <option value="register">Register</option>
+        <option value="Disponible">Disponible</option>
+        <option value="Fuera de servicio">Fuera de servicio</option>
     </select>
 </div>
 </div>
@@ -38,7 +40,7 @@
 
     <table id="driversTable" class="table table-hover">
         <tr>
-            <thead style="background:#F4C05C">
+            <thead style="background:#263238">
                 <th scope="col" class="text-light">Nombre</th>
                 <th scope="col" class="text-light">Apellidos</th>
                 <th scope="col" class="text-light">Estado</th>
@@ -103,8 +105,8 @@ function loadFunctionDataTable(){
     
 }
 
-function loadStylesForSelect(){
-    $("select").addClass("form-control").css({
+function loadStyles(){
+    $(".dt-buttons").css({
         "margin-bottom" : "20px"
     });
 }
@@ -115,19 +117,23 @@ let driversTable = $("#driversTable").DataTable({
     buttons: [
         {
             extend: 'copyHtml5',
+            className: 'btn-info'
         },
         {
             extend: 'excelHtml5',
             messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
-            title: 'Data export'
+            title: 'Data export',
+            className: 'btn-success'
         },
         {
             extend: 'csvHtml5',
+            className: 'btn-secondary'
         },
         {
             extend: 'pdfHtml5',
             orientation: 'landscape',
             pageSize: 'LEGAL',
+            className: 'btn-danger'
         }
     ],
     rowId: 'idRow',
@@ -171,15 +177,29 @@ let driversTable = $("#driversTable").DataTable({
     columns: [
         {data:'name'},
         {data:'last_name'},
-        {data:'state'}
+        {data:'state', render: function(data, type, row, meta){
+            let html = ``;
+
+            console.log(data);
+            if (data.toLowerCase() == "disponible"){
+
+                html += `<span style="border-radius:3px;background:green;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+                //$(data).css("color", "green");
+            }else if (data.toLowerCase() == "fuera de servicio"){
+
+                html += `<span style="border-radius:3px;background:red;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+            }
+
+            return html;
+        }}
     ],
     
     drawCallback: function(settings) {
         //loadFunctionsOfButtons();
-        //loadStylesForSelect();
+        loadStyles();
     },
     initComplete: function(settings){
-        //loadStylesForSelect();
+        loadStyles();
         loadFunctionDataTable();
     }
 });

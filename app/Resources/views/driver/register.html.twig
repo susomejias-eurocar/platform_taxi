@@ -2,14 +2,16 @@
 
 {% block main %}
     <main>
-        <div class="container col-lg-12" style="padding:25px 30px;min-height:100vh;display:flex;align-items:center;" >
-            <div class="card col-lg-5 offset-lg-3"  style="background:#F4C05C">
-               
-                <div class="card-body">
-                 <h1  style="font-weight:bold; padding:10px">Platform Taxi Proyect</h1>
+        <div class="container col-lg-12" style="padding:0px 30px;min-height:100vh;display:flex;align-items:center;" >
+            <div class="card col-lg-7 offset-lg-2">
+                <div class="row" style="background:#263238;color:#fff">
+                    <h1  style="font-weight:bold; padding: 30px 30px">Crear conductor</h1>
+                </div>
+                <div class="card-body row">
 
-                    <h3 style="font-weight:bold; padding:10px">Datos Usuario</h3>
 
+                    <div clas="col" style="padding: 0px 30px">
+                        <h3 style="font-weight:bold; padding:10px">Datos Usuario</h3>
                         <div class="form-group">
                             <label for="email"  class="boldText">Email</label>
                             <input required name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Introduce email">
@@ -28,21 +30,24 @@
                             <label for="phone" class=" boldText">Teléfono</label>
                             <input required name="phone" type="tel" class="form-control" id="phone" placeholder="Introduce teléfono">
                         </div>
+                    
+                    </div>
+                    
+                    <div class="col" style="padding: 0px 30px">
 
                         <h3 class="" style="font-weight:bold; padding:10px">Datos Conductor</h3>
 
                         <div class="form-group">
                             <label for="driverName" class=" boldText">Nombre</label>
-                            <input required name="driverName" type="text" class="form-control" id="driverName" placeholder="Repita contraseña">
+                            <input required name="driverName" type="text" class="form-control" id="driverName" placeholder="Nombre">
                         </div>
 
                         <div class="form-group">
                             <label for="driverLastname" class=" boldText">Apellidos</label>
-                            <input required name="driverLastName" type="text" class="form-control" id="driverLastName" placeholder="Repita contraseña">
+                            <input required name="driverLastName" type="text" class="form-control" id="driverLastName" placeholder="Apellidos">
                         </div>
-
-                        <div>
-                            <label for="car" class=" boldText">Asignar coche</label>
+                        <h3 style="font-weight:bold; padding:10px">Asignar coche</h3>
+                            <label for="driverLastname" class=" boldText">Elija coche</label>
                             <select class="form-control" style="margin-bottom:20px" name="car" id="car">
                                 <option value=NULL>Sin coche</option>
                                 {% for car in cars %}
@@ -50,10 +55,11 @@
                                 {% endfor %}
 
                             </select>
+                    </div>
 
-                        </div>
-
-                        <button  class="btn" style="background:#263238;color:#F4C05C;font-weight:bold;font-size:1.1rem" id="btnRegister">Registrar</button>
+                </div>
+                <div class="row" style="padding: 30px">
+                    <button  class="btn" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" id="btnRegister">Registrar</button>
                 </div>
             </div>
         </div>
