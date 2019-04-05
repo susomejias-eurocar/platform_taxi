@@ -97,14 +97,13 @@ class CompanyController extends Controller
                         "status" => false,
                         "message" => "El correo ya está registrado"
                     );
-                    $result->setContent(json_encode($response));
-                    return $result;
+                    return new JsonResponse($response);
                 }
                 $response = array(
                     "status" => true,
                     "message" => "Registro correcto"
                 );
-                return new JsonResponse($response);
+                
             }
     }
 
@@ -173,6 +172,7 @@ class CompanyController extends Controller
                     $user->setActive(0);
                     $user->setPermission($permission);
                     $user->setCompanys($company);
+                    $user->setRoles(array("ROLE_DRIVER"));
                     $em->persist($user);
                     $em->flush();
                 }catch(UniqueConstraintViolationException $e){
@@ -180,8 +180,7 @@ class CompanyController extends Controller
                         "status" => false,
                         "message" => "El correo ya está registrado"
                     );
-                    $result->setContent(json_encode($response));
-                    return $result;
+                    return new JsonResponse($response);t;
                 }
                 $response = array(
                     "status" => true,

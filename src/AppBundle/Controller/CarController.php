@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class CarController extends Controller
@@ -38,16 +40,22 @@ class CarController extends Controller
         $car->setState($state);
         $em->persist($car);
         $em->flush();
-        return $this->redirect($this->generateUrl('show_car'));
 
+        $response = array(
+            "status" => true,
+            "message" => "Coche editado correctamente"
+        );
+
+        return new JsonResponse($response);
+        //return $this->redirect($this->generateUrl('show_car'));
     }
 
-    public function deleteAction($idCar){
+    public function deleteAction(Request $request,$idCar){
         $em = $this->getDoctrine()->getEntityManager();
         $car = $em->getRepository("AppBundle:car")->findOneById($idCar);
         $em->remove($car);
         $em->flush();
-        return $this->redirectToRoute('show_car');
+        return $this->redirect($this->generateUrl('show_car'));
     }
 
 }

@@ -59,7 +59,7 @@
 
     $('#btnRegister').click(()=>{
 
-        if($('#btnRegister').val()=="Registrar")
+        if($('#btnRegister').text()=="Registrar")
             urlAjax = "{{ path('add_car') }}";
         else
             urlAjax = "{{ path('edit_car_ajax') }}";
@@ -84,7 +84,8 @@
                         result.message,
                         "",
                         "error"
-                        )       
+                        )
+                        //location.ref = "company/car/show";       
                         console.log(result);       
                     }else{
                         Swal.fire(
