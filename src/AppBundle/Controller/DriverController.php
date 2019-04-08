@@ -30,7 +30,7 @@ class DriverController extends Controller
         $email = $request->get('email');
         $phone = $request->get('phone');
         $state = $request->get('state');
-        $iDriver = $request->get('iDriver');
+        $idDriver = $request->get('iDriver');
         $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);        
         $em->persist($driver);
         $em->flush();

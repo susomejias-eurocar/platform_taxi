@@ -480,4 +480,9 @@ class CompanyController extends Controller
         );
         return new JsonResponse($response);
     }
+
+    public function openMapAction(Request $request){
+        
+        return $this->render('company/content-panel-showMap.html.twig', array());
+    }
 }
