@@ -3,23 +3,33 @@
 
             <div style="background:#F4C05C;width:100%;display:flex;flex-direction:column;align-items:center;padding:20px">
                 
-                <img src="https://cdn.iconscout.com/icon/free/png-256/avatar-372-456324.png" height="90px"/>
-                
+                {% if is_granted('ROLE_COMPANY') %}
+                <a href="{{ path('panel') }}">
+                    <img src="{{ asset('images/man.svg') }}" height="90px"/>
+                </a>
+                {% elseif is_granted('ROLE_DRIVER') %}
+                <a href="{{ path('panel') }}">
+                    <img src="{{ asset('images/driver.svg') }}" height="90px"/>
+                </a>
+                {% endif %}
                 <p style="padding:10px,10px;color:#fff">
+                
                 {% block username %}
                     {% if is_granted('ROLE_COMPANY') %}
                         <p style="font-weight:bold">{{ app.user.username }}</p>
-                        <p style="font-weight:bold;padding-bottom:3px;margin:0px">{{ app.user.companys.name  }}</p>
-                        <p style="font-weight:bold;padding:0px">({{ app.user.companys.address }})</p>
+                        <p style="font-weight:bold;padding-bottom:3px;margin:0px"><i class="fas fa-phone" style="margin-right: 5px"></i>{{ app.user.phone  }}</p>
+                        <p style="font-weight:bold;padding-bottom:3px;margin:0px"><i class="fas fa-building" style="margin-right: 5px"></i>{{ app.user.companys.name  }}</p>
+                        <p style="font-weight:bold;padding:0px"><i class="fas fa-map-marker-alt" style="margin-right: 5px"></i>({{ app.user.companys.address }})</p>
                         <a href="{{ path('logout') }}" class="row" style="padding: 5px 0px;display:flex;flex-direction:row;justify-content:center;text-decoration:none;text-align:center;color:#fff">
-                        <img src="{{ asset('images/logout.svg') }}" height="30px"/>
+                        <img src="{{ asset('images/logout.svg') }}" id="imgLogout" height="30px"/>
                         </a>
                     {% elseif is_granted('ROLE_DRIVER') %}
                         <p style="font-weight:bold">{{ app.user.username }}</p>
-                        {# <p style="font-weight:bold;padding-bottom:3px;margin:0px">{{ app.user.companys.name  }}</p>
-                        <p style="font-weight:bold;padding:0px">({{ app.user.companys.address }})</p> #}
+                        <p style="font-weight:bold;padding-bottom:3px;margin:0px"><i class="fas fa-phone" style="margin-right: 5px"></i>{{ app.user.phone  }}</p>
+                        <p style="font-weight:bold;padding-bottom:3px;margin:0px"><i class="fas fa-building" style="margin-right: 5px"></i>{{ app.user.companys.name  }}</p>
+                        <p style="font-weight:bold;padding:0px"><i class="fas fa-map-marker-alt" style="margin-right: 5px"></i> ({{ app.user.companys.address }})</p> 
                         <a href="{{ path('logout') }}" class="row" style="padding: 5px 0px;display:flex;flex-direction:row;justify-content:center;text-decoration:none;text-align:center;color:#fff">
-                        <img src="{{ asset('images/logout.svg') }}" height="30px"/>
+                        <img src="{{ asset('images/logout.svg') }}" id="imgLogout" height="30px"/>
                         </a>
                     {% endif %}
                 {% endblock %}
@@ -27,13 +37,16 @@
             </div>
 
             {% block panelOptions %}
+                <div class="col">
+                
                 {% if is_granted('ROLE_COMPANY') %}
                     <a href="{{ path('show_car') }}" class="row option">Coches</a>
                     <a href="{{ path('show_drivers') }}" class="row option" >Conductores</a>
                     <a href="{{ path('open_map') }}" class="row option" >Mostrar mapa</a>
                 {% elseif is_granted('ROLE_DRIVER') %}
                     {#<a href="{{ path('show_car') }}" class="row option">Coches</a>#}
-                    <a href="{{ path('open_map') }}" class="row option" >Muestra mi coche</a>
+                    <a href="{{ path('change_state_driver', {id: 5}) }}" class="row option" >Cambiar estado</a>
                 {% endif %}
+                </div>
             {% endblock %}
 </div>

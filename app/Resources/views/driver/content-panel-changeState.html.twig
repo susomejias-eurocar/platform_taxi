@@ -1,0 +1,84 @@
+{% extends './user/panel.html.twig' %}
+
+
+{% block content %}
+
+<div class="col col-lg-10" style="padding-left:20px">
+
+    <main>
+        <divdriver_id class="container col-lg-10" style="padding:30px 0px;min-height:100vh;display:flex;align-items:center;" >
+            <div class="card col-lg-7 offset-lg-2">
+                <div class="row" style="background:#263238;color:#fff">
+                    <h1  style="font-weight:bold; padding: 30px 30px"><i class="fas fa-user-tie" style="margin-right:5px"></i>{{ app.user.name }}, {{ app.user.lastName }}</h1>
+                </div>
+                <div class="card-body row">
+
+                    <div class="container">
+
+                    <div>
+                        <label for="state" class=" boldText">Estado</label>
+                        <select class="form-control" style="margin-bottom:20px" name="state" id="state">
+                            <option value="Disponible">Disponible</option>                                
+                            <option value="En parada">En parada</option>
+                            <option value="Sin servicio">Sin servicio</option>                                
+                        </select>
+                    </div>
+
+                    <buton class="btn" id="btn">Enviar</button>
+
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>}
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script>
+
+
+    $('#btn').click(()=>{
+            $.ajax({
+                url: "{{ path('change_state_driver_ajax') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: { 
+                    state: $('#state').val(), 
+                    idDriver: {{driver_id[0]['id']}}
+                },
+                success: function(result){
+
+                    console.log(result);
+                    if (!result.status){
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "error"
+                        )       
+                    }else{
+                        console.log("hola")
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "success"
+                        )    
+
+                        
+                        let path = "{{ path('panel') }}"
+                        setTimeout(function(){ window.location.href = path }, 1500);
+                        
+                    }
+                    
+                    
+                },
+            });
+    });
+</script>
+
+{% endblock %}
