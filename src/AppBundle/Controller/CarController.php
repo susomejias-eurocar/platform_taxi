@@ -38,7 +38,12 @@ class CarController extends Controller
             "message" => "ERROR"
         );
 
-        if (empty($plate) or empty($trademark) or empty($model) or empty($version) or empty($state) or empty($idCar)){
+        if(!preg_match("/^\d{4}[A-Z]{3}/", $plate)){
+            $response = array(
+                "status" => false,
+                "message" => "Formato de matrícula incorrecto"
+            );
+        }else if (empty($plate) or empty($trademark) or empty($model) or empty($version) or empty($state) or empty($idCar)){
             $response = array(
                 "status" => false,
                 "message" => "rellene los campos"
