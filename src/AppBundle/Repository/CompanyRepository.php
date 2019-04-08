@@ -156,11 +156,28 @@ class CompanyRepository extends EntityRepository
         // Inicializamos los strings que van a concatenar la consulta.
         $where = $query = $queryCount = $orderBy = $groupBy =  $having = "";
         $parameters = array();
-        $query = "SELECT d.id,u.name, u.last_name,d.state, c.plate 
-        FROM user as u, driver as d, car as c
+
+
+
+        $query = "SELECT d.id,u.name, u.last_name,d.state, c.plate
+        FROM user as u, driver AS d, car AS c
         WHERE u.id = d.user_id
         AND d.car_id = c.id
-        AND u.companys_id = :company_id";
+        AND u.companys_id = :company_id
+        
+        
+        UNION 
+
+        
+        SELECT d.id,u.name, u.last_name,d.state, 'sin asignar'
+        FROM user as u, driver AS d
+        WHERE u.id = d.user_id
+        AND d.car_id is null
+        AND u.companys_id = :company_id;
+
+        ";
+
+
         $queryCount = "SELECT COUNT(*) as total 
         FROM driver AS d, user as u 
         where u.id = d.user_id    
@@ -197,27 +214,6 @@ class CompanyRepository extends EntityRepository
         return $result;
     }
 
-
-
-    /**
-     * Get info of company by user id.
-     *
-     * @param [type] $user_id
-     * @return void
-     */
-    /*public function getCompanyInfo($user_id)
-    {
-        
-        $sql = "SELECT company.id,company.name, company.address FROM company , user WHERE :user_id = company.user_id";
-        $params = array(
-            'user_id' => $user_id
-        );
-
-        $results = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetchAll();
-
-
-        return $results;
-    }*/
 
     function getDriversWithoutCar($idCompany){
         $em = $this->getEntityManager();
