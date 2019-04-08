@@ -64,10 +64,11 @@ input:focus {
 }
 
 #over_map {
-  background: #57B2E1;
+  background: #F4C05C;
   margin-bottom: 20px;
   padding: 5px;
   border-radius: 3px;
   font-weight: bold;
   color: #fff;
+  font-size: 1.1rem;
 }
