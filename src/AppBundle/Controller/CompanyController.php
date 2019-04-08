@@ -356,7 +356,7 @@ class CompanyController extends Controller
                 $driver = new Driver();
                 $driver->setUser($user);
                 $driver->setCar($car);
-                $driver->setState('register');
+                $driver->setState('Disponible');
                 $em->persist($driver);
                 $em->flush();
                 $response = array(
