@@ -124,6 +124,9 @@ ajax_register_car:
     path:   company/ajax_register_car
     defaults:   { _controller: AppBundle:Company:addCar}
 
+open_map:
+    path: company/map
+    defaults: { _controller: AppBundle:Company:openMap}
 #Show panel view
 panel:
     path:      /panel

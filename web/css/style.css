@@ -1,5 +1,6 @@
 body {
   color: #263238;
+  font-family: 'Lato', sans-serif;
 }
 
 .border-transparent {
@@ -49,4 +50,18 @@ input:focus {
 
 .styleSelectDatatable {
   margin: 0px !important;
+}
+
+#map {
+  width: 100%;
+  min-height: 65vh;
+}
+
+#over_map {
+  background: #57B2E1;
+  margin-bottom: 20px;
+  padding: 5px;
+  border-radius: 3px;
+  font-weight: bold;
+  color: #fff;
 }
