@@ -485,4 +485,5 @@ class CompanyController extends Controller
         
         return $this->render('company/content-panel-showMap.html.twig', array());
     }
+
 }

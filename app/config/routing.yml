@@ -127,6 +127,16 @@ ajax_register_car:
 open_map:
     path: company/map
     defaults: { _controller: AppBundle:Company:openMap}
+
+change_state_driver_ajax:
+    path: driver/changeStateAjax
+    defaults: { _controller: AppBundle:Driver:setState}
+
+change_state_driver:
+    path: driver/changeState/{id}
+    defaults: { _controller: AppBundle:Driver:showFormSetState}
+
+
 #Show panel view
 panel:
     path:      /panel

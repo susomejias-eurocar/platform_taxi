@@ -13,12 +13,43 @@ use Doctrine\ORM\EntityRepository;
 class DriverRepository extends EntityRepository
 {
 
-    public function setState($idCar, $state){
+    public function setState($idDriver, $state){
         $em = $this->getEntityManager();
         $query = $em->createQuery(
             "UPDATE AppBundle\Entity\Driver d SET d.state=:state WHERE d.id=:id"
-        )->setParameters(["state" => $state, "id" => $idCar])->execute();        
+        )->setParameters(["state" => $state, "id" => $idDriver])->execute();        
     }
+
+    public function getId($idUser){
+        $em = $this->getEntityManager();
+        $con = $em->getConnection();
+        $sql = "SELECT d.id
+        FROM driver d, user u
+        WHERE d.user_id = u.id
+        AND u.id = :id";
+        $query = $con->prepare($sql);
+        $query->bindValue("id",$idUser);
+        $query->execute();
+        $results = $query->fetchAll();
+        return $results;        
+    }
+
+    public function getState($idUser){
+        $em = $this->getEntityManager();
+        $con = $em->getConnection();
+        $sql = "SELECT d.state
+        FROM driver d, user u
+        WHERE d.user_id = u.id
+        AND u.id = :id";
+        $query = $con->prepare($sql);
+        $query->bindValue("id",$idUser);
+        $query->execute();
+        $results = $query->fetchAll();
+        return $results;        
+    }
+
+    
+
 
 
 }
