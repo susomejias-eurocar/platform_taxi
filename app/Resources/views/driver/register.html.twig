@@ -96,21 +96,24 @@
                 },
                 success: function(result){
 
+                    console.log(result);
                     if (!result.status){
                         Swal.fire(
                         result.message,
                         "",
                         "error"
                         )       
-                        console.log(result);       
                     }else{
+                        console.log("hola")
                         Swal.fire(
                         result.message,
                         "",
                         "success"
                         )    
 
-                        //setTimeout(function(){ window.location.href = "login" }, 1500);
+                        
+                        let path = "{{ path('panel') }}"
+                        setTimeout(function(){ window.location.href = path }, 1500);
                         
                     }
                     
