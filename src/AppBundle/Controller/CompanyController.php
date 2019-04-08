@@ -315,6 +315,8 @@ class CompanyController extends Controller
             $car = null;
         else
             $car = $this->container->get('car_service')->getCar($idCar);
+
+            
         if ($password1 != $password2) {
             $response = array(
                 "status" => false,
@@ -412,7 +414,13 @@ class CompanyController extends Controller
         $version = $request->get('version');
         $state = $request->get('state');
         $idCompany = $request->get('idCompany');
-        if (empty($plate) or empty($trademark) or empty($model) or empty($version) or empty($state)) {
+
+        If(!preg_match("/^\d{4}[A-Z]{3}/", $plate)){
+            $response = array(
+                "status" => false,
+                "message" => "Formato de matrícula incorrecto"
+            );
+        }else if (empty($plate) or empty($trademark) or empty($model) or empty($version) or empty($state)) {
             $response = array(
                 "status" => false,
                 "message" => "Rellene los campos"
