@@ -84,9 +84,7 @@
                         result.message,
                         "",
                         "error"
-                        )
-                        //location.ref = "company/car/show";       
-                        console.log(result);       
+                        )      
                     }else{
                         Swal.fire(
                         result.message,
@@ -94,7 +92,8 @@
                         "success"
                         )    
 
-                        //setTimeout(function(){ window.location.href = "login" }, 1500);
+                        let path = "{{ path('show_car') }}"
+                        setTimeout(function(){ window.location.href = path }, 1500);
                         
                     }
                     

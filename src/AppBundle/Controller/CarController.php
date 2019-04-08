@@ -24,6 +24,7 @@ class CarController extends Controller
     }
 
     public function editAjaxAction(Request $request){
+
         $em = $this->getDoctrine()->getEntityManager();
         $plate = $request->get('plate');
         $trademark = $request->get('trademark');
@@ -31,23 +32,41 @@ class CarController extends Controller
         $version = $request->get('version');
         $state = $request->get('state');
         $idCar = $request->get('idCar');
-        $car = $em->getRepository("AppBundle:Car")->findOneById($idCar);
-        $car->setPlate($plate);
-        $car->setTrademark($trademark);
-        $car->setModel($model);
-        $car->setVersion($version);
-        $car->setState($state);
-        $em->persist($car);
-        $em->flush();
-
 
         $response = array(
-            "status" => true,
-            "message" => "Coche editado correctamente"
+            "status" => false,
+            "message" => "ERROR"
         );
 
+        if (empty($plate) or empty($trademark) or empty($model) or empty($version) or empty($state) or empty($idCar)){
+            $response = array(
+                "status" => false,
+                "message" => "rellene los campos"
+            );
+            
+        }else{
+            try{
+                $car = $em->getRepository("AppBundle:Car")->findOneById($idCar);
+                $car->setPlate($plate);
+                $car->setTrademark($trademark);
+                $car->setModel($model);
+                $car->setVersion($version);
+                $car->setState($state);
+                $em->persist($car);
+                $em->flush();
+                $response = array(
+                    "status" => true,
+                    "message" => "Coche editado correctamente"
+                );
+            }catch(\Doctrine\DBAL\DBALException $e){
+                $response = array(
+                    "status" => false,
+                    "message" => "La matrícula introducida ya está registrada"
+                );
+                return new JsonResponse($response);
+            }
+        }
         return new JsonResponse($response);
-        //return $this->redirect($this->generateUrl('show_car'));
     }
 
     public function deleteAction(Request $request,$idCar){

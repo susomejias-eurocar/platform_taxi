@@ -92,7 +92,7 @@ class CompanyController extends Controller
                     $user->setPermission($permissionFull);
                     $em->persist($user);
                     $em->flush();
-                }catch(UniqueConstraintViolationException $e){
+                }catch(\Doctrine\DBAL\DBALException $e){
                     $response = array(
                         "status" => false,
                         "message" => "El correo ya está registrado"
@@ -103,6 +103,8 @@ class CompanyController extends Controller
                     "status" => true,
                     "message" => "Registro correcto"
                 );
+
+                return new JsonResponse($response);
                 
             }
     }
@@ -334,32 +336,40 @@ class CompanyController extends Controller
                 "message" => "Contraseña demasiado corta, mínimo 4 caractres"
             );
         } else {
-            $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
-                array('id' => 1)
-            );
-            $user = new User();
-            $user->setName($driverName);
-            $user->setLastName($driverLastName);
-            $user->setRoles(array("ROLE_DRIVER"));
-            $user->setEmail($email);
-            $encoder = $this->container->get('security.password_encoder');
-            $encoded = $encoder->encodePassword($user, $password1);
-            $user->setPassword($encoded);
-            $user->setPhone($phone);
-            $user->setActive(1);
-            $user->setPermission($permissionFull);
-            $user->setCompanys($this->container->get('company_service')->getCompany($idCompany));
-            $em->persist($user);
-            $driver = new Driver();
-            $driver->setUser($user);
-            $driver->setCar($car);
-            $driver->setState('register');
-            $em->persist($driver);
-            $em->flush();
-            $response = array(
-                "status" => true,
-                "message" => "Registro correcto"
-            );
+            try{
+                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                    array('id' => 1)
+                );
+                $user = new User();
+                $user->setName($driverName);
+                $user->setLastName($driverLastName);
+                $user->setRoles(array("ROLE_DRIVER"));
+                $user->setEmail($email);
+                $encoder = $this->container->get('security.password_encoder');
+                $encoded = $encoder->encodePassword($user, $password1);
+                $user->setPassword($encoded);
+                $user->setPhone($phone);
+                $user->setActive(1);
+                $user->setPermission($permissionFull);
+                $user->setCompanys($this->container->get('company_service')->getCompany($idCompany));
+                $em->persist($user);
+                $driver = new Driver();
+                $driver->setUser($user);
+                $driver->setCar($car);
+                $driver->setState('register');
+                $em->persist($driver);
+                $em->flush();
+                $response = array(
+                    "status" => true,
+                    "message" => "Registro correcto"
+                );
+            }catch(\Doctrine\DBAL\DBALException $e){
+                $response = array(
+                    "status" => false,
+                    "message" => "El correo ya está registrado"
+                );
+                return new JsonResponse($response);
+            }
         }
         return new JsonResponse($response);
     }
@@ -385,7 +395,6 @@ class CompanyController extends Controller
         $security_context = $this->get('security.context');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
-        $usersService = $this->get('user_service');
         $companyId = $user->getCompanys()->getId();
         $cars = $this->get("company_service")->getCarWithoutDriver($companyId);
         return $this->render('car/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyId" => $companyId));
@@ -409,22 +418,32 @@ class CompanyController extends Controller
                 "message" => "Rellene los campos"
             );
         }else {
-            $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
-                array('id' => 1)
-            );
-            $car = new Car();
-            $car->setPlate($plate);
-            $car->setTrademark($trademark);
-            $car->setModel($model);
-            $car->setVersion($version);
-            $car->setState($state);
-            $car->setCompany($this->container->get('company_service')->getCompany($idCompany));
-            $em->persist($car);
-            $em->flush();
-            $response = array(
-                "status" => true,
-                "message" => "Registro correcto"
-            );
+            try{
+                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                    array('id' => 1)
+                );
+                $car = new Car();
+                $car->setPlate($plate);
+                $car->setTrademark($trademark);
+                $car->setModel($model);
+                $car->setVersion($version);
+                $car->setState($state);
+                $car->setCompany($this->container->get('company_service')->getCompany($idCompany));
+                $em->persist($car);
+                $em->flush();
+                $response = array(
+                    "status" => true,
+                    "message" => "Registro correcto"
+                );
+                return new JsonResponse($response);
+            }catch(\Doctrine\DBAL\DBALException $e){
+                $response = array(
+                    "status" => false,
+                    "message" => "La matrícula introducida ya está registrada"
+                );
+                return new JsonResponse($response);
+            }
+            
         }
         return new JsonResponse($response);
     }
