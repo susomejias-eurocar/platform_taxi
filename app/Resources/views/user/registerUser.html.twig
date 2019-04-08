@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <main>
+        <div class="container col-lg-12" style="padding:0px 30px;min-height:100vh;display:flex;align-items:center;" >
+            <div class="card col-lg-7 offset-lg-2">
+                <div class="row" style="background:#263238;color:#fff">
+                    <h1  style="font-weight:bold; padding: 30px 30px">Crear usuario</h1>
+                </div>
+
+                <div class="card-body">
+                    <!--<h3 class="text-light" style="font-weight:bold; padding:10px">Datos Usuario</h3>-->
+
+                        <div class="form-group">
+                            <label for="name" class="boldText">Nombre</label>
+                            <input required name="name" type="name" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Introduce tu nombre">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName" class="boldText">Apellidos</label>
+                            <input required name="lastName" type="lastName" class="form-control" id="lastName" aria-describedby="lastNameHelp" placeholder="Introduce tus apellidos">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="boldText">Email</label>
+                            <input required name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Introduce email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password1" class="boldText">Contraseña</label>
+                            <input required name="password1" type="password" class="form-control" id="password1" placeholder="Introduce contraseña">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password2" class="boldText">Repita contraseña</label>
+                            <input required name="password2" type="password" class="form-control" id="password2" placeholder="Repita contraseña">
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="phone" class="boldText">Teléfono</label>
+                            <input required name="phone" type="tel" class="form-control" id="phone" placeholder="Introduce teléfono">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="permissions" class="boldText">Permisos: </label>
+                            <select name="permissions" id="permissions">
+                                <option value="1">Añadir, editar, listar y eliminar</option>
+                                <option value=2>Listar</option>
+                                <option value=3>Editar y listar</option>
+                                <option value=4>Añadir y listar</option>                                
+                            </select>
+                        </div>
+                    <button  class="btn" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" id="btnRegister">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script>
+    $('#btnRegister').click(()=>{
+            $.ajax({
+                url: "{{ path('ajax_register_user') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: { 
+                    name: $('#name').val() , 
+                    lastName: $('#lastName').val() , 
+                    email: $('#email').val() , 
+                    password1: $('#password1').val(), 
+                    password2: $('#password2').val(), 
+                    phone: $("#phone").val(),
+                    permissions: $("#permissions").val(),
+                    idCompany: {{ companyId }}
+
+                },
+                success: function(result){
+
+                    if (!result.status){
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "error"
+                        )       
+                        console.log(result);       
+                    }else{
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "success"
+                        )    
+                        
+                    }
+                    
+                    
+                },
+            });
+    });
+</script>
+
+{% endblock %}

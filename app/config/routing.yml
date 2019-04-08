@@ -1,3 +1,134 @@
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+# Index routing
+homepage:
+    path:      /
+    defaults:  { _controller: AppBundle:Default:index }
+
+# Go to login page
+login:
+    path:      /login
+    defaults:  { _controller: AppBundle:User:login }
+
+# Go to login page
+login_failure:
+    path:      /loginFailure
+    defaults:  { _controller: AppBundle:User:loginFailure }  
+
+# Go to close session
+logout:
+    path: /logout
+
+# Go to show form for register
+register:
+    path:      /register
+    defaults:  { _controller: AppBundle:Company:register }
+
+#Go to obtain data with register form
+ajax_register:
+    path:      /register_ajax
+    defaults:  { _controller: AppBundle:Company:registerAjax }
+
+register_user:
+    path:   company/register_user
+    defaults:  { _controller: AppBundle:Company:registerUser }
+
+ajax_register_user:
+    path:   company/register_user_ajax
+    defaults:  { _controller: AppBundle:Company:registerUserAjax }    
+
+# CAR ROUTING
+
+register_car:
+    path:   company/car/new
+    defaults:  { _controller: AppBundle:Company:registerCar }
+
+
+add_car:
+    path:   company/car/addCar
+    defaults:  { _controller: AppBundle:Company:addCar }
+
+# Go to view for cars datatable 
+show_car:
+    path:   company/car/show
+    defaults:  { _controller: AppBundle:Company:showCars }
+
+edit_car:
+    path: company/car/edit/{idCar}
+    defaults:  { _controller: AppBundle:Car:edit }
+
+edit_car_ajax:
+    path: company/car/edit_ajax/
+    defaults:  { _controller: AppBundle:Car:editAjax }
+
+delete_car:
+    path: company/car/delete/{idCar}
+    defaults:  { _controller: AppBundle:Car:delete }
+
+# Obtain all cars with ajax
+list_all_cars:
+    path:   company/listAllCars
+    defaults:  { _controller: AppBundle:Company:listCars }
+
+# Obtain all cars filtering with state
+list_cars:
+    path:   company/listDivers/{state}
+    defaults:  { _controller: AppBundle:Company:listCars }      
+
+
+# Go to view for drivers datatable 
+show_drivers:
+    path:   company/driverShow
+    defaults:  { _controller: AppBundle:Company:showDrivers }
+
+# Obtain all drivers with ajax
+list_all_drivers:
+    path:   company/listAllDrivers
+    defaults:  { _controller: AppBundle:Company:listDrivers }
+
+# Show form view for register driver
+driver_register:
+    path:   company/register_driver
+    defaults:   { _controller: AppBundle:Company:registerDriver }
+
+# Register driver with ajax
+ajax_register_driver:
+    path:   company/ajax_register_driver
+    defaults:   { _controller: AppBundle:Company:addDriver }
+
+asign_car_driver:
+    path:   company/asignCar
+    defaults:   { _controller: AppBundle:Company:asignCar }
+
+asign_car_to_driver:
+    path: company/asignCarToDriver
+    defaults:   { _controller: AppBundle:Company:asignCarToDriver}
+
+edit_driver:
+    path: company/driver/edit/{idDriver}
+    defaults:  { _controller: AppBundle:Driver:edit }
+
+edit_driver_ajax:
+    path: company/driver/edit_ajax/
+    defaults:  { _controller: AppBundle:Driver:editAjax }
+
+delete_driver:
+    path: company/driver/delete/{idDriver}
+    defaults:  { _controller: AppBundle:Driver:delete }    
+
+# Show form view for register car
+car_register:
+    path:   company/register_car
+    defaults:   { _controller: AppBundle:Company:registerCar }
+
+# Register car with ajax
+ajax_register_car:
+    path:   company/ajax_register_car
+    defaults:   { _controller: AppBundle:Company:addCar}
+
+#Show panel view
+panel:
+    path:      /panel
+    defaults:  { _controller: AppBundle:User:panel }
+
+
+
+

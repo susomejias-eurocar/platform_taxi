@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <main>
+        <div class="container col-lg-12" style="padding:0px 30px;min-height:100vh;display:flex;align-items:center;" >
+            <div class="card col-lg-7 offset-lg-2">
+               
+                <div class="card-body" style="padding:0px">
+
+                <div class="row" style="background:#263238 ">
+                        <h1  style="font-weight:bold; padding:20px;color:#fff">Asignar coche</h1>
+                </div>
+
+                    <!--<h3 class="text-light" style="font-weight:bold; padding:10px">Asignar coche</h3>-->
+                <div class="col" style="padding:30px">
+                
+                    <div class="col form-group">
+                        <label for="drivers" class="boldText">Conductor: </label>
+                        <select class="form-control" name="drivers" id="drivers">
+                            <option value=NULL>Selecciona un conductor</option>
+                                {% for driver in drivers %}
+                            <option value={{driver['id']}}>{{driver['name']}} {{driver['last_name']}}</option>
+                                {% endfor %}
+
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cars" class="boldText">Coche: </label>
+                        <select class="form-control" name="cars" id="cars">
+                            <option value=NULL>Selecciona un coche</option>
+                            {% for car in cars %}
+                                <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+                        <button class="btn" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" id="btnAsign">Asignar</button>
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script>
+
+    let $cars = $("#cars");
+    let $drivers = $("#drivers");
+    $('#btnAsign').prop("disabled",true);
+    if($cars.children('option').length < 2){        
+        $cars.prop("disabled", true);
+        $("#cars option:first").text("No existen coches disponibles");
+    }
+    if($drivers.children('option').length < 2){
+        $drivers.prop("disabled", true);
+        $("#drivers option:first").text("No existen conductores disponibles");
+    }
+
+    $cars.change(function (e) { 
+        e.preventDefault();
+        if($cars.prop('selectedIndex')==0)
+            $('#btnAsign').prop("disabled",true);
+        else
+            checkSelect();
+    });
+
+    $drivers.change(function (e) { 
+        e.preventDefault();
+        if($drivers.prop('selectedIndex')==0)
+            $('#btnAsign').prop("disabled",true);
+        else
+            checkSelect();            
+    });
+
+    function checkSelect(){
+        if($drivers.prop('selectedIndex')!=0 && $cars.prop('selectedIndex')!=0)
+            $('#btnAsign').prop("disabled",false);
+    }
+
+    $('#btnAsign').click(()=>{
+            $.ajax({
+                url: "{{ path('asign_car_driver') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: { 
+                    idDriver: $('#drivers').val() , 
+                    idCar: $('#cars').val(), 
+                    idCompany: {{ companyId }}
+                },
+                success: function(result){
+
+                    if (!result.status){
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "error"
+                        )       
+                        console.log(result);       
+                    }else{
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "success"
+                        )    
+
+                        //setTimeout(function(){ window.location.href = "login" }, 1500);
+                        
+                    }
+                    
+                    
+                },
+            });
+    });
+</script>
+
+{% endblock %}
