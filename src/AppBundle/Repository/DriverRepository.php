@@ -34,6 +34,20 @@ class DriverRepository extends EntityRepository
         return $results;        
     }
 
+    public function getState($idUser){
+        $em = $this->getEntityManager();
+        $con = $em->getConnection();
+        $sql = "SELECT d.state
+        FROM driver d, user u
+        WHERE d.user_id = u.id
+        AND u.id = :id";
+        $query = $con->prepare($sql);
+        $query->bindValue("id",$idUser);
+        $query->execute();
+        $results = $query->fetchAll();
+        return $results;        
+    }
+
     
 
 

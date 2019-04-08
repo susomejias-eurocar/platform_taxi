@@ -9,22 +9,28 @@
         <divdriver_id class="container col-lg-10" style="padding:30px 0px;min-height:100vh;display:flex;align-items:center;" >
             <div class="card col-lg-7 offset-lg-2">
                 <div class="row" style="background:#263238;color:#fff">
-                    <h1  style="font-weight:bold; padding: 30px 30px"><i class="fas fa-user-tie" style="margin-right:5px"></i>{{ app.user.name }}, {{ app.user.lastName }}</h1>
+                    <h1  style="font-weight:bold; padding: 30px 30px">{{ app.user.name }}, {{ app.user.lastName }}</h1>
                 </div>
                 <div class="card-body row">
 
                     <div class="container">
 
                     <div>
+                        <label for="state" class=" boldText">Estado actual</label>
+                        <input style="font-weight:bold"class="form-control" type="text" value="{{ state_now[0]["state"] }}" disabled>
+                        <p></p>
+                    </div>
+                    <div>
                         <label for="state" class=" boldText">Estado</label>
                         <select class="form-control" style="margin-bottom:20px" name="state" id="state">
+                            <option value="Sin asignar">Seleccione un estado</option>    
                             <option value="Disponible">Disponible</option>                                
                             <option value="En parada">En parada</option>
                             <option value="Sin servicio">Sin servicio</option>                                
                         </select>
                     </div>
 
-                    <buton class="btn" id="btn">Enviar</button>
+                    <buton class="btn" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" id="btn">Actualizar</button>
 
                     </div>
                     

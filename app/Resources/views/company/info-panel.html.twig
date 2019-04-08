@@ -45,7 +45,7 @@
                     <a href="{{ path('open_map') }}" class="row option" >Mostrar mapa</a>
                 {% elseif is_granted('ROLE_DRIVER') %}
                     {#<a href="{{ path('show_car') }}" class="row option">Coches</a>#}
-                    <a href="{{ path('change_state_driver', {id: 5}) }}" class="row option" >Cambiar estado</a>
+                    <a href="{{ path('change_state_driver', {id: 5}) }}" class="row option" >Estado</a>
                 {% endif %}
                 </div>
             {% endblock %}

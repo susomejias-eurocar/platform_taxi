@@ -16,21 +16,14 @@ class DriverController extends Controller
         $security_context = $this->get('security.context');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
-        $usersService = $this->get('user_service');
         $companyId = $user->getCompanys()->getId();
         $driver = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:Driver")->findOneById($idDriver);        
         $user = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:User")->findOneById($driver->getUser());        
         return $this->render('driver/register.html.twig', array("driver"=>$driver,"user" => $user, "user_type" => "company", "companyId" => $companyId,"driverId" => $driver->getid()));
-        //return $this->redirect('login');
     }
 
     public function editAjaxAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
-        $name = $request->get('name');
-        $lastName = $request->get('lastName');
-        $email = $request->get('email');
-        $phone = $request->get('phone');
-        $state = $request->get('state');
         $idDriver = $request->get('iDriver');
         $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);        
         $em->persist($driver);
@@ -55,9 +48,8 @@ class DriverController extends Controller
         $user = $security_token->getUser();
         $em = $this->getDoctrine()->getEntityManager();
         $driver_id = $em->getRepository("AppBundle:Driver")->getId($user->getId());
-        // dump($user->getId());
-        // die();
-        return $this->render('driver/content-panel-changeState.html.twig', array('driver_id'=> $driver_id ));
+        $driver_state_now = $em->getRepository("AppBundle:Driver")->getState($user->getId());
+        return $this->render('driver/content-panel-changeState.html.twig', array('driver_id'=> $driver_id , 'state_now' => $driver_state_now));
     }
 
     public function setStateAction(Request $request)
@@ -65,6 +57,13 @@ class DriverController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $state = $request->get('state');
         $driver_id = $request->get('idDriver');
+        if (empty($state) or $driver_id){
+            $response = array(
+                "status" => false,
+                "message" => "Parámetros incorrectos"
+            );
+        }
+
         $driver = $em->getRepository("AppBundle:Driver")->setState($driver_id,$state);
         $response = array(
             "status" => true,
