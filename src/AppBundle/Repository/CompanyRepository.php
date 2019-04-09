@@ -322,6 +322,15 @@ class CompanyRepository extends EntityRepository
         return $results;
     }
 
+    public function existDriver($idCompany, $idDriver){
+        $em = $this->getEntityManager();
+        $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
+        if(!$driver)
+            return false;
+        $con = $em->getConnection();
+        $sql = "SELECT * from company, driver, user";
+    }
+
     public function asignCarToCompany($idDriver, $idCar){
         $em = $this->getEntityManager();
         $car = $em->getRepository("AppBundle:Car")->findOneById($idCar);
