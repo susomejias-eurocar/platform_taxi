@@ -140,6 +140,9 @@ change_state_driver:
     path: driver/changeState/{id}
     defaults: { _controller: AppBundle:Driver:showFormSetState}
 
+unassing_car:
+    path: driver/unassign/{idDriver}
+    defaults: { _controller: AppBundle:Driver:unassignCar}    
 
 #Show panel view
 panel:

@@ -19,7 +19,13 @@ class CarController extends Controller
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
+        $companyService = $this->container->get("company_service");
         $car = $em->getRepository("AppBundle:car")->findOneById($idCar);        
+        if($car == null)
+            return $this->redirectToRoute('show_car');
+        if($companyService->existCar($companyId,$car->getId()))
+            return $this->redirectToRoute('show_drivers');
+
         return $this->render('car/content-panel-createCar.html.twig', array("car"=>$car,"user_type" => "company", "companyId" => $companyId,"carId" => $car->getid()));
     }
 
