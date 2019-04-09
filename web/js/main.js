@@ -2,6 +2,7 @@
 
     let init = function(){
 
+        
         $('.option').mouseenter(function () { 
             $(this).addClass('animated').addClass('flipInX');
         });

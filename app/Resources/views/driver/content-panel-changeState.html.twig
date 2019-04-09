@@ -21,8 +21,8 @@
                         <p></p>
                     </div>
                     <div>
-                        <label for="state" class=" boldText">Estado</label>
-                        <select class="form-control" style="margin-bottom:20px" name="state" id="state">
+                        <label for="state" class="boldText">Estado</label>
+                        <select class="chosen-select form-control" style="margin-bottom:20px" name="state" id="state">
                             <option value="Sin asignar">Seleccione un estado</option>    
                             <option value="Disponible">Disponible</option>                                
                             <option value="En parada">En parada</option>
@@ -30,7 +30,7 @@
                         </select>
                     </div>
 
-                    <buton class="btn" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" id="btn">Actualizar</button>
+                    <buton class="btn" style="margin-top:20px;background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" id="btn">Actualizar</button>
 
                     </div>
                     
@@ -48,6 +48,7 @@
 
 <script>
 
+    $(".chosen-select").chosen({no_results_text: "Oops, nothing found!"});
 
     $('#btn').click(()=>{
             $.ajax({
