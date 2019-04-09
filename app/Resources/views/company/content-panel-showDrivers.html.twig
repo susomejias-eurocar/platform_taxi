@@ -6,6 +6,8 @@
 <h1>Conductores de la compañia</h1>
 <div class="row" style="padding:20px 15px">
     <a href="{{ path('driver_register') }}" class="btn bg-success text-light boldText">Crear nuevo conductor</a>
+    <a href="{{ path('asign_car_to_driver') }}" style="margin-left:20px;"class="btn bg-success text-light boldText">Asignar coche</a>
+
 </diV>
 <div class="row">
 <div class="input-group col-3" style="padding: 30px 15px;height:100% ">
@@ -237,11 +239,16 @@ let driversTable = $("#driversTable").DataTable({
             let html = ``;
             let pathEdit = "{{ path('edit_driver', {'idDriver': 'pepe'}) }}";
             let pathDelete = "{{ path('delete_driver', {'idDriver': 'pepe'}) }}";
+            let pathUnassingcar = "{{ path('unassing_car', {'idDriver': 'pepe'}) }}";
             pathEdit=pathEdit.replace("pepe", row.id);
             pathDelete=pathDelete.replace("pepe", row.id);
+            pathUnassingcar=pathUnassingcar.replace("pepe", row.id);
 
                 html += "<a href='"+ pathEdit +"' class='btn bg-info' style='color:#fff' font-weight:bold\">Editar</a>";
                 html += "<a  id='btnDelete' href='" + pathDelete + "' class='btn bg-danger' style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\">Eliminar</a>";
+                if(row.plate != "sin asignar")
+                    html += "<a  id='btnDelete' href='" + pathUnassingcar + "' class='btn bg-danger' style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\">Quitar coche</a>";
+                
 
             return html;
         }}

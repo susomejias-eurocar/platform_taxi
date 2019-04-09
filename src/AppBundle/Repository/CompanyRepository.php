@@ -328,7 +328,28 @@ class CompanyRepository extends EntityRepository
         if(!$driver)
             return false;
         $con = $em->getConnection();
-        $sql = "SELECT * from company, driver, user";
+        $sql = "SELECT * from  driver, user where driver.id=:idDriver and user.id=driver.user_id and user.companys_id=:idCompany";
+        $query = $con->prepare($sql);
+        $query->bindValue("idDriver",$idDriver);
+        $query->bindValue("idCompany",$idCompany);
+        $query->execute();
+        $results = $query->fetchAll();
+        return empty($results);
+    }
+
+    public function existCar($idCompany, $idCar){
+        $em = $this->getEntityManager();
+        $car = $em->getRepository("AppBundle:Car")->findOneById($idCar);
+        if(!$car)
+            return false;
+        $con = $em->getConnection();
+        $sql = "SELECT * from  car, company where car.id=:idCar and car.company_id=:idCompany";
+        $query = $con->prepare($sql);
+        $query->bindValue("idCar",$idCar);
+        $query->bindValue("idCompany",$idCompany);
+        $query->execute();
+        $results = $query->fetchAll();
+        return empty($results);
     }
 
     public function asignCarToCompany($idDriver, $idCar){

@@ -19,9 +19,12 @@ class DriverController extends Controller
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
         $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
+        $companyService = $this->container->get("company_service");
         if($driver == null)
             return $this->redirectToRoute('show_drivers');
         $idDriver = $driver->getId();
+        if($companyService->existDriver($companyId,$idDriver))
+            return $this->redirectToRoute('show_drivers');
         $user = $em->getRepository("AppBundle:User")->findOneById($driver->getUser());
         $carDriver = $em->getRepository("AppBundle:Car")->findOneById($driver->getCar());
         $cars = $this->get("company_service")->getCarWithoutDriver($companyId);
@@ -55,9 +58,11 @@ class DriverController extends Controller
             $user->setLastName($lastName);
             $user->setEmail($email);
             $user->setPhone($phone);
-            $encoder = $this->container->get('security.password_encoder');
-            $encoded = $encoder->encodePassword($user, $password1);
-            $user->setPassword($encoded);
+            if(!empty($password1)){
+                $encoder = $this->container->get('security.password_encoder');
+                $encoded = $encoder->encodePassword($user, $password1);
+                $user->setPassword($encoded);
+            }
             $driver->setCar($carDriver);
             $em->persist($driver);
             $em->flush();
@@ -109,4 +114,16 @@ class DriverController extends Controller
         );
         return new JsonResponse($response);
     }
+
+    public function unassignCarAction($idDriver){
+        $em = $this->getDoctrine()->getEntityManager();
+        $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
+        $driver->setCar(null);
+        $em->persist($driver);
+        $em->flush();
+        return $this->redirectToRoute('show_drivers');
+
+
+    }
+
 }
