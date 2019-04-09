@@ -87,3 +87,7 @@ input:focus {
   color: #ffffff;
   font-size: 1.1rem;
 }
+
+#imgLogout {
+  opacity: 0.6;
+}
