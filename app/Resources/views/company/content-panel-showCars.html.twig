@@ -253,8 +253,8 @@ let carsTable = $("#carsTable").DataTable({
             let pathDelete = "{{ path('delete_car', {'idCar': 'pepe'}) }}";
             pathEdit=pathEdit.replace("pepe", row.id);
             pathDelete=pathDelete.replace("pepe", row.id);
-                html += "<a href='"+ pathEdit +"' class='btn bg-info' style='color:#fff' font-weight:bold\">Editar</a>";
-                html += "<a id='btnDelete' href='" + pathDelete + "' class='btn bg-danger' idCar="+row.id+" style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\">Eliminar</a>";
+                html += "<a title=Editar id=editar href='"+ pathEdit +"' class='btn bg-info' style='color:#fff' font-weight:bold\"><i id='editar' class='fas fa-pen'></i></a>";
+                html += "<a title=Eliminar id='btnDelete' href='" + pathDelete + "' class='btn bg-danger' idCar="+row.id+" style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='far fa-trash-alt'></i></a>";
 
             return html;
         }}
@@ -265,7 +265,11 @@ let carsTable = $("#carsTable").DataTable({
         loadStyles();
         loadFunctionDataTable();
     }
+
 });
+
+    $("#editar").tooltip();
+
 
 }
 

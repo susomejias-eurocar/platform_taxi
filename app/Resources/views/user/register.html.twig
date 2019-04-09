@@ -75,6 +75,8 @@
 {{ parent() }}
 
 <script>
+    $("#phone").mask("000-000-000");
+
     $('#btnRegister').click(()=>{
             $.ajax({
                 url: "{{ path('ajax_register') }}",
