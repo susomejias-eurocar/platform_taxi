@@ -41,80 +41,79 @@ class CompanyController extends Controller
         $em = $this->getDoctrine()->getManager();
         $name = $request->get('name');
         $lastName = $request->get('lastName');
+        $email = $request->get('email');
+        $password1 = $request->get('password1');
+        $password2 = $request->get('password2');
+        $phone = $request->get('phone');
+        $companyName = $request->get('companyName');
+        $companyAddress = $request->get('companyAdress');
+        if ($password1 != $password2) {
+            $response = array(
+                "status" => false,
+                "message" => "Las contraseñas no coinciden"
+            );
+        } elseif (empty($email) or empty($phone) or empty($password1) or empty($password2) or empty($companyName) or empty($companyAddress)) {
+            $response = array(
+                "status" => false,
+                "message" => "Rellene los campos"
+            );
+        } elseif (strlen($phone) < 6) {
+            $response = array(
+                "status" => false,
+                "message" => "Formato del teléfono no válido, mínimo 6 números"
+            );
+        } elseif (strlen($password1) < 4) {
+            $response = array(
+                "status" => false,
+                "message" => "Contraseña demasiado corta, mínimo 4 caractres"
+            );
+        } else {
+            try {
+                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                    array('id' => 1)
+                );
+                $company = new Company();
+                $company->setName($companyName);
+                $company->setAddress($companyAddress);
+                $em->persist($company);
+                $user = new User();
+                $user->setName($name);
+                $user->setLastName($lastName);
 
-            $email = $request->get('email');
-            $password1 = $request->get('password1');
-            $password2 = $request->get('password2');
-            $phone = $request->get('phone');
-            $companyName = $request->get('companyName');
-            $companyAddress = $request->get('companyAdress'); 
-            if ($password1 != $password2){
+                $user->setRoles(array("ROLE_COMPANY"));
+                $user->setEmail($email);
+                $encoder = $this->container->get('security.password_encoder');
+                $encoded = $encoder->encodePassword($user, $password1);
+                $user->setPassword($encoded);
+                $user->setPhone($phone);
+                $user->setActive(0);
+                $user->setCompanys($company);
+                $user->setPermission($permissionFull);
+                $em->persist($user);
+                $em->flush();
+            } catch (\Doctrine\DBAL\DBALException $e) {
                 $response = array(
                     "status" => false,
-                    "message" => "Las contraseñas no coinciden"
+                    "message" => "El correo ya está registrado"
                 );
-            }elseif (empty($email) or empty($phone) or empty($password1) or empty($password2) or empty($companyName) or empty($companyAddress)){
-                $response = array(
-                    "status" => false,
-                    "message" => "Rellene los campos"
-                );
-            }elseif(strlen($phone) < 6){
-                $response = array(
-                    "status" => false,
-                    "message" => "Formato del teléfono no válido, mínimo 6 números"
-                );
-            }elseif (strlen($password1) < 4){
-                $response = array(
-                    "status" => false,
-                    "message" => "Contraseña demasiado corta, mínimo 4 caractres"
-                );
-            }else{
-                try{
-                    $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
-                        array('id'=> 1)
-                    );
-                    $company = new Company();
-                    $company->setName($companyName);
-                    $company->setAddress($companyAddress);
-                    $em->persist($company);
-                    $user = new User();
-                    $user->setName($name);
-                    $user->setLastName($lastName);
-
-                    $user->setRoles(array("ROLE_COMPANY"));
-                    $user->setEmail($email);
-                    $encoder = $this->container->get('security.password_encoder');
-                    $encoded = $encoder->encodePassword($user, $password1);
-                    $user->setPassword($encoded);
-                    $user->setPhone($phone);
-                    $user->setActive(0);
-                    $user->setCompanys($company);
-                    $user->setPermission($permissionFull);
-                    $em->persist($user);
-                    $em->flush();
-                }catch(\Doctrine\DBAL\DBALException $e){
-                    $response = array(
-                        "status" => false,
-                        "message" => "El correo ya está registrado"
-                    );
-                    return new JsonResponse($response);
-                }
-                $response = array(
-                    "status" => true,
-                    "message" => "Registro correcto"
-                );
-
                 return new JsonResponse($response);
-                
             }
+            $response = array(
+                "status" => true,
+                "message" => "Registro correcto"
+            );
+
+            return new JsonResponse($response);
+        }
     }
 
-    public function registerUserAction(){
+    public function registerUserAction()
+    {
         $security_context = $this->get('security.context');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
-        if($user){
+        if ($user) {
             return $this->render('company/content-panel-registerUser.html.twig', array("user_type" => "company", "companyId" => $companyId));
         }
     }
@@ -126,72 +125,72 @@ class CompanyController extends Controller
             "message" => "ERROR"
         );
         $em = $this->getDoctrine()->getManager();
-            $name = $request->get('name');
-            $lastName = $request->get('lastName');
-            $email = $request->get('email');
-            $password1 = $request->get('password1');
-            $password2 = $request->get('password2');
-            $phone = $request->get('phone');
-            $permissionsId = $request->get('companyName');
-            $companyId = $request->get('idCompany');
+        $name = $request->get('name');
+        $lastName = $request->get('lastName');
+        $email = $request->get('email');
+        $password1 = $request->get('password1');
+        $password2 = $request->get('password2');
+        $phone = $request->get('phone');
+        $permissionsId = $request->get('companyName');
+        $companyId = $request->get('idCompany');
 
-            if ($password1 != $password2){
+        if ($password1 != $password2) {
+            $response = array(
+                "status" => false,
+                "message" => "Las contraseñas no coinciden"
+            );
+        } elseif (empty($email) or empty($phone) or empty($password1) or empty($password2)) {
+            $response = array(
+                "status" => false,
+                "message" => "Rellene los campos"
+            );
+        } elseif (strlen($phone) < 6) {
+            $response = array(
+                "status" => false,
+                "message" => "Formato del teléfono no válido, mínimo 6 números"
+            );
+        } elseif (strlen($password1) < 4) {
+            $response = array(
+                "status" => false,
+                "message" => "Contraseña demasiado corta, mínimo 4 caractres"
+            );
+        } else {
+            try {
+                $permission = $em->getRepository('AppBundle:Permission')->findOneBy(
+                    array('id' => $permissionsId)
+                );
+                $company = $em->getRepository('AppBundle:Company')->findOneBy(
+                    array('id' => $companyId)
+                );
+                $user = new User();
+                $encoder = $this->container->get('security.password_encoder');
+                $encoded = $encoder->encodePassword($user, $password1);
+                $user->setName($name);
+                $user->setLastName($lastName);
+                $user->setEmail($email);
+                $user->setPassword($encoded);
+                $user->setPhone($phone);
+                $user->setActive(0);
+                $user->setPermission($permission);
+                $user->setCompanys($company);
+                $user->setRoles(array("ROLE_DRIVER"));
+                $em->persist($user);
+                $em->flush();
+            } catch (UniqueConstraintViolationException $e) {
                 $response = array(
                     "status" => false,
-                    "message" => "Las contraseñas no coinciden"
+                    "message" => "El correo ya está registrado"
                 );
-            }elseif (empty($email) or empty($phone) or empty($password1) or empty($password2)){
-                $response = array(
-                    "status" => false,
-                    "message" => "Rellene los campos"
-                );
-            }elseif(strlen($phone) < 6){
-                $response = array(
-                    "status" => false,
-                    "message" => "Formato del teléfono no válido, mínimo 6 números"
-                );
-            }elseif (strlen($password1) < 4){
-                $response = array(
-                    "status" => false,
-                    "message" => "Contraseña demasiado corta, mínimo 4 caractres"
-                );
-            }else{
-                try{
-                    $permission = $em->getRepository('AppBundle:Permission')->findOneBy(
-                        array('id'=> $permissionsId)
-                    );
-                    $company = $em->getRepository('AppBundle:Company')->findOneBy(
-                        array('id'=> $companyId)
-                    );
-                    $user = new User();                    
-                    $encoder = $this->container->get('security.password_encoder');
-                    $encoded = $encoder->encodePassword($user, $password1);
-                    $user->setName($name);
-                    $user->setLastName($lastName);
-                    $user->setEmail($email);
-                    $user->setPassword($encoded);
-                    $user->setPhone($phone);
-                    $user->setActive(0);
-                    $user->setPermission($permission);
-                    $user->setCompanys($company);
-                    $user->setRoles(array("ROLE_DRIVER"));
-                    $em->persist($user);
-                    $em->flush();
-                }catch(UniqueConstraintViolationException $e){
-                    $response = array(
-                        "status" => false,
-                        "message" => "El correo ya está registrado"
-                    );
-                    return new JsonResponse($response);t;
-                }
-                $response = array(
-                    "status" => true,
-                    "message" => "Registro correcto"
-                );
-
                 return new JsonResponse($response);
-
+                t;
             }
+            $response = array(
+                "status" => true,
+                "message" => "Registro correcto"
+            );
+
+            return new JsonResponse($response);
+        }
     }
 
     /**
@@ -205,11 +204,11 @@ class CompanyController extends Controller
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
-        if($user){
+        if ($user) {
             if ($this->get('security.context')->isGranted('ROLE_COMPANY')) {
                 return $this->render('company/content-panel-showCars.html.twig', array("user_type" => "company"));
             }
-        }   
+        }
     }
 
     /**
@@ -227,7 +226,7 @@ class CompanyController extends Controller
         $companyService = $this->get('company_service');
         $companyId = $user->getCompanys()->getId();
         $params = $request->request->all();
-        $getAllCarsCompany = $companyService->getAllCars($params,$companyId);
+        $getAllCarsCompany = $companyService->getAllCars($params, $companyId);
         $response = new Response();
         $response->setContent(json_encode($getAllCarsCompany));
         return $response;
@@ -245,10 +244,9 @@ class CompanyController extends Controller
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
-        if($user){
+        if ($user) {
             return $this->render('company/content-panel-showDrivers.html.twig', array("user_type" => "company"));
         }
-
     }
 
     /**
@@ -266,7 +264,7 @@ class CompanyController extends Controller
         $companyService = $this->get('company_service');
         $params = $request->request->all();
         $companyId = $user->getCompanys()->getId();
-        $getAllDriversCompany = $companyService->getAllDrivers($params,$companyId);
+        $getAllDriversCompany = $companyService->getAllDrivers($params, $companyId);
         $response = new Response();
         $response->setContent(json_encode($getAllDriversCompany));
         return $response;
@@ -284,10 +282,10 @@ class CompanyController extends Controller
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
-        if($user){
+        if ($user) {
             $cars = $this->get("company_service")->getCarWithoutDriver($companyId);
-            return $this->render('company/content-panel-createDriver.html.twig', array("cars"=>$cars,"user_type" => "company", "companyId" => $companyId));
-        }    
+            return $this->render('company/content-panel-createDriver.html.twig', array("cars" => $cars, "user_type" => "company", "companyId" => $companyId));
+        }
     }
 
     /**
@@ -311,12 +309,12 @@ class CompanyController extends Controller
         $driverLastName = $request->get('driverLastName');
         $idCar = $request->get('car');
         $idCompany = $request->get('idCompany');
-        if($idCar==0)
+        if ($idCar == 0)
             $car = null;
         else
             $car = $this->container->get('car_service')->getCar($idCar);
 
-            
+
         if ($password1 != $password2) {
             $response = array(
                 "status" => false,
@@ -338,7 +336,7 @@ class CompanyController extends Controller
                 "message" => "Contraseña demasiado corta, mínimo 4 caractres"
             );
         } else {
-            try{
+            try {
                 $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => 1)
                 );
@@ -365,7 +363,7 @@ class CompanyController extends Controller
                     "status" => true,
                     "message" => "Registro correcto"
                 );
-            }catch(\Doctrine\DBAL\DBALException $e){
+            } catch (\Doctrine\DBAL\DBALException $e) {
                 $response = array(
                     "status" => false,
                     "message" => "El correo ya está registrado"
@@ -393,16 +391,18 @@ class CompanyController extends Controller
      *
      * @return void
      */
-    public function registerCarAction(){
+    public function registerCarAction()
+    {
         $security_context = $this->get('security.context');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
         $cars = $this->get("company_service")->getCarWithoutDriver($companyId);
-        return $this->render('car/content-panel-createCar.html.twig', array("cars"=>$cars,"user_type" => "company", "companyId" => $companyId));
+        return $this->render('car/content-panel-createCar.html.twig', array("cars" => $cars, "user_type" => "company", "companyId" => $companyId));
     }
 
-    public function addCarAction(Request $request){
+    public function addCarAction(Request $request)
+    {
         $response = array(
             "status" => false,
             "message" => "ERROR"
@@ -415,18 +415,18 @@ class CompanyController extends Controller
         $state = $request->get('state');
         $idCompany = $request->get('idCompany');
 
-        If(!preg_match("/^\d{4}[A-Z]{3}/", $plate)){
+        if (!preg_match("/^\d{4}[A-Z]{3}/", $plate)) {
             $response = array(
                 "status" => false,
                 "message" => "Formato de matrícula incorrecto"
             );
-        }else if (empty($plate) or empty($trademark) or empty($model) or empty($version) or empty($state)) {
+        } else if (empty($plate) or empty($trademark) or empty($model) or empty($version) or empty($state)) {
             $response = array(
                 "status" => false,
                 "message" => "Rellene los campos"
             );
-        }else {
-            try{
+        } else {
+            try {
                 $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => 1)
                 );
@@ -444,14 +444,13 @@ class CompanyController extends Controller
                     "message" => "Registro correcto"
                 );
                 return new JsonResponse($response);
-            }catch(\Doctrine\DBAL\DBALException $e){
+            } catch (\Doctrine\DBAL\DBALException $e) {
                 $response = array(
                     "status" => false,
                     "message" => "La matrícula introducida ya está registrada"
                 );
                 return new JsonResponse($response);
             }
-            
         }
         return new JsonResponse($response);
     }
@@ -461,7 +460,8 @@ class CompanyController extends Controller
      *
      * @return void
      */
-    public function asignCarToDriverAction(){
+    public function asignCarToDriverAction()
+    {
         $security_context = $this->get('security.context');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
@@ -470,10 +470,11 @@ class CompanyController extends Controller
         $companyId = $user->getCompanys()->getId();
         $cars = $companyService->getCarWithoutDriver($companyId);
         $drivers = $companyService->getDriversWithoutCar($companyId);
-        return $this->render('car/content-panel-asignCar.html.twig', array("drivers"=> $drivers, "cars"=>$cars,"user_type" => "company",  "companyId" => $companyId));
+        return $this->render('car/content-panel-asignCar.html.twig', array("drivers" => $drivers, "cars" => $cars, "user_type" => "company",  "companyId" => $companyId));
     }
 
-    public function asignCarAction(Request $request){
+    public function asignCarAction(Request $request)
+    {
         $response = array(
             "status" => false,
             "message" => "ERROR"
@@ -481,7 +482,7 @@ class CompanyController extends Controller
         $em = $this->getDoctrine()->getManager();
         $idDriver = $request->get('idDriver');
         $idCar = $request->get('idCar');
-        $this->get('company_service')->asignCarToCompany($idDriver,$idCar);
+        $this->get('company_service')->asignCarToCompany($idDriver, $idCar);
         $response = array(
             "status" => true,
             "message" => "Se ha asignado el coche al conductor"
@@ -489,9 +490,9 @@ class CompanyController extends Controller
         return new JsonResponse($response);
     }
 
-    public function openMapAction(Request $request){
-        
+    public function openMapAction(Request $request)
+    {
+
         return $this->render('company/content-panel-showMap.html.twig', array());
     }
-
 }
