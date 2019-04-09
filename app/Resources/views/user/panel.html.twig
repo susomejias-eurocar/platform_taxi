@@ -9,7 +9,11 @@
             {% endblock %}
                 {% block content %}
                 <div class="col" style="display:flex;flex-direction:column;align-items:center;justify-content:center">
-                    <h1 style="font-size:9rem;font-weight:bold;">Platform taxi</h1>
+                    {% if is_granted('ROLE_COMPANY') %}
+                        <h1 class="logo-company" style="font-size:9rem;font-weight:bold;">Platform taxi</h1>
+                    {% elseif is_granted('ROLE_DRIVER') %}
+                        <h1 class="logo-driver" style="font-size:9rem;font-weight:bold;">Platform taxi</h1>
+                    {% endif %}
                 </div>
             {% endblock %}
         </div>
