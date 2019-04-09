@@ -27,7 +27,7 @@
     <div class="input-group-prepend" style="height:100%" >
         <div class="input-group-text" style="background: #263238; color:#fff;%"><b>Estado</b></div>
     </div>
-    <select class="form-control search-data-field styleSelectDatatables" data-field='state'>
+    <select class="chosen-select form-control search-data-field styleSelectDatatables " data-field='state'>
         <option value="">Seleccione Estado</option>
         <option value="Disponible">Disponible</option>
         <option value="Averiado">Averiado</option>
@@ -82,6 +82,8 @@ let init = function(){
 
 // Variable auxilair
     let time = null;
+
+    $(".chosen-select").chosen({no_results_text: "Oops, nothing found!"});
 
 
     $('.search-data-field').each(function( index ) {
