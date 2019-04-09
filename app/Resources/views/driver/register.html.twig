@@ -51,7 +51,7 @@
                         {% if is_granted('ROLE_COMPANY') %}
                             <h3 style="font-weight:bold; padding:10px">Asignar coche</h3>
                                 <label for="car" class=" boldText">Elija coche</label>
-                                <select class="form-control" style="margin-bottom:20px" name="car" id="car">
+                                <select class="form-control chosen-select" style="margin-bottom:20px" name="car" id="car">
                                     <option value=NULL>Sin coche</option>
                                     {% if carDriver is defined and carDriver is not null %}
                                         <option selected value={{carDriver.id}}>{{carDriver.trademark}} {{carDriver.model}} {{carDriver.version}} - {{carDriver.plate}}</option>
@@ -86,6 +86,8 @@
             urlAjax = "{{ path('edit_driver_ajax') }}";
 
 
+    $(".chosen-select").chosen();
+    $("#phone").mask("000-000-000");
     $('#btnRegister').click(()=>{
             $.ajax({
                 url: urlAjax,

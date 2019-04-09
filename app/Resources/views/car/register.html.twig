@@ -32,7 +32,7 @@
 
                         <div>
                             <label for="state" class=" boldText">Estado</label>
-                            <select class="form-control" style="margin-bottom:20px" name="state" id="state">
+                            <select class="form-control chosen-select" style="margin-bottom:20px" name="state" id="state">
                                 <option value="Disponible">Disponible</option>                                
                                 <option value="Averiado">Averiado</option>
                                 <option value="En reparación">En reparación</option>                                
@@ -56,6 +56,8 @@
 <script>
 
     let urlAjax;
+
+    $(".chosen-select").chosen();
 
     $('#btnRegister').click(()=>{
 
