@@ -1,18 +1,21 @@
 <div class="col col-lg-2" id="leftPanel" style="background:#263238;padding:0px">
 
 
-            <div style="background:#F4C05C;width:100%;display:flex;flex-direction:column;align-items:center;padding:20px">
-                
+            {% if is_granted('ROLE_COMPANY') %}
+                <div style="width:100%;display:flex;flex-direction:column;align-items:center;padding:20px" class="gradient-company">
+            {% elseif is_granted('ROLE_DRIVER') %}
+                <div style="width:100%;display:flex;flex-direction:column;align-items:center;padding:20px" class="gradient-driver">
+            {% endif %}
                 {% if is_granted('ROLE_COMPANY') %}
                 <a href="{{ path('panel') }}">
-                    <img src="{{ asset('images/man.svg') }}" height="90px"/>
+                    <img src="{{ asset('images/man.svg') }}" height="100px"/>
                 </a>
                 {% elseif is_granted('ROLE_DRIVER') %}
                 <a href="{{ path('panel') }}">
-                    <img src="{{ asset('images/driver.svg') }}" height="90px"/>
+                    <img src="{{ asset('images/driver.svg') }}" height="100px"/>
                 </a>
                 {% endif %}
-                <p style="padding:10px,10px;color:#fff">
+                <p style="padding:10px 10px">
                 
                 {% block username %}
                     {% if is_granted('ROLE_COMPANY') %}
@@ -40,9 +43,9 @@
                 <div class="col">
                 
                 {% if is_granted('ROLE_COMPANY') %}
-                    <a href="{{ path('show_car') }}" class="row option">Coches</a>
-                    <a href="{{ path('show_drivers') }}" class="row option" >Conductores</a>
-                    <a href="{{ path('open_map') }}" class="row option" >Mostrar mapa</a>
+                    <a href="{{ path('show_car') }}" class="row option optionText">Coches</a>
+                    <a href="{{ path('show_drivers') }}" class="row option optionText" >Conductores</a>
+                    <a href="{{ path('open_map') }}" class="row option optionText" >Mostrar mapa</a>
                 {% elseif is_granted('ROLE_DRIVER') %}
                     {#<a href="{{ path('show_car') }}" class="row option">Coches</a>#}
                     <a href="{{ path('change_state_driver', {id: idDriver}) }}" class="row option" >Estado</a>
