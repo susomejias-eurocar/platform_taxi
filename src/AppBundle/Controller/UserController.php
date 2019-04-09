@@ -16,6 +16,16 @@ class UserController extends Controller
 {
     public function loginAction(Request $request)
     {
+
+        $security_context = $this->get('security.context');
+        $security_token = $security_context->getToken();
+        $user = $security_token->getUser();
+
+        
+        if ($user != "anon."){
+            return $this->redirect($this->generateUrl('panel'));
+        }
+        
         //Llamamos al servicio de autenticacion
         $authenticationUtils = $this->get('security.authentication_utils');
         
