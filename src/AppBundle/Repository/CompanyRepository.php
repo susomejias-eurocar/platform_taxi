@@ -43,7 +43,8 @@ class CompanyRepository extends EntityRepository
 
         if(!is_null($orderBy))
             $query .= $orderBy;
-    
+    //print_r($query);
+    //die();
         // var_dump($query);
         // die();
         // Ejecutamos la consulta
@@ -148,10 +149,10 @@ class CompanyRepository extends EntityRepository
         // die();
         // Definimos las columnas
         $columns = array(
-            0 => 'name',
-            1 => 'last_name',
-            2 => 'state',
-            2=> 'plate'
+            0 => 'u.name',
+            1 => 'u.last_name',
+            2 => 'd.state',
+            3 => 'c.plate'
         );
         // Inicializamos los strings que van a concatenar la consulta.
         $where = $query = $queryCount = $orderBy = $groupBy =  $having = "";
@@ -159,21 +160,11 @@ class CompanyRepository extends EntityRepository
 
 
 
-        $query = "SELECT d.id,u.name, u.last_name,d.state, c.plate
-        FROM user as u, driver AS d, car AS c
-        WHERE u.id = d.user_id
-        AND d.car_id = c.id
-        AND u.companys_id = :company_id
-        
-        
-        UNION 
-
-        
-        SELECT d.id,u.name, u.last_name,d.state, 'sin asignar'
-        FROM user as u, driver AS d
-        WHERE u.id = d.user_id
-        AND d.car_id is null
-        AND u.companys_id = :company_id;
+        $query = "SELECT u.name, u.last_name, d.state, c.plate
+        FROM user AS u
+        LEFT JOIN driver AS d ON d.user_id=u.id
+        LEFT JOIN car AS c ON c.id=d.car_id
+        WHERE u.companys_id=:company_id AND u.roles!='[ROLE_COMPANY]'
 
         ";
 
@@ -197,6 +188,7 @@ class CompanyRepository extends EntityRepository
             $limit="  LIMIT ".$params['start']." ,".$params['length']." ";
         }
         $orderBy .= " ORDER BY ". $columns[$params['order'][0]['column']]."   ".$params['order'][0]['dir'] . $limit;
+        
         // CREAMOS EL GROUP BY aparte
         $groupBy .= " GROUP BY d.id";
         $parameters = array();
