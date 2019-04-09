@@ -9,6 +9,8 @@ body {
 
 .background-city {
   background-image: url("../images/city.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .transparent {
@@ -71,4 +73,33 @@ input:focus {
   font-weight: bold;
   color: #fff;
   font-size: 1.1rem;
+}
+
+.gradient-company {
+  background-image: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%);
+}
+
+.logo-company {
+  background: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-driver {
+  background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);
+}
+
+.logo-driver {
+  background: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.optionText {
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+#imgLogout {
+  opacity: 0.6;
 }
