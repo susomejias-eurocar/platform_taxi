@@ -14,13 +14,13 @@ class CarController extends Controller
 {
     public function editAction($idCar)
     {
+        $em = $this->getDoctrine()->getEntityManager();
         $security_context = $this->get('security.context');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
-        $car = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:car")->findOneById($idCar);        
+        $car = $em->getRepository("AppBundle:car")->findOneById($idCar);        
         return $this->render('car/content-panel-createCar.html.twig', array("car"=>$car,"user_type" => "company", "companyId" => $companyId,"carId" => $car->getid()));
-        //return $this->redirect('login');
     }
 
     public function editAjaxAction(Request $request){
