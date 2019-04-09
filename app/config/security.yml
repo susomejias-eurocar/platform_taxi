@@ -34,7 +34,7 @@ security:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/company, roles: ROLE_COMPANY }
-        - { path: ^/driver, roles: ROLE_DRIVER }
+        - { path: ^/driver, roles: [ROLE_DRIVER,ROLE_COMPANY] }
 
             # activate different ways to authenticate
 

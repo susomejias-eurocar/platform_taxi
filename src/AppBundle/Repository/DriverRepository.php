@@ -31,7 +31,7 @@ class DriverRepository extends EntityRepository
         $query->bindValue("id",$idUser);
         $query->execute();
         $results = $query->fetchAll();
-        return $results;        
+        return $results[0]['id'];        
     }
 
     public function getState($idUser){

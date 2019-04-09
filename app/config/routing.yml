@@ -103,11 +103,15 @@ asign_car_to_driver:
     defaults:   { _controller: AppBundle:Company:asignCarToDriver}
 
 edit_driver:
-    path: company/driver/edit/{idDriver}
+    path: driver/edit/{idDriver}
     defaults:  { _controller: AppBundle:Driver:edit }
 
+edit_info_driver:
+    path: driver/edit/{idDriver}
+    defaults:  { _controller: AppBundle:Driver:edit }    
+
 edit_driver_ajax:
-    path: company/driver/edit_ajax/
+    path: driver/edit_ajax/
     defaults:  { _controller: AppBundle:Driver:editAjax }
 
 delete_driver:

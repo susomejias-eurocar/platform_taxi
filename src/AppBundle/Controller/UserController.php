@@ -71,7 +71,9 @@ class UserController extends Controller
             if($this->get('security.context')->isGranted('ROLE_COMPANY')){
                 return $this->render('user/panel.html.twig', array());
             }else if ($this->get('security.context')->isGranted('ROLE_DRIVER')){
-                return $this->render('user/panel.html.twig', array());
+                $em = $this->getDoctrine()->getManager();
+                $idDriver = $this->container->get("driver_service")->getId($user->getId());
+                return $this->render('user/panel.html.twig', array("idDriver" => $idDriver));
             }
 
         }

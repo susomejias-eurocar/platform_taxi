@@ -18,17 +18,51 @@ class DriverController extends Controller
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
         $driver = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:Driver")->findOneById($idDriver);        
-        $user = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:User")->findOneById($driver->getUser());        
-        return $this->render('driver/register.html.twig', array("driver"=>$driver,"user" => $user, "user_type" => "company", "companyId" => $companyId,"driverId" => $driver->getid()));
+        $idDriver = $driver->getId();
+        $user = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:User")->findOneById($driver->getUser());
+        $carDriver = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:Car")->findOneById($driver->getCar());
+        $cars = $this->get("company_service")->getCarWithoutDriver($companyId);
+        
+        return $this->render('company/content-panel-createDriver.html.twig', array("idDriver" =>$idDriver, "carDriver"=> $carDriver, "cars" => $cars, "driver"=>$driver,"user" => $user, "user_type" => "company", "companyId" => $companyId,"driverId" => $driver->getid()));
     }
 
     public function editAjaxAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
-        $idDriver = $request->get('iDriver');
-        $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);        
-        $em->persist($driver);
-        $em->flush();
-        return new RedirectResponse($this->generateUrl('show_car'));
+        $idDriver = $request->get('idDriver');
+        $idUser = $request->get('idUser');
+        $name = $request->get('driverName');
+        $lastName = $request->get('driverLastName');
+        $email = $request->get('email');
+        $idCar = $request->get('car');
+        $phone = $request->get('phone');
+        $user = $request->get('user');
+        $password1 = $request->get('password1');
+        $password2 = $request->get('password2');
+        if($password1!=$password2){
+            $response = array(
+                "status" => false,
+                "message" => "Las contraseñas no coinciden"
+            );
+        }else{
+            $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
+            $carDriver = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:Car")->findOneById($idCar);
+            $user = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:User")->findOneById($idUser);
+            $user->setName($name);
+            $user->setLastName($lastName);
+            $user->setEmail($email);
+            $user->setPhone($phone);
+            $encoder = $this->container->get('security.password_encoder');
+            $encoded = $encoder->encodePassword($user, $password1);
+            $user->setPassword($encoded);
+            $driver->setCar($carDriver);        
+            $em->persist($driver);
+            $em->flush();
+            $response = array(
+                "status" => true,
+                "message" => "Conductor actualizado correctamente"
+            );
+        }
+        return new JsonResponse($response);
 
     }
 
@@ -49,7 +83,7 @@ class DriverController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $driver_id = $em->getRepository("AppBundle:Driver")->getId($user->getId());
         $driver_state_now = $em->getRepository("AppBundle:Driver")->getState($user->getId());
-        return $this->render('driver/content-panel-changeState.html.twig', array('driver_id'=> $driver_id , 'state_now' => $driver_state_now));
+        return $this->render('driver/content-panel-changeState.html.twig', array('idDriver'=> $driver_id , 'state_now' => $driver_state_now));
     }
 
     public function setStateAction(Request $request)
