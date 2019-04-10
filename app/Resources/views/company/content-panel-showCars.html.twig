@@ -121,10 +121,19 @@ let init = function(){
 
 function loadFunctionDataTable(){
 
-    $("#btnDelete").click(function(e){
+    $(".btnDelete").click(function(e){
         e.preventDefault();
         $btn = $(this);
         $btnPath = $(this).attr("href");
+        let idCar = $(this).data('idcar');
+
+        if(!idCar){
+            Swal.fire({
+
+            })
+            return;
+        }
+
         //console.log($btnPath);
         Swal.fire({
             title: '¿Estás seguro que deseas eliminar este coche?',
@@ -137,15 +146,26 @@ function loadFunctionDataTable(){
             cancelButtonText: 'No',
             }).then((result) => {
                 if (result.value) {
-                    window.location.href = $btnPath;
-                    Swal.fire(
-                    'Eliminado',
-                    'Su coche fue eliminado correctamente.',
-                    'success'
-                    )
+                    //window.location.href = $btnPath;
+                    $.ajax({
+                        url: "{{ path('delete_car')}}",
+                        data: {idCar : idCar},
+                        success: function (response) {
+                            console.log(response);
+                            Swal.fire(
+                                'Eliminado',
+                                response.message,
+                                'success'
+                            );
+                            carsTable.ajax.reload();
+                        },
+                        error: function(response){
+                            console.log(response);
+                            console.log("error");
+                        }
+                    });
                 }
             })
-
     });
 
 }
@@ -160,10 +180,10 @@ function loadStyles(){
 let carsTable = $("#carsTable").DataTable({
     dom: 'Blrtip',
     buttons: [
-        {
+        /*{
             extend: 'copyHtml5',
             className: 'btn-info'
-        },
+        },*/
         {
             extend: 'excelHtml5',
             messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
@@ -250,15 +270,18 @@ let carsTable = $("#carsTable").DataTable({
         {data:'', render: function(data, type, row, meta){
             let html = ``;
             let pathEdit = "{{ path('edit_car', {'idCar': 'pepe'}) }}";
-            let pathDelete = "{{ path('delete_car', {'idCar': 'pepe'}) }}";
             pathEdit=pathEdit.replace("pepe", row.id);
-            pathDelete=pathDelete.replace("pepe", row.id);
-                html += "<a title=Editar id=editar href='"+ pathEdit +"' class='btn bg-info' style='color:#fff' font-weight:bold\"><i id='editar' class='fas fa-pen'></i></a>";
-                html += "<a title=Eliminar id='btnDelete' href='" + pathDelete + "' class='btn bg-danger' idCar="+row.id+" style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='far fa-trash-alt'></i></a>";
+                html += "<a title='Editar' id=editar href='"+ pathEdit +"' class='btn bg-info' style='color:#fff' font-weight:bold\"><i id='editar' class='fas fa-pen'></i></a>";
+                html += "<a title='Eliminar' class='btn bg-danger btnDelete' href='#' data-idcar="+row.id+" style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='far fa-trash-alt'></i></a>";
 
             return html;
         }}
     ],
+
+     "columnDefs":[{
+        "targets" : 5,
+        "orderable": false
+    }],
     
     drawCallback: function(settings) {
         //loadFunctionsOfButtons();

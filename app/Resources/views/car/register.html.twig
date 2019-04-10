@@ -16,26 +16,26 @@
                         </h3>
                         <div class="form-group">
                             <label class="boldText" for="plate">Matrícula</label>
-                            <input required name="plate" type="plate" class="form-control" id="plate" aria-describedby="emailHelp" placeholder="Introduce la matrícula" value={{car.plate|default('')}}>
+                            <input required name="plate" type="text" class="form-control plate" aria-describedby="emailHelp" placeholder="Introduce la matrícula" value={{car.plate|default('')}}>
                         </div>
                         <div class="form-group">
                             <label class=" boldText" for="trademark">Marca</label>
-                            <input required name="trademark" type="text" class="form-control" id="trademark" placeholder="Introduce la marca" value={{car.trademark|default('')}}>
+                            <input required name="trademark" type="text" class="form-control" class="trademark" placeholder="Introduce la marca" value={{car.trademark|default('')}}>
                         </div>
 
                         <div class="form-group">
                             <label class=" boldText" for="model">Modelo</label>
-                            <input required name="model" type="text" class="form-control" id="model" placeholder="Introduce el modelo" value={{car.model|default('')}}>
+                            <input required name="model" type="text" class="form-control" class="model" placeholder="Introduce el modelo" value={{car.model|default('')}}>
                         </div>
 
                         <div class="form-group">
                             <label class=" boldText" for="version">Versión</label>
-                            <input required name="version" type="tel" class="form-control" id="version" placeholder="Introduce la versión" value={{car.version|default('')}}>
+                            <input required name="version" type="tel" class="form-control" class="version" placeholder="Introduce la versión" value={{car.version|default('')}}>
                         </div>
 
                         <div>
                             <label class=" boldText" for="state">Estado</label>
-                            <select class="form-control chosen-select" id="state" name="state" style="margin-bottom:20px">
+                            <select class="form-control chosen-select" class="state" name="state" style="margin-bottom:20px">
                                 <option value="Disponible">Disponible</option>
                                 <option value="Averiado">Averiado</option>
                                 <option value="En reparación">En reparación</option>
@@ -62,18 +62,64 @@
     {{ parent() }}
 
     <script>
+    let urlAjax;
 
-[36mLine: 1[0m
-[31mlet urlAjax;[0m
-[31m$(".chosen-select").chosen();[0m
-[31m$("#plate").mask("0000-ZZZ", {[0m
-[31m    translation: {[0m
-[31m        'Z': {[0m
-[31m            pattern: /[A-Za-z]/[0m
-[31m        }[0m
+    $(".chosen-select").chosen();
+    $(".plate").mask('0000-ZZZ', {
+        translation: {
+            'Z' : {
+                pattern: /[A-z]/
+            },onKeyPress: function (value, event) {
+                event.currentTarget.value = value.toUpperCase();
+            }
+        }
+    });
 
-[36mLine: 46[0m
-[32m(empty line)[0m
+    $('#btnRegister').click(()=>{
+
+        if($('#btnRegister').text()=="Registrar")
+            urlAjax = "{{ path('add_car') }}";
+        else
+            urlAjax = "{{ path('edit_car_ajax') }}";
+
+            $.ajax({
+                url: urlAjax,
+                type: 'POST',
+                dataType: 'json',
+                data: { 
+                    plate: $('#plate').val() , 
+                    trademark: $('#trademark').val(), 
+                    model: $('#model').val(), 
+                    version: $("#version").val(),
+                    state: $("#state").val(),
+                    idCompany: {{ companyId }},
+                    idCar: {{ car.id|default(0) }}
+                },
+                success: function(result){
+
+                    if (!result.status){
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "error"
+                        )      
+                    }else{
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "success"
+                        )    
+
+                        let path = "{{ path('show_car') }}"
+                        setTimeout(function(){ window.location.href = path }, 1500);
+                        
+                    }
+                    
+                    
+                },
+            });
+        
+    });
 
 </script>
 

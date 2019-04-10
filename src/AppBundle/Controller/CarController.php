@@ -24,7 +24,7 @@ class CarController extends Controller
         if($car == null)
             return $this->redirectToRoute('show_car');
         if($companyService->existCar($companyId,$car->getId()))
-            return $this->redirectToRoute('show_drivers');
+            return $this->redirectToRoute('show_car');
 
         return $this->render('car/content-panel-createCar.html.twig', array("car"=>$car,"user_type" => "company", "companyId" => $companyId,"carId" => $car->getid()));
     }
@@ -80,12 +80,25 @@ class CarController extends Controller
         return new JsonResponse($response);
     }
 
-    public function deleteAction(Request $request,$idCar){
+    public function deleteAction(Request $request){
+        $idCar = $request->get('idCar');
         $em = $this->getDoctrine()->getEntityManager();
-        $car = $em->getRepository("AppBundle:car")->findOneById($idCar);
+        $security_context = $this->get('security.context');
+        $security_token = $security_context->getToken();
+        $user = $security_token->getUser();
+        $idCompany = $user->getCompanys()->getId();
+        $companyService = $this->container->get("company_service");
+        $car = $em->getRepository("AppBundle:car")->findOneById($idCar);        
+        if($car == null)
+            return $this->redirectToRoute('show_car');
+        if($companyService->existCar($idCompany,$car->getId()))
+            return $this->redirectToRoute('show_car');
         $em->remove($car);
         $em->flush();
-        return $this->redirect($this->generateUrl('show_car'));
+        return new JsonResponse(array(
+            "status" => true,
+            "message" => "El coche ha sido eliminado"
+        ));
     }
 
 }

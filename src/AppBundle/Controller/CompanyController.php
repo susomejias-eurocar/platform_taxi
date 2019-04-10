@@ -350,7 +350,6 @@ class CompanyController extends Controller
                 $user->setPassword($encoded);
                 $user->setPhone($phone);
                 $user->setActive(1);
-                $user->setPermission($permissionFull);
                 $user->setCompanys($this->container->get('company_service')->getCompany($idCompany));
                 $em->persist($user);
                 $driver = new Driver();
