@@ -36,9 +36,16 @@ input:focus {
 
 .linkPanel {
   padding: 20px 0px;
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
   display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
+  -webkit-box-orient: horizontal !important;
+  -webkit-box-direction: normal !important;
+      -ms-flex-direction: row !important;
+          flex-direction: row !important;
+  -webkit-box-pack: center !important;
+      -ms-flex-pack: center !important;
+          justify-content: center !important;
   color: #fff;
 }
 
@@ -103,3 +110,4 @@ input:focus {
 #imgLogout {
   opacity: 0.6;
 }
+/*# sourceMappingURL=style.css.map */
