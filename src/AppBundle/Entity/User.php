@@ -250,12 +250,21 @@ class User implements UserInterface
     }
 
     /**
+     * Set id
+     */
+    public function setIdUser($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+/**
      * Set companys
      *
      * @param \AppBundle\Entity\Company $companys
      * @return User
      */
-    public function setCompanys(\AppBundle\Entity\Company $companys = null)
+    public function setId(\AppBundle\Entity\Company $companys = null)
     {
         $this->companys = $companys;
 
@@ -349,5 +358,18 @@ class User implements UserInterface
     public function getLastName()
     {
         return $this->last_name;
+    }
+
+    /**
+     * Set companys
+     *
+     * @param \AppBundle\Entity\Company $companys
+     * @return User
+     */
+    public function setCompanys(\AppBundle\Entity\Company $companys = null)
+    {
+        $this->companys = $companys;
+
+        return $this;
     }
 }
