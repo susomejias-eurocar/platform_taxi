@@ -20,7 +20,7 @@ class CarController extends Controller
     public function editAction($idCar)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
@@ -93,7 +93,7 @@ class CarController extends Controller
     public function deleteAction(Request $request){
         $idCar = $request->get('idCar');
         $em = $this->getDoctrine()->getEntityManager();
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $idCompany = $user->getCompanys()->getId();
