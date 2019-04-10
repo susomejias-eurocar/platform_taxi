@@ -153,7 +153,7 @@ function loadFunctionDataTable(){
                     window.location.href = $btnPath;
                     Swal.fire(
                     'Eliminado',
-                    'El conductor fue eliminado correctamente.',
+                    'El conductor fue desasignado correctamente.',
                     'success'
                     )
                 }
@@ -250,9 +250,10 @@ let driversTable = $("#driversTable").DataTable({
             return html;
         }},
         {data:'plate', render: function(data, type, row, meta){
+            console.log(row);
             let html = ``;
-            if (data && data.toLowerCase() == 'sin asignar'){
-                html += `<span style="border-radius:3px;background:red;color:#fff;padding:7px; font-weight:bold">${data}</span>`;
+            if (data && data === 'sin asignar'){
+                html += `<span style="border-radius:3px;background:red;color:#fff;padding:7px; font-weight:bold">Sin asignar</span>`;
             }else{
                 html += `<span style="border-radius:3px;background:#263238;color:#fff;padding:7px; font-weight:bold">${data}</span>`;
             }
@@ -272,7 +273,7 @@ let driversTable = $("#driversTable").DataTable({
                 html += "<a title=Editar id=editar href='"+ pathEdit +"' class='btn bg-info' style='color:#fff' font-weight:bold\"><i id='editar' class='fas fa-pen'></i></a>";
                 html += "<a title=Eliminar id='btnDelete' href='" + pathDelete + "' class='btn bg-danger' idCar="+row.id+" style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='far fa-trash-alt'></i></a>";
                 if(row.plate != "sin asignar")
-                    html += "<a title='Desasignar coche' id='btnDelete' href='" + pathUnassingcar + "' class='btn bg-danger' style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='fas fa-car-side'></i></a>";
+                    html += "<a title='Desasignar coche' id='btnUnassign' href='" + pathUnassingcar + "' class='btn bg-danger' style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='fas fa-car-side'></i></a>";
                 
 
             return html;
