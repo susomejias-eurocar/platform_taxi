@@ -35,6 +35,7 @@
         <option value="">Seleccione Estado</option>
         <option value="Disponible">Disponible</option>
         <option value="Fuera de servicio">Fuera de servicio</option>
+        <option value="En parada">En parada</option>
     </select>
 </div>
 </div>
@@ -288,6 +289,9 @@ let driversTable = $("#driversTable").DataTable({
             }else if (data && data.toLowerCase() == "fuera de servicio"){
 
                 html += `<span style="border-radius:3px;background:red;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+            }else if (data && data.toLowerCase() == "en parada"){
+
+                html += `<span style="border-radius:3px;background:orange;color:#fff;padding:7px; font-weight:bold">${data}</span>`
             }
 
             return html;
