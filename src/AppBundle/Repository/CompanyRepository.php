@@ -160,12 +160,11 @@ class CompanyRepository extends EntityRepository
 
 
 
-        $query = "SELECT u.name, u.last_name, d.state, c.plate
+        $query = "SELECT d.id,u.name, u.last_name, d.state,IFNULL(c.plate,'sin asignar') AS plate
         FROM user AS u
         LEFT JOIN driver AS d ON d.user_id=u.id
         LEFT JOIN car AS c ON c.id=d.car_id
-        WHERE u.companys_id=:company_id AND u.roles!='[ROLE_COMPANY]'
-
+        WHERE u.companys_id=:company_id AND u.roles <> '[\"ROLE_COMPANY\"]'
         ";
 
 
