@@ -43,6 +43,7 @@ class DriverController extends Controller
         $idCar = $request->get('car');
         $phone = $request->get('phone');
         $user = $request->get('user');
+        $state = $request->get('state');
         $password1 = $request->get('password1');
         $password2 = $request->get('password2');
         if ($password1 != $password2) {
@@ -64,6 +65,7 @@ class DriverController extends Controller
                 $user->setPassword($encoded);
             }
             $driver->setCar($carDriver);
+            $driver->setState($state);
             $em->persist($driver);
             $em->flush();
             $response = array(

@@ -75,6 +75,15 @@
     });
 
     $('#btnRegister').click(()=>{
+        if($("#plate").val()=="")
+            return invalidFormSwal("La matrícula no puede estar vacía");
+        else if(!$("#plate").val().match(/^\d{4}[A-Z]{3}/))
+            return invalidFormSwal("El formato de la matrícula no es válido");
+        else if($("#trademark").val()=="")
+            return invalidFormSwal("La marca no puede estar vacía");            
+        else if($("#model").val()=="")
+            return invalidFormSwal("El modelo no puede estar vacío");
+
         if($('#btnRegister').text().trim()=="Registrar")
             urlAjax = "{{ path('add_car') }}";
         else
@@ -85,7 +94,7 @@
                 type: 'POST',
                 dataType: 'json',
                 data: { 
-                    plate: $('#plate').val() , 
+                    plate: $('#plate').val().toUpperCase(),
                     trademark: $('#trademark').val(), 
                     model: $('#model').val(), 
                     version: $("#version").val(),
@@ -118,6 +127,10 @@
             });
         
     });
+
+    function invalidFormSwal(message) {
+        Swal.fire( message, "", "error");
+    }    
 
 </script>
 
