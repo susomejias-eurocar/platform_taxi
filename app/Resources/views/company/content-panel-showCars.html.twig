@@ -9,21 +9,24 @@
     <a href="{{ path('asign_car_to_driver') }}" style="margin-left:20px;"class="btn bg-success text-light boldText">Asignar coche</a>
 </diV>
 <div class="row">
-<div class="input-group col-3" style="padding: 30px 15px;height:100% ">
+    <h3 style="padding-left:20px">Filtros</h1>
+</div>
+<div class="row">
+<div class="input-group col-3" style="padding: 15px;height:100% ">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Matrícula</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='plate'  placeholder="{{'Introduce Matrícula' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+<div class="input-group col-3" style="padding:15px; height:100%">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Modelo</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='model'  placeholder="{{'Introduce Modelo' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+<div class="input-group col-3" style="padding:15px; height:100%">
     <div class="input-group-prepend" style="height:100%" >
         <div class="input-group-text" style="background: #263238; color:#fff;%"><b>Estado</b></div>
     </div>
@@ -37,19 +40,6 @@
 
 
 </div>
-
-
-
-
-{# <div style="padding: 10px; margin-bottom: 15px">
-    <label>Employee office name search: <label>
-    <input class = "form-control search-data-field" type="text" data-field='employeeOffice' placeholder="{{'Employee office' | trans}}">
-</div> #}
-
-{# <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
-<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
-<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
-<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}"> #}
 
     <table id="carsTable" class="table table-hover">
         <tr>

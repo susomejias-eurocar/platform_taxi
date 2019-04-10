@@ -10,21 +10,24 @@
 
 </diV>
 <div class="row">
-<div class="input-group col-3" style="padding: 30px 15px;height:100% ">
+    <h3 style="padding-left:20px">Filtros</h1>
+</div>
+<div class="row">
+<div class="input-group col-3" style="padding: 15px;height:100% ">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Nombre</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='name'  placeholder="{{'Introduce nombre' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+<div class="input-group col-3" style="padding: 15px; height:100%">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Apellidos</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='last_name'  placeholder="{{'Introduce apellidos' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+<div class="input-group col-3" style="padding: 15px; height:100%">
     <div class="input-group-prepend" style="height:100%" >
         <div class="input-group-text" style="background: #263238; color:#fff"><b>Estado</b></div>
     </div>
@@ -35,11 +38,6 @@
     </select>
 </div>
 </div>
-{# <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
-<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
-<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
-<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}"> #}
-
     <table id="driversTable" class="table table-hover">
         <tr>
             <thead style="background:#263238">
@@ -110,32 +108,6 @@ let init = function(){
     });
 function loadFunctionDataTable(){
 
-    /*$("#btnDelete").click(function(e){
-        e.preventDefault();
-        $btn = $(this);
-        $btnPath = $(this).attr("href");
-        //console.log($btnPath);
-        Swal.fire({
-            title: '¿Estás seguro que deseas eliminar este conductor?',
-            text: "¡Esta acción no se puede revertir!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si',
-            cancelButtonText: 'No',
-            }).then((result) => {
-                if (result.value) {
-                    window.location.href = $btnPath;
-                    Swal.fire(
-                    'Eliminado',
-                    'El conductor fue eliminado correctamente.',
-                    'success'
-                    )
-                }
-            })
-    });*/
-
         $(".btnDelete").click(function(e){
         e.preventDefault();
         $btn = $(this);
@@ -149,7 +121,6 @@ function loadFunctionDataTable(){
             return;
         }
 
-        //console.log($btnPath);
         Swal.fire({
             title: '¿Estás seguro que deseas eliminar este conductor?',
             text: "¡Esta acción no se puede revertir!",
