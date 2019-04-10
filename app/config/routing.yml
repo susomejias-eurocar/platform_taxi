@@ -60,7 +60,7 @@ edit_car_ajax:
     defaults:  { _controller: AppBundle:Car:editAjax }
 
 delete_car:
-    path: company/car/delete/{idCar}
+    path: company/car/delete/
     defaults:  { _controller: AppBundle:Car:delete }
 
 # Obtain all cars with ajax
@@ -115,7 +115,7 @@ edit_driver_ajax:
     defaults:  { _controller: AppBundle:Driver:editAjax }
 
 delete_driver:
-    path: company/driver/delete/{idDriver}
+    path: company/driver/delete/
     defaults:  { _controller: AppBundle:Driver:delete }    
 
 # Show form view for register car
@@ -140,8 +140,8 @@ change_state_driver:
     path: driver/changeState/{id}
     defaults: { _controller: AppBundle:Driver:showFormSetState}
 
-unassing_car:
-    path: driver/unassign/{idDriver}
+unassign_car:
+    path: driver/unassign/
     defaults: { _controller: AppBundle:Driver:unassignCar}    
 
 #Show panel view

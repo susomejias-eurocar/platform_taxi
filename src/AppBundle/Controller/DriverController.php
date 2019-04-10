@@ -74,13 +74,18 @@ class DriverController extends Controller
         return new JsonResponse($response);
     }
 
-    public function deleteAction($idDriver)
+    public function deleteAction(Request $request)
     {
+
+        $idDriver = $request->get('idDriver');
         $em = $this->getDoctrine()->getEntityManager();
         $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
         $em->remove($driver);
         $em->flush();
-        return $this->redirectToRoute('show_car');
+        return new JsonResponse(array(
+            "status" => true,
+            "message" => "El conductor ha sido eliminado"
+        ));
     }
 
 
@@ -115,13 +120,18 @@ class DriverController extends Controller
         return new JsonResponse($response);
     }
 
-    public function unassignCarAction($idDriver){
+    public function unassignCarAction(Request $request){
+        $idDriver = $request->get('idDriver');
         $em = $this->getDoctrine()->getEntityManager();
         $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
         $driver->setCar(null);
         $em->persist($driver);
         $em->flush();
-        return $this->redirectToRoute('show_drivers');
+        $response = array(
+            "status" => true,
+            "message" => "Coche desasignado correctamente"
+        );
+        return new JsonResponse($response);
 
 
     }

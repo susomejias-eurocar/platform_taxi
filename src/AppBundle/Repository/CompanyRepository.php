@@ -151,8 +151,10 @@ class CompanyRepository extends EntityRepository
         $columns = array(
             0 => 'u.name',
             1 => 'u.last_name',
-            2 => 'd.state',
-            3 => 'c.plate'
+            2 => 'u.phone',
+            3 => 'u.email',
+            4 => 'd.state',
+            5 => 'c.plate'
         );
         // Inicializamos los strings que van a concatenar la consulta.
         $where = $query = $queryCount = $orderBy = $groupBy =  $having = "";
@@ -160,7 +162,8 @@ class CompanyRepository extends EntityRepository
 
 
 
-        $query = "SELECT d.id,u.name, u.last_name, d.state,IFNULL(c.plate,'sin asignar') AS plate
+        $query = "SELECT d.id,u.name, u.last_name, u.phone, u.email, d.state, IFNULL(c.plate,'sin asignar') AS plate
+
         FROM user AS u
         LEFT JOIN driver AS d ON d.user_id=u.id
         LEFT JOIN car AS c ON c.id=d.car_id
