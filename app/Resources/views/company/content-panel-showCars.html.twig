@@ -271,7 +271,7 @@ let carsTable = $("#carsTable").DataTable({
             let html = ``;
             let pathEdit = "{{ path('edit_car', {'idCar': 'pepe'}) }}";
             pathEdit=pathEdit.replace("pepe", row.id);
-                html += "<a title='Editar' id=editar href='"+ pathEdit +"' class='btn bg-info' style='color:#fff' font-weight:bold\"><i id='editar' class='fas fa-pen'></i></a>";
+                html += "<a title='Editar' id=editar href='"+ pathEdit +"' class='btn' style='background:#F9A825;color:#fff' font-weight:bold\"><i id='editar' class='fas fa-pen'></i></a>";
                 html += "<a title='Eliminar' class='btn bg-danger btnDelete' href='#' data-idcar="+row.id+" style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='far fa-trash-alt'></i></a>";
 
 
