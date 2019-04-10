@@ -61,6 +61,17 @@
                                     {% endfor %}
                                 </select>
                         {% endif %}
+
+                        {% if is_granted('ROLE_COMPANY') %}
+                            <h3 style="font-weight:bold; padding:10px">Estado</h3>
+                                <label for="car" class=" boldText">Asignar estado</label>
+                                <select class="form-control chosen-select" style="margin-bottom:20px" name="state" id="state">
+                                    <option value="Disponible">Disponible</option>
+                                    <option value="Parada">Parada</option>
+                                    <option value="Ocupado">Ocupado</option>
+                                    <option value="Fuera de servicio">Fuera de servicio</option>
+                                </select>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -88,8 +99,26 @@
 
 
     $(".chosen-select").chosen();
-    $("#phone").mask("000-000-000");
+    $("#phone").mask("000000000");
     $('#btnRegister').click(()=>{
+
+        if($('#btnRegister').text()=="Registrar")
+            if($("#password1").val()=="" && $("#password2").val()=="")
+                return invalidFormSwal("Las contraseñas no pueden estar vacías");            
+        if($("#password1").val()!=$("#password2").val())
+            return invalidFormSwal("Las contraseñas no coincide");
+        else if($("#email").val()=="")
+            return invalidFormSwal("El email no puede estar vacío");
+        else if(!$("#email").val().match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/))
+            return invalidFormSwal("El email no tiene un formato válido");
+        else if($("#phone").val()=="")
+            return invalidFormSwal("El teléfono no puede estar vacío");
+        else if($("#driverName").val()=="")
+            return invalidFormSwal("El nombre no puede estar vacío");
+        else if($("#driverLastName").val()=="")
+            return invalidFormSwal("Los apellidos no pueden estar vacío");
+
+            
             $.ajax({
                 url: urlAjax,
                 type: 'POST',
@@ -102,6 +131,7 @@
                     driverName: $("#driverName").val(),
                     driverLastName: $("#driverLastName").val(),
                     car: $("#car").val(),
+                    state: $("#state").val(),
                     idCompany: {{ companyId }},
                     {% if idDriver is defined %}
                         idDriver: {{idDriver}},
@@ -140,6 +170,11 @@
                 },
             });
     });
+
+    function invalidFormSwal(message) {
+     Swal.fire( message, "", "error");
+    }
+
 </script>
 
 {% endblock %}

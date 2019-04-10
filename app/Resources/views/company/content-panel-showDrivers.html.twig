@@ -27,18 +27,52 @@
     <input type="text" class="form-control search-data-field" data-field='last_name'  placeholder="{{'Introduce apellidos' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 15px; height:100%">
+<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+    <div class="input-group-prepend" >
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Teléfono</b></div>
+    </div>
+    <input type="text" class="form-control search-data-field" data-field='phone'  placeholder="{{'Introduce teléfono' | trans}}" >
+</div>
+
+<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+    <div class="input-group-prepend" >
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Email</b></div>
+    </div>
+    <input type="text" class="form-control search-data-field" data-field='email'  placeholder="{{'Introduce email' | trans}}" >
+</div>
+
+<div class="input-group col-3" style="padding: 30px 15px; height:100%">
     <div class="input-group-prepend" style="height:100%" >
         <div class="input-group-text" style="background: #263238; color:#fff"><b>Estado</b></div>
     </div>
     <select class="chosen-select form-control search-data-field styleSelectDatatables" data-field='state'>
         <option value="">Seleccione Estado</option>
         <option value="Disponible">Disponible</option>
+        <option value="Parada">Parada</option>
+        <option value="Ocupado">Ocupado</option>
         <option value="Fuera de servicio">Fuera de servicio</option>
         <option value="En parada">En parada</option>
     </select>
 </div>
+
+<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+    <div class="input-group-prepend" style="height:100%" >
+        <div class="input-group-text" style="background: #263238; color:#fff"><b>Coche</b></div>
+    </div>
+    <select class="chosen-select form-control search-data-field styleSelectDatatables" data-field='carasigned'>
+        <option value="">Seleccione Estado</option>
+        <option value="asign">Asignado</option>
+        <option value="unasign">Sin asignar</option>
+    </select>
 </div>
+</div>
+
+
+{# <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
+<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
+<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
+<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}"> #}
+
     <table id="driversTable" class="table table-hover">
         <tr>
             <thead style="background:#263238">
@@ -214,10 +248,6 @@ function loadStyles(){
 let driversTable = $("#driversTable").DataTable({
     dom: 'Blrtip',
     buttons: [
-        /*{
-            extend: 'copyHtml5',
-            className: 'btn-info'
-        },*/
         {
             extend: 'excelHtml5',
             messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
@@ -287,10 +317,15 @@ let driversTable = $("#driversTable").DataTable({
                 html += `<span style="border-radius:3px;background:green;color:#fff;padding:7px; font-weight:bold">${data}</span>`
                 //$(data).css("color", "green");
             }else if (data && data.toLowerCase() == "fuera de servicio"){
-
+                html += `<span style="border-radius:3px;background:grey;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+            }
+            else if (data && data.toLowerCase() == "parada"){
                 html += `<span style="border-radius:3px;background:red;color:#fff;padding:7px; font-weight:bold">${data}</span>`
             }else if (data && data.toLowerCase() == "en parada"){
 
+                html += `<span style="border-radius:3px;background:orange;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+            }
+            else if (data && data.toLowerCase() == "ocupado"){
                 html += `<span style="border-radius:3px;background:orange;color:#fff;padding:7px; font-weight:bold">${data}</span>`
             }
 
