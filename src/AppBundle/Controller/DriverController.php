@@ -32,6 +32,11 @@ class DriverController extends Controller
         return $this->render('company/content-panel-createDriver.html.twig', array("idDriver" => $idDriver, "carDriver" => $carDriver, "cars" => $cars, "driver" => $driver, "user" => $user, "user_type" => "company", "companyId" => $companyId, "driverId" => $driver->getid()));
     }
 
+    /**
+     * Edit driver
+     * 
+     * @param Request $request
+     */
     public function editAjaxAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -76,6 +81,12 @@ class DriverController extends Controller
         return new JsonResponse($response);
     }
 
+
+    /**
+     * Delete driver
+     * 
+     * @param Request $request
+     */
     public function deleteAction(Request $request)
     {
 
@@ -91,6 +102,10 @@ class DriverController extends Controller
     }
 
 
+    /**
+     * Show form for change state
+     * 
+     */
     public function showFormSetStateAction()
     {
         $security_context = $this->get('security.context');
@@ -102,6 +117,11 @@ class DriverController extends Controller
         return $this->render('driver/content-panel-changeState.html.twig', array('idDriver' => $driver_id, 'state_now' => $driver_state_now));
     }
 
+    /**
+     * Set state for driver
+     * 
+     * @param Request $request
+     */
     public function setStateAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -122,6 +142,9 @@ class DriverController extends Controller
         return new JsonResponse($response);
     }
 
+    /**
+     * Unassign car to a driver
+     */
     public function unassignCarAction(Request $request){
         $idDriver = $request->get('idDriver');
         $em = $this->getDoctrine()->getEntityManager();
@@ -138,6 +161,9 @@ class DriverController extends Controller
 
     }
 
+    /**
+     * Open the map view for driver
+     */
     public function openMapAction(Request $request)
     {
         $security_context = $this->get('security.context');

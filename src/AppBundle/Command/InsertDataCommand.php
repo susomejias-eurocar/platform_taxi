@@ -20,7 +20,7 @@ class InsertDataCommand extends ContainerAwareCommand
     {
         $this
             ->setName('users')
-            ->setDescription('Inserta coches')
+            ->setDescription('Inserta usuarios y conductores')
             ->addArgument(
                 'company_id',
                 InputArgument::REQUIRED,

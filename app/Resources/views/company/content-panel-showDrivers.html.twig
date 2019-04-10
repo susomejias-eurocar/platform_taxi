@@ -10,14 +10,17 @@
 
 </diV>
 <div class="row">
-<div class="input-group col-3" style="padding: 30px 15px;height:100% ">
+    <h3 style="padding-left:20px">Filtros</h1>
+</div>
+<div class="row">
+<div class="input-group col-3" style="padding: 15px;height:100% ">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Nombre</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='name'  placeholder="{{'Introduce nombre' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+<div class="input-group col-3" style="padding: 15px; height:100%">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Apellidos</b></div>
     </div>
@@ -152,7 +155,6 @@ function loadFunctionDataTable(){
             return;
         }
 
-        //console.log($btnPath);
         Swal.fire({
             title: '¿Estás seguro que deseas eliminar este conductor?',
             text: "¡Esta acción no se puede revertir!",

@@ -14,12 +14,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CompanyController extends Controller
 {
-
     /**
      * Renderiza la vista de registro de compañia
      *
      * @param Request $request
-     * @return void
      */
     public function registerAction(Request $request)
     {
@@ -30,7 +28,6 @@ class CompanyController extends Controller
      * Registra una comapañia
      *
      * @param Request $request
-     * @return void
      */
     public function registerAjaxAction(Request $request)
     {
@@ -107,6 +104,9 @@ class CompanyController extends Controller
         }
     }
 
+    /**
+     * Show form for register
+     */
     public function registerUserAction()
     {
         $security_context = $this->get('security.context');
@@ -118,6 +118,10 @@ class CompanyController extends Controller
         }
     }
 
+    /**
+     * Register user
+     * @param Request $request
+     */
     public function registerUserAjaxAction(Request $request)
     {
         $response = array(
@@ -182,13 +186,11 @@ class CompanyController extends Controller
                     "message" => "El correo ya está registrado"
                 );
                 return new JsonResponse($response);
-                t;
             }
             $response = array(
                 "status" => true,
                 "message" => "Registro correcto"
             );
-
             return new JsonResponse($response);
         }
     }
@@ -236,7 +238,6 @@ class CompanyController extends Controller
     /**
      * Show the view for the datatable.
      *
-     * @return void
      */
     public function showDriversAction()
     {
@@ -386,9 +387,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Renderiza la vista de registro de coche
-     *
-     * @return void
+     * show form register car
      */
     public function registerCarAction()
     {
@@ -400,6 +399,10 @@ class CompanyController extends Controller
         return $this->render('car/content-panel-createCar.html.twig', array("cars" => $cars, "user_type" => "company", "companyId" => $companyId));
     }
 
+    /**
+     * Insert car 
+     * @param Request $request
+     */
     public function addCarAction(Request $request)
     {
         $response = array(
@@ -455,8 +458,6 @@ class CompanyController extends Controller
 
     /**
      * Assign a car to a driver
-     *
-     * @return void
      */
     public function asignCarToDriverAction()
     {
@@ -471,6 +472,10 @@ class CompanyController extends Controller
         return $this->render('car/content-panel-asignCar.html.twig', array("drivers" => $drivers, "cars" => $cars, "user_type" => "company",  "companyId" => $companyId));
     }
 
+    /**
+     * Asign car to driver
+     * @param Request $request
+     */
     public function asignCarAction(Request $request)
     {
         $response = array(
@@ -488,9 +493,11 @@ class CompanyController extends Controller
         return new JsonResponse($response);
     }
 
+    /**
+     * Open the map view for comapany
+     */
     public function openMapAction(Request $request)
     {
-
         return $this->render('company/content-panel-showMap.html.twig', array());
     }
 }
