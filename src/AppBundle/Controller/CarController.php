@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CarController extends Controller
 {
+    /**
+     * Show form for edit car
+     * 
+     * @param idCar $idCar
+     */
     public function editAction($idCar)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -25,12 +30,15 @@ class CarController extends Controller
             return $this->redirectToRoute('show_car');
         if($companyService->existCar($companyId,$car->getId()))
             return $this->redirectToRoute('show_car');
-
         return $this->render('car/content-panel-createCar.html.twig', array("car"=>$car,"user_type" => "company", "companyId" => $companyId,"carId" => $car->getid()));
     }
 
+    /**
+     * Edit car
+     * 
+     * @param Request $request
+     */
     public function editAjaxAction(Request $request){
-
         $em = $this->getDoctrine()->getEntityManager();
         $plate = $request->get('plate');
         $trademark = $request->get('trademark');
@@ -38,12 +46,10 @@ class CarController extends Controller
         $version = $request->get('version');
         $state = $request->get('state');
         $idCar = $request->get('idCar');
-
         $response = array(
             "status" => false,
             "message" => "ERROR"
         );
-
         if(!preg_match("/^\d{4}[A-Z]{3}/", $plate)){
             $response = array(
                 "status" => false,
@@ -54,7 +60,6 @@ class CarController extends Controller
                 "status" => false,
                 "message" => "rellene los campos"
             );
-            
         }else{
             try{
                 $car = $em->getRepository("AppBundle:Car")->findOneById($idCar);
@@ -80,6 +85,11 @@ class CarController extends Controller
         return new JsonResponse($response);
     }
 
+    /**
+     * Set state for driver
+     * 
+     * @param Request $request
+     */
     public function deleteAction(Request $request){
         $idCar = $request->get('idCar');
         $em = $this->getDoctrine()->getEntityManager();
