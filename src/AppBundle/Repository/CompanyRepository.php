@@ -93,16 +93,28 @@ class CompanyRepository extends EntityRepository
         $queryCount = "SELECT COUNT(*) as total FROM car as ca, company as co where ca.company_id = co.id AND co.id = :company_id";
 
         if (isset($search["plate"]) AND $search["plate"]){
-            $where .= " AND ca.plate LIKE '%". $search["plate"] ."%'";
+            $plate = trim($search["plate"],"'");
+            $where .= " AND ca.plate LIKE '%". $plate ."%'";
+        }
+
+        if (isset($search["trademark"]) AND $search["trademark"]){
+            $trademark = trim($search["trademark"],"'");
+            $where .= " AND ca.trademark LIKE '%". $trademark ."%'";
         }
 
         if (isset($search["model"]) AND $search["model"]){
-            $where .= " AND ca.model LIKE '%". $search["model"] ."%'";
+            $model = trim($search["model"],"'");
+            $where .= " AND ca.model LIKE '%". $model ."%'";
         }
 
-        
+        if (isset($search["version"]) AND $search["version"]){
+            $version = trim($search["version"],"'");
+            $where .= " AND ca.version LIKE '%". $version ."%'";
+        }        
+    
         if (isset($search["state"]) AND $search["state"]){
-            $where .= " AND ca.state LIKE '%". $search["state"] ."%'";
+            $state = trim($search["state"],"'");
+            $where .= " AND ca.state LIKE '%". $state."%'";
         }
 
         //CREAMOS EL ORDER BY CON EL LIMIT aparte
@@ -176,13 +188,33 @@ class CompanyRepository extends EntityRepository
         where u.id = d.user_id    
         AND u.companys_id = :company_id";
         if (isset($search["name"]) AND $search["name"]){
-            $where .= " AND u.name LIKE '%". $search["name"] ."%'";
+            $name = trim($search["name"],"'");
+            $where .= " AND u.name LIKE '%". $name ."%'";
         }
         if (isset($search["last_name"]) AND $search["last_name"]){
-            $where .= " AND u.last_name LIKE '%". $search["last_name"] ."%'";
+            $last_name = trim($search["last_name"],"'");
+            $where .= " AND u.last_name LIKE '%". $last_name ."%'";
         }
+
+        if (isset($search["phone"]) AND $search["phone"]){
+            $phone = trim($search["phone"],"'");
+            $where .= " AND u.phone LIKE '%". $phone ."%'";
+        }
+
+        if (isset($search["email"]) AND $search["email"]){
+            $email = trim($search["email"],"'");
+            $where .= " AND u.email LIKE '%". $email ."%'";
+        }
+
         if (isset($search["state"]) AND $search["state"]){
             $where .= " AND d.state LIKE '%". $search["state"] ."%'";
+        }
+
+        if (isset($search["carasigned"]) AND $search["carasigned"]){
+            if($search['carasigned'] == "asign")
+                $where .= " AND d.car_id is not null";
+            else if($search['carasigned'] == "unasign")
+                $where .= " AND d.car_id is null";
         }
         //CREAMOS EL ORDER BY CON EL LIMIT aparte
         $limit=" ";

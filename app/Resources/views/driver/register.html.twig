@@ -61,6 +61,17 @@
                                     {% endfor %}
                                 </select>
                         {% endif %}
+
+                        {% if is_granted('ROLE_COMPANY') %}
+                            <h3 style="font-weight:bold; padding:10px">Estado</h3>
+                                <label for="car" class=" boldText">Asignar estado</label>
+                                <select class="form-control chosen-select" style="margin-bottom:20px" name="state" id="state">
+                                    <option value="Disponible">Disponible</option>
+                                    <option value="Parada">Parada</option>
+                                    <option value="Ocupado">Ocupado</option>
+                                    <option value="Fuera de servicio">Fuera de servicio</option>
+                                </select>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -85,11 +96,17 @@
             urlAjax = "{{ path('ajax_register_driver') }}";
         else
             urlAjax = "{{ path('edit_driver_ajax') }}";
-
-
     $(".chosen-select").chosen();
-    $("#phone").mask("000-000-000");
+    $("#phone").mask("000000000");
     $('#btnRegister').click(()=>{
+
+        checkData();
+        $message = "";
+        
+        if($("#password1").text()!=$("#password2").text()){
+            $message = "La contraseña no coincide";
+        }
+
             $.ajax({
                 url: urlAjax,
                 type: 'POST',
@@ -102,6 +119,7 @@
                     driverName: $("#driverName").val(),
                     driverLastName: $("#driverLastName").val(),
                     car: $("#car").val(),
+                    state: $("#state").val(),
                     idCompany: {{ companyId }},
                     {% if idDriver is defined %}
                         idDriver: {{idDriver}},
@@ -140,6 +158,26 @@
                 },
             });
     });
+    
+    function checkData() {
+        $message = "";    
+        if($('#btnRegister').text()=="Registrar")
+            if($("#password1").text()=="" && $("#password2").text()=="")
+                $message = "Las contraseña no pueden estar vacías";            
+        if($("#password1").text()!=$("#password2").text())
+            $message = "Las contraseñas no coincide";
+        else if($("#email").text()=="")
+            $message = "El email no puede estar vacío";
+        else if($("#phone").text()=="")
+            $message = "El teléfono no puede estar vacío";
+        else if($("#driverName").text()=="")
+            $message = "El nombre no puede estar vacío";
+        else if($("#driverLastName").text()=="")
+            $message = "Los apellidos no pueden estar vacío";            
+            
+    }
+
+
 </script>
 
 {% endblock %}
