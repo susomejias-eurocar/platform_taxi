@@ -50,6 +50,8 @@
                     {#<a href="{{ path('show_car') }}" class="row option">Coches</a>#}
                     <a href="{{ path('change_state_driver', {id: idDriver}) }}" class="row option optionText" >Estado</a>
                     <a href="{{ path('edit_info_driver', {idDriver: idDriver}) }}" class="row option optionText" >Editar información</a>
+                    <a href="{{ path('open_map_driver', {idDriver: idDriver}) }}" class="row option optionText" >Mostrar mapa</a>
+
                 {% endif %}
                 </div>
             {% endblock %}

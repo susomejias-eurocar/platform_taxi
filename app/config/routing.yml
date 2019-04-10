@@ -132,6 +132,10 @@ open_map:
     path: company/map
     defaults: { _controller: AppBundle:Company:openMap}
 
+open_map_driver:
+    path: driver/map
+    defaults: { _controller: AppBundle:Driver:openMap}
+
 change_state_driver_ajax:
     path: driver/changeStateAjax
     defaults: { _controller: AppBundle:Driver:setState}
