@@ -136,4 +136,18 @@ class DriverController extends Controller
 
     }
 
+    public function openMapAction(Request $request)
+    {
+        $security_context = $this->get('security.context');
+
+        $security_token = $security_context->getToken();
+
+        $user = $security_token->getUser();
+
+        $usersService = $this->get('user_service');
+
+        $idDriver = $this->container->get("driver_service")->getId($user->getId());
+        return $this->render('driver/content-panel-showMap.html.twig', array('idDriver' => $idDriver));
+    }
+
 }
