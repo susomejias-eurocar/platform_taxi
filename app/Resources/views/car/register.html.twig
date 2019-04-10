@@ -44,11 +44,7 @@
                         </div>
 
                         <button class="btn" id="btnRegister" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem">
-                            {% if car is defined %}
-                                Actualizar
-                            {% else %}
-                                Registrar
-                            {% endif %}
+                            {% if car is defined %}Actualizar{% else %}Registrar{% endif %}
                         </button>
                         <a class="btn" style="margin-left:10px; background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" href="{{ path('show_car')}}">Volver</a>
 
@@ -79,8 +75,7 @@
     });
 
     $('#btnRegister').click(()=>{
-
-        if($('#btnRegister').text()=="Registrar")
+        if($('#btnRegister').text().trim()=="Registrar")
             urlAjax = "{{ path('add_car') }}";
         else
             urlAjax = "{{ path('edit_car_ajax') }}";
