@@ -16,26 +16,26 @@
                         </h3>
                         <div class="form-group">
                             <label class="boldText" for="plate">Matrícula</label>
-                            <input required name="plate" type="text" class="form-control plate" aria-describedby="emailHelp" placeholder="Introduce la matrícula" value={{car.plate|default('')}}>
+                            <input required name="plate" type="text" class="form-control plate" id="plate" aria-describedby="emailHelp" placeholder="Introduce la matrícula" value={{car.plate|default('')}}>
                         </div>
                         <div class="form-group">
                             <label class=" boldText" for="trademark">Marca</label>
-                            <input required name="trademark" type="text" class="form-control" class="trademark" placeholder="Introduce la marca" value={{car.trademark|default('')}}>
+                            <input required name="trademark" type="text" class="form-control" id="trademark" placeholder="Introduce la marca" value={{car.trademark|default('')}}>
                         </div>
 
                         <div class="form-group">
                             <label class=" boldText" for="model">Modelo</label>
-                            <input required name="model" type="text" class="form-control" class="model" placeholder="Introduce el modelo" value={{car.model|default('')}}>
+                            <input required name="model" type="text" class="form-control" id="model" placeholder="Introduce el modelo" value={{car.model|default('')}}>
                         </div>
 
                         <div class="form-group">
                             <label class=" boldText" for="version">Versión</label>
-                            <input required name="version" type="tel" class="form-control" class="version" placeholder="Introduce la versión" value={{car.version|default('')}}>
+                            <input required name="version" type="tel" class="form-control" id="version" placeholder="Introduce la versión" value={{car.version|default('')}}>
                         </div>
 
                         <div>
                             <label class=" boldText" for="state">Estado</label>
-                            <select class="form-control chosen-select" class="state" name="state" style="margin-bottom:20px">
+                            <select class="form-control chosen-select" id="state" name="state" style="margin-bottom:20px">
                                 <option value="Disponible">Disponible</option>
                                 <option value="Averiado">Averiado</option>
                                 <option value="En reparación">En reparación</option>
@@ -44,7 +44,10 @@
                         </div>
 
                         <button class="btn" id="btnRegister" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem">
-                            {% if car is defined %}Actualizar{% else %}Registrar
+                            {% if car is defined %}
+                                Actualizar
+                            {% else %}
+                                Registrar
                             {% endif %}
                         </button>
                         <a class="btn" style="margin-left:10px; background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" href="{{ path('show_car')}}">Volver</a>
@@ -65,7 +68,7 @@
     let urlAjax;
 
     $(".chosen-select").chosen();
-    $(".plate").mask('0000-ZZZ', {
+    $(".plate").mask('0000ZZZ', {
         translation: {
             'Z' : {
                 pattern: /[A-z]/
