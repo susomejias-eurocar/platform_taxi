@@ -14,7 +14,7 @@ class DriverController extends Controller
     public function editAction($idDriver)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
@@ -106,7 +106,7 @@ class DriverController extends Controller
      */
     public function showFormSetStateAction()
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $em = $this->getDoctrine()->getEntityManager();
@@ -164,7 +164,7 @@ class DriverController extends Controller
      */
     public function openMapAction(Request $request)
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
 
         $security_token = $security_context->getToken();
 

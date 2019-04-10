@@ -22,7 +22,7 @@ class UserController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         if ($user != "anon."){
@@ -63,14 +63,14 @@ class UserController extends Controller
      */
     public function panelAction(Request $request)
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
         if($user){
-            if($this->get('security.context')->isGranted('ROLE_COMPANY')){
+            if($this->get('security.authorization_checker')->isGranted('ROLE_COMPANY')){
                 return $this->render('user/panel.html.twig', array());
-            }else if ($this->get('security.context')->isGranted('ROLE_DRIVER')){
+            }else if ($this->get('security.authorization_checker')->isGranted('ROLE_DRIVER')){
                 $em = $this->getDoctrine()->getManager();
                 $idDriver = $this->container->get("driver_service")->getId($user->getId());
                 return $this->render('user/panel.html.twig', array("idDriver" => $idDriver));

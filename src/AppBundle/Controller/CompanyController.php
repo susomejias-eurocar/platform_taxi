@@ -109,7 +109,7 @@ class CompanyController extends Controller
      */
     public function registerUserAction()
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
@@ -202,12 +202,12 @@ class CompanyController extends Controller
      */
     public function showCarsAction()
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
         if ($user) {
-            if ($this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_COMPANY')) {
                 return $this->render('company/content-panel-showCars.html.twig', array("user_type" => "company"));
             }
         }
@@ -221,7 +221,7 @@ class CompanyController extends Controller
      */
     public function listCarsAction(Request $request)
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyService = $this->get('company_service');
@@ -241,7 +241,7 @@ class CompanyController extends Controller
      */
     public function showDriversAction()
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
@@ -258,7 +258,7 @@ class CompanyController extends Controller
      */
     public function listDriversAction(Request $request)
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyService = $this->get('company_service');
@@ -279,7 +279,7 @@ class CompanyController extends Controller
      */
     public function registerDriverAction(Request $request)
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
@@ -391,7 +391,7 @@ class CompanyController extends Controller
      */
     public function registerCarAction()
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $companyId = $user->getCompanys()->getId();
@@ -461,7 +461,7 @@ class CompanyController extends Controller
      */
     public function asignCarToDriverAction()
     {
-        $security_context = $this->get('security.context');
+        $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
