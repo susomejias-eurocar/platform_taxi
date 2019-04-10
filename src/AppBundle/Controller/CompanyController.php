@@ -413,7 +413,6 @@ class CompanyController extends Controller
         $version = $request->get('version');
         $state = $request->get('state');
         $idCompany = $request->get('idCompany');
-
         if (!preg_match("/^\d{4}[A-Z]{3}/", $plate)) {
             $response = array(
                 "status" => false,
