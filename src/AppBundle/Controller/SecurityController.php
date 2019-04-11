@@ -159,4 +159,19 @@ class SecurityController extends Controller
             "message" => "La contraseña se ha cambiado correctamente"
         ));
     }
+
+    public function testTemplateEmailAction()
+    {
+        return $this->render('mail/register.html.twig', array());
+    }
+
+    public function showForgetPasswordAction()
+    {
+        return $this->render('security/forget-password.html.twig', array());
+    }
+
+    public function showRecoveryPasswordAction()
+    {
+        return $this->render('security/recovery-password.html.twig', array());
+    }
 }
