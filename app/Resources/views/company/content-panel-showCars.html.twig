@@ -1,7 +1,7 @@
 {% extends './user/panel.html.twig' %}
 
 {% block content %}
-<div class="col col-lg-10" style="padding:30px">
+<div class="col col-lg-10 animated fadeIn slow" style="padding:30px">
 
 <h1>Coches de la compañia</h1>
 <div class="row" style="padding:20px 15px">
@@ -9,25 +9,43 @@
     <a href="{{ path('asign_car_to_driver') }}" style="margin-left:20px;"class="btn bg-success text-light boldText">Asignar coche</a>
 </diV>
 <div class="row">
-<div class="input-group col-3" style="padding: 30px 15px;height:100% ">
+    <h3 style="padding-left:20px">Filtros</h1>
+</div>
+<div class="row">
+<div class="input-group col-3" style="padding: 10px 15px;height:100% ">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Matrícula</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='plate'  placeholder="{{'Introduce Matrícula' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+<div class="input-group col-3" style="padding: 10px 15px; height:100%">
+    <div class="input-group-prepend" >
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Marca</b></div>
+    </div>
+    <input type="text" class="form-control search-data-field" data-field='trademark'  placeholder="{{'Introduce Marca' | trans}}" >
+</div>
+
+
+<div class="input-group col-3" style="padding: 10px 15px; height:100%">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Modelo</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='model'  placeholder="{{'Introduce Modelo' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+<div class="input-group col-3" style="padding: 10px 15px; height:100%">
+    <div class="input-group-prepend" >
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Versión</b></div>
+    </div>
+    <input type="text" class="form-control search-data-field" data-field='version'  placeholder="{{'Introduce Versión' | trans}}" >
+</div>
+
+<div class="input-group col-3" style="padding: 10px 15px; height:100%">
     <div class="input-group-prepend" style="height:100%" >
         <div class="input-group-text" style="background: #263238; color:#fff;%"><b>Estado</b></div>
     </div>
-    <select class="form-control search-data-field styleSelectDatatables" data-field='state'>
+    <select class="chosen-select form-control search-data-field styleSelectDatatables " data-field='state'>
         <option value="">Seleccione Estado</option>
         <option value="Disponible">Disponible</option>
         <option value="Averiado">Averiado</option>
@@ -37,19 +55,6 @@
 
 
 </div>
-
-
-
-
-{# <div style="padding: 10px; margin-bottom: 15px">
-    <label>Employee office name search: <label>
-    <input class = "form-control search-data-field" type="text" data-field='employeeOffice' placeholder="{{'Employee office' | trans}}">
-</div> #}
-
-{# <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
-<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
-<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
-<input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}"> #}
 
     <table id="carsTable" class="table table-hover">
         <tr>
@@ -82,6 +87,8 @@ let init = function(){
 
 // Variable auxilair
     let time = null;
+
+    $(".chosen-select").chosen({no_results_text: "Oops, nothing found!"});
 
 
     $('.search-data-field').each(function( index ) {
@@ -119,8 +126,53 @@ let init = function(){
 
 function loadFunctionDataTable(){
 
+    $(".btnDelete").click(function(e){
+        e.preventDefault();
+        $btn = $(this);
+        $btnPath = $(this).attr("href");
+        let idCar = $(this).data('idcar');
 
-    
+        if(!idCar){
+            Swal.fire({
+
+            })
+            return;
+        }
+
+        //console.log($btnPath);
+        Swal.fire({
+            title: '¿Estás seguro que deseas eliminar este coche?',
+            text: "¡Esta acción no se puede revertir!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No',
+            }).then((result) => {
+                if (result.value) {
+                    //window.location.href = $btnPath;
+                    $.ajax({
+                        url: "{{ path('delete_car')}}",
+                        data: {idCar : idCar},
+                        success: function (response) {
+                            console.log(response);
+                            Swal.fire(
+                                'Eliminado',
+                                response.message,
+                                'success'
+                            );
+                            carsTable.ajax.reload();
+                        },
+                        error: function(response){
+                            console.log(response);
+                            console.log("error");
+                        }
+                    });
+                }
+            })
+    });
+
 }
 
 function loadStyles(){
@@ -133,10 +185,10 @@ function loadStyles(){
 let carsTable = $("#carsTable").DataTable({
     dom: 'Blrtip',
     buttons: [
-        {
+        /*{
             extend: 'copyHtml5',
             className: 'btn-info'
-        },
+        },*/
         {
             extend: 'excelHtml5',
             messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
@@ -223,22 +275,30 @@ let carsTable = $("#carsTable").DataTable({
         {data:'', render: function(data, type, row, meta){
             let html = ``;
             let pathEdit = "{{ path('edit_car', {'idCar': 'pepe'}) }}";
-            let pathDelete = "{{ path('delete_car', {'idCar': 'pepe'}) }}";
             pathEdit=pathEdit.replace("pepe", row.id);
-            pathDelete=pathDelete.replace("pepe", row.id);
-                html += "<a href='"+ pathEdit +"' class='btn bg-info' style='color:#fff' font-weight:bold\">Editar</a>";
-                html += "<a href='" + pathDelete + "' class='btn bg-danger' idCar="+row.id+" style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\">Eliminar</a>";
+                html += "<a title='Editar' id=editar href='"+ pathEdit +"' class='btn' style='background:#F9A825;color:#fff' font-weight:bold\"><i id='editar' class='fas fa-pen'></i></a>";
+                html += "<a title='Eliminar' class='btn bg-danger btnDelete' href='#' data-idcar="+row.id+" style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='far fa-trash-alt'></i></a>";
+
 
             return html;
         }}
     ],
+
+     "columnDefs":[{
+        "targets" : 5,
+        "orderable": false
+    }],
     
     drawCallback: function(settings) {
         //loadFunctionsOfButtons();
         loadStyles();
         loadFunctionDataTable();
     }
+
 });
+
+    $("#editar").tooltip();
+
 
 }
 

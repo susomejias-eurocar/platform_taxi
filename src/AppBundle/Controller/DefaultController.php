@@ -10,7 +10,7 @@ class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
-        return $this->redirect('login');
+        return $this->redirect('panel');
     }
 
 }

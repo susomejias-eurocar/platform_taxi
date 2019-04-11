@@ -16,7 +16,7 @@
                 
                     <div class="col form-group">
                         <label for="drivers" class="boldText">Conductor: </label>
-                        <select class="form-control" name="drivers" id="drivers">
+                        <select class="chosen-select form-control" name="drivers" id="drivers">
                             <option value=NULL>Selecciona un conductor</option>
                                 {% for driver in drivers %}
                             <option value={{driver['id']}}>{{driver['name']}} {{driver['last_name']}}</option>
@@ -27,7 +27,7 @@
 
                     <div class="form-group">
                         <label for="cars" class="boldText">Coche: </label>
-                        <select class="form-control" name="cars" id="cars">
+                        <select class="chosen-select form-control" name="cars" id="cars">
                             <option value=NULL>Selecciona un coche</option>
                             {% for car in cars %}
                                 <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
@@ -50,6 +50,7 @@
 {{ parent() }}
 
 <script>
+    $(".chosen-select").chosen({no_results_text: "Oops, nothing found!"});
 
     let $cars = $("#cars");
     let $drivers = $("#drivers");
@@ -110,7 +111,7 @@
                         "success"
                         )    
 
-                        //setTimeout(function(){ window.location.href = "login" }, 1500);
+                        setTimeout(function(){ window.location.href = "{{ path('show_drivers') }}" }, 1500);
                         
                     }
                     

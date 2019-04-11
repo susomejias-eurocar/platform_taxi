@@ -179,6 +179,16 @@ use Symfony\Component\HttpFoundation\Request;
 
         }
 
+        public function existDriver($idCompany, $idDriver){
+            $em = $this->entityManager;
+            return $em->getRepository("AppBundle:Company")->existDriver($idCompany,$idDriver);
+        }
+
+        public function existCar($idCompany, $idCar){
+            $em = $this->entityManager;
+            return $em->getRepository("AppBundle:Company")->existCar($idCompany,$idCar);
+        }
+
         
 
     }

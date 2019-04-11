@@ -34,6 +34,10 @@ use Symfony\Component\HttpFoundation\Request;
         public function setState($idDriver, $state){
             $this->entityManager->getRepository("AppBundle:Driver")->setState($idDriver,$state);
         }
+
+        public function getId($idUser){
+            return $this->entityManager->getRepository("AppBundle:Driver")->getId($idUser);
+        }
         
     }
 

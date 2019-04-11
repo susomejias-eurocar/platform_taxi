@@ -2,12 +2,15 @@
 
 body
     color: #263238
+    font-family: 'Lato', sans-serif;
 
 
 .border-transparent
     border: 2px solid rgba(0, 0, 0, .6) !important
 .background-city
     background-image: url("../images/city.jpeg")
+    background-repeat: no-repeat
+    background-size: cover
 
 .transparent
     background: rgba(0, 0, 0, .4)
@@ -35,15 +38,55 @@ input:focus
     text-align:center 
     color:#fff
 
-#leftPanel
-    .option
-        padding: 20px 0px
-        display: block
-        text-align: center
+
+.option
+    padding: 20px 0px
+    display: block
+    text-align: center
+    color: #fff
+    text-decoration: none
+    &:hover
+        background: rgba(255, 255, 255, .2)
         color: #fff
         text-decoration: none
 
 .styleSelectDatatable
     margin: 0px !important
 
+#map
+    width: 100%
+    min-height: 65vh
 
+#over_map
+    background: #F4C05C
+    margin-bottom: 20px
+    padding: 5px
+    border-radius: 3px
+    font-weight: bold
+    color: #fff
+    font-size: 1.1rem
+
+.gradient-company
+    background-image: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)
+
+.logo-company
+    background: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+
+
+.gradient-driver
+    background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%)
+
+.logo-driver
+    background: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+    
+
+.optionText
+    color: #ffffff
+    font-size: 1.1rem
+
+#imgLogout
+    opacity: 0.6

@@ -36,7 +36,9 @@ use Symfony\Component\HttpFoundation\Request;
             $em->getRepository("AppBundle:Car")->setState($idCar,$state);
         }
 
-
+        public function isEditableCar(){
+            
+        }
 
     }
 

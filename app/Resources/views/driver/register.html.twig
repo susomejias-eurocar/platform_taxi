@@ -46,19 +46,38 @@
                             <label for="driverLastname" class=" boldText">Apellidos</label>
                             <input required name="driverLastName" type="text" class="form-control" id="driverLastName" placeholder="Apellidos" value={{user.lastName|default('')}}>
                         </div>
-                        <h3 style="font-weight:bold; padding:10px">Asignar coche</h3>
-                            <label for="driverLastname" class=" boldText">Elija coche</label>
-                            <select class="form-control" style="margin-bottom:20px" name="car" id="car">
-                                <option value=NULL>Sin coche</option>
-                                {#{% for car in cars %}
-                                <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
-                                {% endfor %}#}
-                            </select>
+
+
+                        {% if is_granted('ROLE_COMPANY') %}
+                            <h3 style="font-weight:bold; padding:10px">Asignar coche</h3>
+                                <label for="car" class=" boldText">Elija coche</label>
+                                <select class="form-control chosen-select" style="margin-bottom:20px" name="car" id="car">
+                                    <option value=NULL>Sin coche</option>
+                                    {% if carDriver is defined and carDriver is not null %}
+                                        <option selected value={{carDriver.id}}>{{carDriver.trademark}} {{carDriver.model}} {{carDriver.version}} - {{carDriver.plate}}</option>
+                                    {% endif %}
+                                    {% for car in cars %}                                                   
+                                        <option value={{car['id']}}>{{car['trademark']}} {{car['model']}} {{car['version']}} - {{car['plate']}}</option>
+                                    {% endfor %}
+                                </select>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_COMPANY') %}
+                            <h3 style="font-weight:bold; padding:10px">Estado</h3>
+                                <label for="car" class=" boldText">Asignar estado</label>
+                                <select class="form-control chosen-select" style="margin-bottom:20px" name="state" id="state">
+                                    <option value="Disponible">Disponible</option>
+                                    <option value="Parada">Parada</option>
+                                    <option value="Ocupado">Ocupado</option>
+                                    <option value="Fuera de servicio">Fuera de servicio</option>
+                                </select>
+                        {% endif %}
                     </div>
 
                 </div>
                 <div class="row" style="padding: 30px">
                     <button   class="btn" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" id="btnRegister">{% if driver is defined %}Actualizar{% else %}Registrar{% endif %}</button>
+                    <a class="btn" style="margin-left:10px; background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" href="{{ path('show_drivers')}}">Volver</a>
                 </div>
             </div>
         </div>
@@ -72,14 +91,34 @@
 <script>
 
     let urlAjax;
+    let action;
         if($('#btnRegister').text()=="Registrar")
             urlAjax = "{{ path('ajax_register_driver') }}";
         else
             urlAjax = "{{ path('edit_driver_ajax') }}";
 
 
-
+    $(".chosen-select").chosen();
+    $("#phone").mask("000000000");
     $('#btnRegister').click(()=>{
+
+        if($('#btnRegister').text()=="Registrar")
+            if($("#password1").val()=="" && $("#password2").val()=="")
+                return invalidFormSwal("Las contraseñas no pueden estar vacías");            
+        if($("#password1").val()!=$("#password2").val())
+            return invalidFormSwal("Las contraseñas no coincide");
+        else if($("#email").val()=="")
+            return invalidFormSwal("El email no puede estar vacío");
+        else if(!$("#email").val().match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/))
+            return invalidFormSwal("El email no tiene un formato válido");
+        else if($("#phone").val()=="")
+            return invalidFormSwal("El teléfono no puede estar vacío");
+        else if($("#driverName").val()=="")
+            return invalidFormSwal("El nombre no puede estar vacío");
+        else if($("#driverLastName").val()=="")
+            return invalidFormSwal("Los apellidos no pueden estar vacío");
+
+            
             $.ajax({
                 url: urlAjax,
                 type: 'POST',
@@ -92,7 +131,14 @@
                     driverName: $("#driverName").val(),
                     driverLastName: $("#driverLastName").val(),
                     car: $("#car").val(),
-                    idCompany: {{ companyId }}
+                    state: $("#state").val(),
+                    idCompany: {{ companyId }},
+                    {% if idDriver is defined %}
+                        idDriver: {{idDriver}},
+                    {% endif %}
+                    {% if user is defined %}
+                        idUser: {{user.id}}
+                    {% endif %}
                 },
                 success: function(result){
 
@@ -109,10 +155,13 @@
                         result.message,
                         "",
                         "success"
-                        )    
-
-                        
-                        let path = "{{ path('panel') }}"
+                        )                                
+                        let path;
+                        {% if is_granted('ROLE_COMPANY') %}
+                            path = "{{ path('show_drivers') }}"
+                        {% else %}
+                            path = "{{ path('panel') }}"
+                        {% endif %}
                         setTimeout(function(){ window.location.href = path }, 1500);
                         
                     }
@@ -121,6 +170,11 @@
                 },
             });
     });
+
+    function invalidFormSwal(message) {
+     Swal.fire( message, "", "error");
+    }
+
 </script>
 
 {% endblock %}

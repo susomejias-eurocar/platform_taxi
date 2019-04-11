@@ -1,0 +1,91 @@
+{% extends './user/panel.html.twig' %}
+
+
+{% block content %}
+
+<div class="col col-lg-10 animated fadeIn slow" style="padding-left:20px">
+
+    <main>
+        <divdriver_id class="container col-lg-10" style="padding:30px 0px;min-height:100vh;display:flex;align-items:center;" >
+            <div class="card col-lg-7 offset-lg-2">
+                <div class="row" style="background:#263238;color:#fff">
+                    <h1  style="font-weight:bold; padding: 30px 30px">{{ app.user.name }}, {{ app.user.lastName }}</h1>
+                </div>
+                <div class="card-body row">
+
+                    <div class="container">
+
+                    <div>
+                        <label for="state" class=" boldText">Estado actual</label>
+                        <input style="font-weight:bold"class="form-control" type="text" value="{{ state_now[0]["state"] }}" disabled>
+                        <p></p>
+                    </div>
+                    <div>
+                        <label for="state" class="boldText">Estado</label>
+                        <select class="chosen-select form-control" style="margin-bottom:20px" name="state" id="state">
+                            <option value="Sin asignar">Seleccione un estado</option>    
+                            <option value="Disponible">Disponible</option>                                
+                            <option value="En parada">En parada</option>
+                            <option value="Fuera de servicio">Fuera de servicio</option>                                
+                        </select>
+                    </div>
+
+                    <buton class="btn" style="margin-top:20px;background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" id="btn">Actualizar</button>
+
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>}
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script>
+
+    $(".chosen-select").chosen({no_results_text: "Oops, nothing found!"});
+
+    $('#btn').click(()=>{
+            $.ajax({
+                url: "{{ path('change_state_driver_ajax') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: { 
+                    state: $('#state').val(), 
+                    idDriver: {{idDriver}}
+                },
+                success: function(result){
+
+                    console.log(result);
+                    if (!result.status){
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "error"
+                        )       
+                    }else{
+                        console.log("hola")
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "success"
+                        )    
+
+                        
+                        let path = "{{ path('panel') }}"
+                        setTimeout(function(){ window.location.href = path }, 1500);
+                        
+                    }
+                    
+                    
+                },
+            });
+    });
+</script>
+
+{% endblock %}

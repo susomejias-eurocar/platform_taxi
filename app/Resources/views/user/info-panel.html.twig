@@ -1,0 +1,60 @@
+<div class="col col-lg-2" id="leftPanel" style="background:#263238;padding:0px">
+
+
+            {% if is_granted('ROLE_COMPANY') %}
+                <div style="width:100%;display:flex;flex-direction:column;align-items:center;padding:20px" class="gradient-company">
+            {% elseif is_granted('ROLE_DRIVER') %}
+                <div style="width:100%;display:flex;flex-direction:column;align-items:center;padding:20px" class="gradient-driver">
+            {% endif %}
+                {% if is_granted('ROLE_COMPANY') %}
+                <a href="{{ path('panel') }}">
+                    <img src="{{ asset('images/man.svg') }}" height="100px"/>
+                </a>
+                {% elseif is_granted('ROLE_DRIVER') %}
+                <a href="{{ path('panel') }}">
+                    <img src="{{ asset('images/driver.svg') }}" height="100px"/>
+                </a>
+                {% endif %}
+                <p style="padding:10px 10px">
+                
+                {% block username %}
+                    {% if is_granted('ROLE_COMPANY') %}
+                        <p style="font-weight:bold">{{ app.user.username }}</p>
+                        <p style="font-weight:bold;padding-bottom:3px;margin:0px"><i class="fas fa-phone" style="margin-right: 5px"></i>{{ app.user.phone  }}</p>
+                        <p style="font-weight:bold;padding-bottom:3px;margin:0px"><i class="fas fa-building" style="margin-right: 5px"></i>{{ app.user.companys.name  }}</p>
+                        <p style="font-weight:bold;padding:0px"><i class="fas fa-map-marker-alt" style="margin-right: 5px"></i>({{ app.user.companys.address }})</p>
+                        <a href="{{ path('logout') }}" class="row" style="padding: 5px 0px;display:flex;flex-direction:row;justify-content:center;text-decoration:none;text-align:center;color:#fff">
+                        <img src="{{ asset('images/logout.svg') }}" id="imgLogout" height="30px"/>
+                        </a>
+                    {% elseif is_granted('ROLE_DRIVER') %}
+                        <p style="font-weight:bold">{{ app.user.username }}</p>
+                        <p style="font-weight:bold;padding-bottom:3px;margin:0px"><i class="fas fa-phone" style="margin-right: 5px"></i>{{ app.user.phone  }}</p>
+                        <p style="font-weight:bold;padding-bottom:3px;margin:0px"><i class="fas fa-building" style="margin-right: 5px"></i>{{ app.user.companys.name  }}</p>
+                        <p style="font-weight:bold;padding:0px"><i class="fas fa-map-marker-alt" style="margin-right: 5px"></i> ({{ app.user.companys.address }})</p> 
+                        <a href="{{ path('logout') }}" class="row" style="padding: 5px 0px;display:flex;flex-direction:row;justify-content:center;text-decoration:none;text-align:center;color:#fff">
+                        <img src="{{ asset('images/logout.svg') }}" id="imgLogout" height="30px"/>
+                        </a>
+                    {% endif %}
+                {% endblock %}
+                </p>
+            </div>
+
+            {% block panelOptions %}
+                <div class="col">
+                
+                {% if is_granted('ROLE_COMPANY') %}
+                    <a href="{{ path('show_car') }}" class="row option optionText">Coches</a>
+                    <a href="{{ path('show_drivers') }}" class="row option optionText" >Conductores</a>
+                    <a href="{{ path('open_map') }}" class="row option optionText" >Mostrar mapa</a>
+                    <a href="{{ path('show_edit_company') }}" class="row option optionText" >Modificar perfil</a>
+
+                {% elseif is_granted('ROLE_DRIVER') %}
+                    {#<a href="{{ path('show_car') }}" class="row option">Coches</a>#}
+                    <a href="{{ path('change_state_driver', {id: idDriver}) }}" class="row option optionText" >Estado</a>
+                    <a href="{{ path('edit_info_driver', {idDriver: idDriver}) }}" class="row option optionText" >Editar información</a>
+                    <a href="{{ path('open_map_driver', {idDriver: idDriver}) }}" class="row option optionText" >Mostrar mapa</a>
+
+                {% endif %}
+                </div>
+            {% endblock %}
+</div>

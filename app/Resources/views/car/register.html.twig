@@ -1,48 +1,55 @@
 {% extends 'base.html.twig' %}
 {% block main %}
     <main>
-        <div class="container col-lg-12" style="padding:0px 30px;min-height:100vh;display:flex;align-items:center;" >
+        <div class="container col-lg-12" style="padding:0px 30px;min-height:100vh;display:flex;align-items:center;">
             <div class="card col-lg-7 offset-lg-2">
-               
+
                 <div class="card-body" style="padding:0px">
 
-                <div class="row" style="background:#263238;color:#fff">
-                    <h1  style="font-weight:bold; padding:20px">Platform Taxi Proyect</h1>
-                </div>
-                <div class="col" style="padding:30px">
-                    <h3 style="font-weight:bold; padding:10px">{% if car is defined %}Actualizar coche{% else %}Registrar coche{% endif %}</h3>
+                    <div class="row" style="background:#263238;color:#fff">
+                        <h1 style="font-weight:bold; padding:20px">Platform Taxi Proyect</h1>
+                    </div>
+                    <div class="col" style="padding:30px">
+                        <h3 style="font-weight:bold; padding:10px">
+                            {% if car is defined %}Actualizar coche{% else %}Registrar coche
+                            {% endif %}
+                        </h3>
                         <div class="form-group">
-                            <label for="plate"  class="boldText">Matrícula</label>
-                            <input required name="plate" type="plate" class="form-control" id="plate" aria-describedby="emailHelp" placeholder="Introduce la matrícula" value={{car.plate|default('')}}>
+                            <label class="boldText" for="plate">Matrícula</label>
+                            <input required name="plate" type="text" class="form-control plate" id="plate" aria-describedby="emailHelp" placeholder="Introduce la matrícula" value={{car.plate|default('')}}>
                         </div>
                         <div class="form-group">
-                            <label for="trademark" class=" boldText">Marca</label>
+                            <label class=" boldText" for="trademark">Marca</label>
                             <input required name="trademark" type="text" class="form-control" id="trademark" placeholder="Introduce la marca" value={{car.trademark|default('')}}>
                         </div>
 
                         <div class="form-group">
-                            <label for="model" class=" boldText">Modelo</label>
+                            <label class=" boldText" for="model">Modelo</label>
                             <input required name="model" type="text" class="form-control" id="model" placeholder="Introduce el modelo" value={{car.model|default('')}}>
-                        </div> 
+                        </div>
 
                         <div class="form-group">
-                            <label for="version" class=" boldText">Versión</label>
+                            <label class=" boldText" for="version">Versión</label>
                             <input required name="version" type="tel" class="form-control" id="version" placeholder="Introduce la versión" value={{car.version|default('')}}>
                         </div>
 
                         <div>
-                            <label for="state" class=" boldText">Estado</label>
-                            <select class="form-control" style="margin-bottom:20px" name="state" id="state">
-                                <option value="Disponible">Disponible</option>                                
+                            <label class=" boldText" for="state">Estado</label>
+                            <select class="form-control chosen-select" id="state" name="state" style="margin-bottom:20px">
+                                <option value="Disponible">Disponible</option>
                                 <option value="Averiado">Averiado</option>
-                                <option value="En reparación">En reparación</option>                                
+                                <option value="En reparación">En reparación</option>
                             </select>
 
                         </div>
 
-                        <button   class="btn" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" id="btnRegister">{% if car is defined %}Actualizar{% else %}Registrar{% endif %}</button>
-                </div>
-                    
+                        <button class="btn" id="btnRegister" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem">
+                            {% if car is defined %}Actualizar{% else %}Registrar{% endif %}
+                        </button>
+                        <a class="btn" style="margin-left:10px; background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" href="{{ path('show_car')}}">Volver</a>
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -51,15 +58,33 @@
 
 {% block javascripts %}
 
-{{ parent() }}
+    {{ parent() }}
 
-<script>
-
+    <script>
     let urlAjax;
 
-    $('#btnRegister').click(()=>{
+    $(".chosen-select").chosen();
+    $(".plate").mask('0000ZZZ', {
+        translation: {
+            'Z' : {
+                pattern: /[A-z]/
+            },onKeyPress: function (value, event) {
+                event.currentTarget.value = value.toUpperCase();
+            }
+        }
+    });
 
-        if($('#btnRegister').text()=="Registrar")
+    $('#btnRegister').click(()=>{
+        if($("#plate").val()=="")
+            return invalidFormSwal("La matrícula no puede estar vacía");
+        else if(!$("#plate").val().match(/^\d{4}[A-Z]{3}/))
+            return invalidFormSwal("El formato de la matrícula no es válido");
+        else if($("#trademark").val()=="")
+            return invalidFormSwal("La marca no puede estar vacía");            
+        else if($("#model").val()=="")
+            return invalidFormSwal("El modelo no puede estar vacío");
+
+        if($('#btnRegister').text().trim()=="Registrar")
             urlAjax = "{{ path('add_car') }}";
         else
             urlAjax = "{{ path('edit_car_ajax') }}";
@@ -69,7 +94,7 @@
                 type: 'POST',
                 dataType: 'json',
                 data: { 
-                    plate: $('#plate').val() , 
+                    plate: $('#plate').val().toUpperCase(),
                     trademark: $('#trademark').val(), 
                     model: $('#model').val(), 
                     version: $("#version").val(),
@@ -102,6 +127,11 @@
             });
         
     });
+
+    function invalidFormSwal(message) {
+        Swal.fire( message, "", "error");
+    }    
+
 </script>
 
 {% endblock %}

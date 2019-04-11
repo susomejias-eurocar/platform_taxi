@@ -1,38 +1,73 @@
 {% extends './user/panel.html.twig' %}
 
 {% block content %}
-<div class="col col-lg-10" style="padding:30px">
+<div class="col col-lg-10 animated fadeIn slow" style="padding:30px">
 
 <h1>Conductores de la compañia</h1>
 <div class="row" style="padding:20px 15px">
     <a href="{{ path('driver_register') }}" class="btn bg-success text-light boldText">Crear nuevo conductor</a>
+    <a href="{{ path('asign_car_to_driver') }}" style="margin-left:20px;"class="btn bg-success text-light boldText">Asignar coche</a>
+
 </diV>
 <div class="row">
-<div class="input-group col-3" style="padding: 30px 15px;height:100% ">
+    <h3 style="padding-left:20px">Filtros</h1>
+</div>
+<div class="row">
+<div class="input-group col-3" style="padding: 10px 15px;height:100% ">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Nombre</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='name'  placeholder="{{'Introduce nombre' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+<div class="input-group col-3" style="padding: 10px 15px; height:100%">
     <div class="input-group-prepend" >
         <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Apellidos</b></div>
     </div>
     <input type="text" class="form-control search-data-field" data-field='last_name'  placeholder="{{'Introduce apellidos' | trans}}" >
 </div>
 
-<div class="input-group col-3" style="padding: 30px 15px; height:100%">
+<div class="input-group col-3" style="padding: 10px 15px; height:100%">
+    <div class="input-group-prepend" >
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Teléfono</b></div>
+    </div>
+    <input type="text" class="form-control search-data-field" data-field='phone'  placeholder="{{'Introduce teléfono' | trans}}" >
+</div>
+
+<div class="input-group col-3" style="padding: 10px 15px; height:100%">
+    <div class="input-group-prepend" >
+        <div class="input-group-text" style="background: #263238; color:#fff;height:100%"><b>Email</b></div>
+    </div>
+    <input type="text" class="form-control search-data-field" data-field='email'  placeholder="{{'Introduce email' | trans}}" >
+</div>
+
+<div class="input-group col-3" style="padding: 13px 15px; height:100%">
     <div class="input-group-prepend" style="height:100%" >
         <div class="input-group-text" style="background: #263238; color:#fff"><b>Estado</b></div>
     </div>
-    <select class="form-control search-data-field styleSelectDatatables" data-field='state'>
+    <select class="chosen-select form-control search-data-field styleSelectDatatables" data-field='state'>
         <option value="">Seleccione Estado</option>
         <option value="Disponible">Disponible</option>
+        <option value="Parada">Parada</option>
+        <option value="Ocupado">Ocupado</option>
         <option value="Fuera de servicio">Fuera de servicio</option>
+        <option value="En parada">En parada</option>
+    </select>
+</div>
+
+<div class="input-group col-3" style="padding: 13px 15px; height:100%">
+    <div class="input-group-prepend" style="height:100%" >
+        <div class="input-group-text" style="background: #263238; color:#fff"><b>Coche</b></div>
+    </div>
+    <select class="chosen-select form-control search-data-field styleSelectDatatables" data-field='carasigned'>
+        <option value="">Seleccione Estado</option>
+        <option value="asign">Asignado</option>
+        <option value="unasign">Sin asignar</option>
     </select>
 </div>
 </div>
+
+
 {# <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
 <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
 <input class = "form-control search-data-field" type="text" data-field='country' placeholder="{{'Pais' | trans}}">
@@ -43,6 +78,8 @@
             <thead style="background:#263238">
                 <th scope="col" class="text-light">Nombre</th>
                 <th scope="col" class="text-light">Apellidos</th>
+                <th scope="col" class="text-light">Teléfono</th>
+                <th scope="col" class="text-light">Email</th>
                 <th scope="col" class="text-light">Estado</th>
                 <th scope="col" class="text-light">Matrícula del coche asignado</th>
                 <th scope="col" class="text-light">Acciones</th>
@@ -68,6 +105,9 @@ let init = function(){
 
  // Variable auxilair
     let time = null;
+
+    $(".chosen-select").chosen({no_results_text: "Oops, nothing found!"});
+
 
    $('.search-data-field').each(function( index ) {
 
@@ -103,8 +143,99 @@ let init = function(){
     });
 function loadFunctionDataTable(){
 
-    
-    
+        $(".btnDelete").click(function(e){
+        e.preventDefault();
+        $btn = $(this);
+        $btnPath = $(this).attr("href");
+        let idDriver = $(this).data('iddriver');
+
+        if(!idDriver){
+            Swal.fire({
+
+            })
+            return;
+        }
+
+        Swal.fire({
+            title: '¿Estás seguro que deseas eliminar este conductor?',
+            text: "¡Esta acción no se puede revertir!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No',
+            }).then((result) => {
+                if (result.value) {
+                    //window.location.href = $btnPath;
+                    $.ajax({
+                        url: "{{ path('delete_driver')}}",
+                        data: {idDriver : idDriver},
+                        success: function (response) {
+                            console.log(response);
+                            Swal.fire(
+                                'Eliminado',
+                                response.message,
+                                'success'
+                            );
+                            driversTable.ajax.reload();
+                        },
+                        error: function(response){
+                            console.log(response);
+                            console.log("error");
+                        }
+                    });
+                }
+            })
+    });
+
+        $(".btnUnassign").click(function(e){
+        e.preventDefault();
+        $btn = $(this);
+        $btnPath = $(this).attr("href");
+        let idDriver = $(this).data('iddriver');
+
+        if(!idDriver){
+            Swal.fire({
+
+            })
+            return;
+        }
+
+        //console.log($btnPath);
+        Swal.fire({
+            title: '¿Estás seguro que deseas desasignar el coche a este conductor?',
+            text: "¡Esta acción no se puede revertir!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No',
+            }).then((result) => {
+                if (result.value) {
+                    //window.location.href = $btnPath;
+                    $.ajax({
+                        url: "{{ path('unassign_car')}}",
+                        data: {idDriver : idDriver},
+                        success: function (response) {
+                            console.log(response);
+                            Swal.fire(
+                                'Desasignado',
+                                response.message,
+                                'success'
+                            );
+                            driversTable.ajax.reload();
+                        },
+                        error: function(response){
+                            console.log(response);
+                            console.log("error");
+                        }
+                    });
+                }
+            })
+    });    
+   
 }
 
 function loadStyles(){
@@ -117,10 +248,6 @@ function loadStyles(){
 let driversTable = $("#driversTable").DataTable({
     dom: 'Blrtip',
     buttons: [
-        {
-            extend: 'copyHtml5',
-            className: 'btn-info'
-        },
         {
             extend: 'excelHtml5',
             messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
@@ -179,23 +306,39 @@ let driversTable = $("#driversTable").DataTable({
     columns: [
         {data:'name'},
         {data:'last_name'},
+        {data:'phone'},
+        {data:'email'},
         {data:'state', render: function(data, type, row, meta){
             let html = ``;
 
-            console.log(data);
-            if (data.toLowerCase() == "disponible"){
+            
+            if (data && data.toLowerCase() == "disponible"){
 
                 html += `<span style="border-radius:3px;background:green;color:#fff;padding:7px; font-weight:bold">${data}</span>`
                 //$(data).css("color", "green");
-            }else if (data.toLowerCase() == "fuera de servicio"){
-
+            }else if (data && data.toLowerCase() == "fuera de servicio"){
+                html += `<span style="border-radius:3px;background:grey;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+            }
+            else if (data && data.toLowerCase() == "parada"){
                 html += `<span style="border-radius:3px;background:red;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+            }else if (data && data.toLowerCase() == "en parada"){
+
+                html += `<span style="border-radius:3px;background:orange;color:#fff;padding:7px; font-weight:bold">${data}</span>`
+            }
+            else if (data && data.toLowerCase() == "ocupado"){
+                html += `<span style="border-radius:3px;background:orange;color:#fff;padding:7px; font-weight:bold">${data}</span>`
             }
 
             return html;
         }},
         {data:'plate', render: function(data, type, row, meta){
-            let html = `<span style="border-radius:3px;background:#263238;color:#fff;padding:7px; font-weight:bold">${data}</span>`;
+            console.log(row);
+            let html = ``;
+            if (data && data === 'sin asignar'){
+                html += `<span style="border-radius:3px;background:#455A64;color:#fff;padding:7px; font-weight:bold">Sin asignar</span>`;
+            }else{
+                html += `<span style="border-radius:3px;background:#311B92;color:#fff;padding:7px; font-weight:bold">${data}</span>`;
+            }
 
 
             return html;
@@ -203,16 +346,23 @@ let driversTable = $("#driversTable").DataTable({
         {data:'', render: function(data, type, row, meta){
             let html = ``;
             let pathEdit = "{{ path('edit_driver', {'idDriver': 'pepe'}) }}";
-            let pathDelete = "{{ path('delete_driver', {'idDriver': 'pepe'}) }}";
             pathEdit=pathEdit.replace("pepe", row.id);
-            pathDelete=pathDelete.replace("pepe", row.id);
 
-                html += "<a href='"+ pathEdit +"' class='btn bg-info' style='color:#fff' font-weight:bold\">Editar</a>";
-                html += "<a href='" + pathDelete + "' class='btn bg-danger' style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\">Eliminar</a>";
+                html += "<a title=Editar id=editar href='"+ pathEdit +"' class='btn' style='background:#F9A825;color:#fff' font-weight:bold\"><i id='editar' class='fas fa-pen'></i></a>";
+                html += "<a title=Eliminar class='btn bg-danger btnDelete' href='#' data-iddriver="+row.id+" style='margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='far fa-trash-alt'></i></a>";
+                if(row.plate != "sin asignar")
+                    html += "<a title='Desasignar coche' class='btn btnUnassign' href='#' data-iddriver="+row.id+" style='background:#455A64;margin-left:20px; color:#fff;' font-weight:bold;margin-left:5px;\"><i class='fas fa-car-side'></i></a>";
+
+                
 
             return html;
         }}
     ],
+
+    "columnDefs":[{
+        "targets" : 6,
+        "orderable": false
+    }],
     
     drawCallback: function(settings) {
         //loadFunctionsOfButtons();

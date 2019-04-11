@@ -43,7 +43,8 @@ class CompanyRepository extends EntityRepository
 
         if(!is_null($orderBy))
             $query .= $orderBy;
-    
+    //print_r($query);
+    //die();
         // var_dump($query);
         // die();
         // Ejecutamos la consulta
@@ -92,16 +93,29 @@ class CompanyRepository extends EntityRepository
         $queryCount = "SELECT COUNT(*) as total FROM car as ca, company as co where ca.company_id = co.id AND co.id = :company_id";
 
         if (isset($search["plate"]) AND $search["plate"]){
-            $where .= " AND ca.plate LIKE '%". $search["plate"] ."%'";
+            $plate = trim($search["plate"],"'");
+            $where .= " AND ca.plate LIKE '%". $plate ."%'";
+        }
+
+        if (isset($search["trademark"]) AND $search["trademark"]){
+            $trademark = trim($search["trademark"],"'");
+            $where .= " AND ca.trademark LIKE '%". $trademark ."%'";
         }
 
         if (isset($search["model"]) AND $search["model"]){
-            $where .= " AND ca.model LIKE '%". $search["model"] ."%'";
+            $model = trim($search["model"],"'");
+            $where .= " AND ca.model LIKE '%". $model ."%'";
         }
+
+        if (isset($search["version"]) AND $search["version"]){
+            $version = trim($search["version"],"'");
+            $where .= " AND ca.version LIKE '%". $version ."%'";
+        }  
 
         
         if (isset($search["state"]) AND $search["state"]){
-            $where .= " AND ca.state LIKE '%". $search["state"] ."%'";
+            $state = trim($search["state"],"'");
+            $where .= " AND ca.state LIKE '%". $state."%'";
         }
 
         //CREAMOS EL ORDER BY CON EL LIMIT aparte
@@ -148,31 +162,63 @@ class CompanyRepository extends EntityRepository
         // die();
         // Definimos las columnas
         $columns = array(
-            0 => 'name',
-            1 => 'last_name',
-            2 => 'state',
-            2=> 'plate'
+            0 => 'u.name',
+            1 => 'u.last_name',
+            2 => 'u.phone',
+            3 => 'u.email',
+            4 => 'd.state',
+            5 => 'c.plate'
         );
         // Inicializamos los strings que van a concatenar la consulta.
         $where = $query = $queryCount = $orderBy = $groupBy =  $having = "";
         $parameters = array();
-        $query = "SELECT d.id,u.name, u.last_name,d.state, c.plate 
-        FROM user as u, driver as d, car as c
-        WHERE u.id = d.user_id
-        AND d.car_id = c.id
-        AND u.companys_id = :company_id";
+
+
+
+        $query = "SELECT d.id,u.name, u.last_name, u.phone, u.email, d.state, IFNULL(c.plate,'sin asignar') AS plate
+
+        FROM user AS u
+        LEFT JOIN driver AS d ON d.user_id=u.id
+        LEFT JOIN car AS c ON c.id=d.car_id
+        WHERE u.companys_id=:company_id AND u.roles <> '[\"ROLE_COMPANY\"]'
+        ";
+
+
         $queryCount = "SELECT COUNT(*) as total 
         FROM driver AS d, user as u 
         where u.id = d.user_id    
         AND u.companys_id = :company_id";
         if (isset($search["name"]) AND $search["name"]){
-            $where .= " AND u.name LIKE '%". $search["name"] ."%'";
+            $name = trim($search["name"],"'");
+            $where .= " AND u.name LIKE '%". $name ."%'";
+
         }
         if (isset($search["last_name"]) AND $search["last_name"]){
-            $where .= " AND u.last_name LIKE '%". $search["last_name"] ."%'";
+            $last_name = trim($search["last_name"],"'");
+            $where .= " AND u.last_name LIKE '%". $last_name ."%'";
+
         }
         if (isset($search["state"]) AND $search["state"]){
             $where .= " AND d.state LIKE '%". $search["state"] ."%'";
+        }
+
+
+        if (isset($search["phone"]) AND $search["phone"]){
+            $phone = trim($search["phone"],"'");
+            $where .= " AND u.phone LIKE '%". $phone ."%'";
+        }
+        if (isset($search["email"]) AND $search["email"]){
+            $email = trim($search["email"],"'");
+            $where .= " AND u.email LIKE '%". $email ."%'";
+        }
+        if (isset($search["state"]) AND $search["state"]){
+            $where .= " AND d.state LIKE '%". $search["state"] ."%'";
+        }
+        if (isset($search["carasigned"]) AND $search["carasigned"]){
+            if($search['carasigned'] == "asign")
+                $where .= " AND d.car_id is not null";
+            else if($search['carasigned'] == "unasign")
+                $where .= " AND d.car_id is null";
         }
         //CREAMOS EL ORDER BY CON EL LIMIT aparte
         $limit=" ";
@@ -180,6 +226,7 @@ class CompanyRepository extends EntityRepository
             $limit="  LIMIT ".$params['start']." ,".$params['length']." ";
         }
         $orderBy .= " ORDER BY ". $columns[$params['order'][0]['column']]."   ".$params['order'][0]['dir'] . $limit;
+        
         // CREAMOS EL GROUP BY aparte
         $groupBy .= " GROUP BY d.id";
         $parameters = array();
@@ -197,27 +244,6 @@ class CompanyRepository extends EntityRepository
         return $result;
     }
 
-
-
-    /**
-     * Get info of company by user id.
-     *
-     * @param [type] $user_id
-     * @return void
-     */
-    /*public function getCompanyInfo($user_id)
-    {
-        
-        $sql = "SELECT company.id,company.name, company.address FROM company , user WHERE :user_id = company.user_id";
-        $params = array(
-            'user_id' => $user_id
-        );
-
-        $results = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetchAll();
-
-
-        return $results;
-    }*/
 
     function getDriversWithoutCar($idCompany){
         $em = $this->getEntityManager();
@@ -324,6 +350,36 @@ class CompanyRepository extends EntityRepository
         $query->execute();
         $results = $query->fetchAll();
         return $results;
+    }
+
+    public function existDriver($idCompany, $idDriver){
+        $em = $this->getEntityManager();
+        $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
+        if(!$driver)
+            return false;
+        $con = $em->getConnection();
+        $sql = "SELECT * from  driver, user where driver.id=:idDriver and user.id=driver.user_id and user.companys_id=:idCompany";
+        $query = $con->prepare($sql);
+        $query->bindValue("idDriver",$idDriver);
+        $query->bindValue("idCompany",$idCompany);
+        $query->execute();
+        $results = $query->fetchAll();
+        return empty($results);
+    }
+
+    public function existCar($idCompany, $idCar){
+        $em = $this->getEntityManager();
+        $car = $em->getRepository("AppBundle:Car")->findOneById($idCar);
+        if(!$car)
+            return false;
+        $con = $em->getConnection();
+        $sql = "SELECT * from  car, company where car.id=:idCar and car.company_id=:idCompany";
+        $query = $con->prepare($sql);
+        $query->bindValue("idCar",$idCar);
+        $query->bindValue("idCompany",$idCompany);
+        $query->execute();
+        $results = $query->fetchAll();
+        return empty($results);
     }
 
     public function asignCarToCompany($idDriver, $idCar){

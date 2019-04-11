@@ -8,11 +8,11 @@
                 <div style="color:#000">{{app.user.name}}</div>
         {%endif%}
         </div> #}
-        <div class="container col-lg-12 background-city" style="padding:50px;min-height:100vh;display:flex;align-items:center;" >
-            <div class="card col-lg-4 offset-lg-4 transparent">
+        <div class="container col-lg-12 col-sm-12 background-city" style="padding:50px;min-height:100vh;display:flex;align-items:center;" >
+            <div class="card col-lg-4 offset-lg-4 transparent  animated jackInTheBox">
                <form action="{{ path('login') }}" method="POST">
                 <div class="card-body">
-                 <h1 class="text-light" style="font-weight:bold; padding:10px">Platform Taxi Proyect</h1>
+                 <h1 class="text-light" style="font-weight:bold; padding:10px">Platform Taxi</h1>
                         <div class="form-group">
                             <label for="email" class="text-light boldText">Email</label>
                             {% if msgError is not defined %}
@@ -27,7 +27,7 @@
                             <input required name="_password" type="password" class="form-control inputTransparent" id="password" placeholder="Introduce contraseña">
                         </div>
 
-                        <input type="hidden" name="_failure_path" value="{{ path('login_failure') }}"/>
+                        <input type="hidden" name="_failure_path" value="/loginFailure"/>
                         <input type="hidden" name="_target_path" value="/panel" />
 
                         <input type="submit" class="btn" style="background:rgba(255, 255, 255, .9);color:#263238;font-weight:bold;font-size:1.1rem" id="btnLogin" value="Entrar">
@@ -40,7 +40,6 @@
 {% endblock %}
 {% block javascripts %}
     {% if msgError is defined %}
-        {{dump(msgError)}}
 
         {{ parent() }}
         <script>

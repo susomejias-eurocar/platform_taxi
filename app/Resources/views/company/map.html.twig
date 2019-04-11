@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <main>
+    
+        <div class="container col-lg-10" style="padding:30px 0px;min-height:100vh;display:flex;align-items:center;" >
+            <div class="card col-lg-12">
+                <div class="row" style="background:#263238;color:#fff">
+                    <h1  style="font-weight:bold; padding: 30px 30px">Mapa conductores</h1>
+                </div>
+                <div class="card-body row">
+
+                <div id="over_map">
+                    <div>
+                        <span>Vehículos: </span><span id="vehicle">0</span>
+                    </div>
+                </div>
+
+                <div id="map"></div>
+
+
+
+
+
+                
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+        <script>
+        // Initialize Firebase
+        let config = {
+            apiKey: "AIzaSyCTl5BRHiYg1bgEDpSGSSG62LVgTf2k2Co",
+            authDomain: "tracking-test-e7601.firebaseapp.com",
+            databaseURL: "https://tracking-test-e7601.firebaseio.com",
+            projectId: "tracking-test-e7601",
+            storageBucket: "tracking-test-e7601.appspot.com",
+            messagingSenderId: "1057080228981"
+        };
+        firebase.initializeApp(config);
+        </script>
+
+        <script>
+
+
+            let vehicle_count = 0;
+
+            let markers = [];
+            let map;
+            function initMap() {
+                let geocoder = new google.maps.Geocoder();
+                let location = "Spain";
+                
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 6,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                geocoder.geocode({ 'address': location }, function(results, status){
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                    } else {
+                        alert("Could not find location: " + location);
+                    }
+                });
+            }
+        
+            
+            function AddVehicle(data) {
+
+                let icon = { 
+                    path: 'M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759   c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z    M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713   v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336   h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805',
+                    scale: 0.6,
+                    fillColor: data.val().color,
+                    fillOpacity: 1,
+                    strokeWeight: 0.5,
+                    anchor: new google.maps.Point(0, 5),
+                    rotation: data.val().angle
+                };
+
+                let uluru = { lat: data.val().lat, lng: data.val().lng };
+
+                let marker = new google.maps.Marker({
+                    position: uluru,
+                    icon: icon,
+                    map: map
+                });
+
+
+                markers[data.key] = marker;
+                $("#vehicle").html(vehicle_count);
+            }
+
+        let path = "{{ app.user.companys.name }}"
+        let vehicle_Ref = firebase.database().ref('/' + path.toLowerCase());
+
+
+        vehicle_Ref.on('child_added', function (data) {
+            vehicle_count++;
+            AddVehicle(data);
+        });
+
+        vehicle_Ref.on('child_changed', function (data) {
+            markers[data.key].setMap(null);
+            AddVehicle(data);
+        });
+
+        vehicle_Ref.on('child_removed', function (data) {
+            markers[data.key].setMap(null);
+            vehicle_count--;
+            $("#vehicle").html(vehicle_count);
+        });
+
+        </script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9A3GFqM4PEA0lLCRPCxYmLbHcjcw8gbc&callback=initMap">
+        </script>
+{% endblock %}
