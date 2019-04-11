@@ -17,15 +17,15 @@ use Doctrine\ORM\EntityManagerInterface;
             $this->templating = $templating;
         }
 
-        public function send($view){
+        public function send($view, $username, $email, $tokenRegister){
             
             $message = (new \Swift_Message('Hello Email'))
                 ->setFrom('jesusmejias.eurocar@gmail.com')
-                ->setTo('jesusmejias.jm@gmail.com')
+                ->setTo($email)
                 ->setBody(
                         $this->templating->render(
                             'mail/'. $view .'.html.twig',
-                            array('name' => "Prueba")
+                            array('username' => $username, 'url' => "http://127.0.0.1:8000/emailConfirmation?tokenRegister=".$tokenRegister)
                         ));
                 $this->mailer->send($message);
         }
