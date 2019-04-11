@@ -68,7 +68,7 @@ class UserController extends Controller
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
         if($user){
-            $mailService = $this->get('mail_service')->send('register');
+            //$mailService = $this->get('mail_service')->send('register');
             if($this->get('security.context')->isGranted('ROLE_COMPANY')){
                 return $this->render('user/panel.html.twig', array());
             }else if ($this->get('security.context')->isGranted('ROLE_DRIVER')){

@@ -17,8 +17,8 @@ use Doctrine\ORM\EntityManagerInterface;
             $this->templating = $templating;
         }
 
-        public function send($view, $email,$username, $url, $token){
-            
+
+        public function send($view, $email,$username, $url, $token){            
             $message = (new \Swift_Message('Hello Email'))
                 ->setFrom('jesusmejias.eurocar@gmail.com')
                 ->setTo($email)
