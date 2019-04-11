@@ -14,7 +14,7 @@ class InsertCarsCommand extends ContainerAwareCommand
 {
 
     /** Use command
-        php app/console users 8 ROLE_DRIVER true 13
+        php app/console cars 11 10
      */
     protected function configure()
     {

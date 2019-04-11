@@ -54,7 +54,6 @@ class Company
      * @var int
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Driver", mappedBy="company")
-     
     private $drivers;*/
 
 
