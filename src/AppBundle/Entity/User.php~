@@ -359,4 +359,17 @@ class User implements UserInterface
     {
         return $this->last_name;
     }
+
+    /**
+     * Set companys
+     *
+     * @param \AppBundle\Entity\Company $companys
+     * @return User
+     */
+    public function setCompanys(\AppBundle\Entity\Company $companys = null)
+    {
+        $this->companys = $companys;
+
+        return $this;
+    }
 }

@@ -40,7 +40,6 @@
 {% endblock %}
 {% block javascripts %}
     {% if msgError is defined %}
-        {{dump(msgError)}}
 
         {{ parent() }}
         <script>

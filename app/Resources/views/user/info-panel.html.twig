@@ -46,6 +46,8 @@
                     <a href="{{ path('show_car') }}" class="row option optionText">Coches</a>
                     <a href="{{ path('show_drivers') }}" class="row option optionText" >Conductores</a>
                     <a href="{{ path('open_map') }}" class="row option optionText" >Mostrar mapa</a>
+                    <a href="{{ path('show_edit_company') }}" class="row option optionText" >Modificar perfil</a>
+
                 {% elseif is_granted('ROLE_DRIVER') %}
                     {#<a href="{{ path('show_car') }}" class="row option">Coches</a>#}
                     <a href="{{ path('change_state_driver', {id: idDriver}) }}" class="row option optionText" >Estado</a>
