@@ -91,7 +91,7 @@ class CompanyController extends Controller
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $response = array(
                     "status" => false,
-                    "message" => "El correo ya está registrado"
+                    "message" => "El correo o nombre de la empresa ya está registrado"
                 );
                 return new JsonResponse($response);
             }
