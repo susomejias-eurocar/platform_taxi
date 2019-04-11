@@ -11,7 +11,6 @@
                         <h1 style="font-weight:bold; padding:20px">Editar mi perfil</h1>
                     </div>
                     <div class="row" style="padding:30px">
-
                         <div class="col">
                             <h2>Usuario</h2>
                             <div class="form-group">
@@ -30,12 +29,12 @@
 
                             <div class="form-group">
                                 <label class="boldText" for="password">Contraseña</label>
-                                <input required name="plate" type="password" class="form-control plate" id="password" aria-describedby="emailHelp" placeholder="Introduce contraseña" >
+                                <input name="plate" type="password" class="form-control plate" id="password" aria-describedby="emailHelp" placeholder="Introduce contraseña" >
                             </div>
 
                             <div class="form-group">
                                 <label class="boldText" for="password2">Repita contraseña</label>
-                                <input required name="plate" type="password" class="form-control plate" id="password2" aria-describedby="emailHelp" placeholder="Introduce contraseña">
+                                <input name="plate" type="password" class="form-control plate" id="password2" aria-describedby="emailHelp" placeholder="Introduce contraseña">
                             </div>
 
 
@@ -49,12 +48,12 @@
                             <h2>Empresa</h2>
                             <div class="form-group">
                                 <label class=" boldText" for="companyName">Nombre</label>
-                                <input required name="companyName" type="text" class="form-control" id="companyName" placeholder="Introduce nombre compañia" value={{app.user.companys.name}}>
+                                <input required name="companyName" type="text" class="form-control" id="companyName" placeholder="Introduce nombre compañia" value="{{app.user.companys.name}}">
                             </div>
 
                             <div class="form-group">
                                 <label class=" boldText" for="companyAddress">Dirección</label>
-                                <input required name="address" type="text" class="form-control" id="companyAddress" placeholder="Introduce nombre compañia" value={{app.user.companys.address}}>
+                                <input required name="address" type="text" class="form-control" id="companyAddress" placeholder="Introduce nombre compañia" value="{{app.user.companys.address}}">
                             </div>
                         </div>
                     </div>
@@ -77,43 +76,42 @@
     $('#btnEdit').click(()=>{
             
             let urlAjax = "{{ path('edit_company') }}";
+                    $.ajax({
+                    url: urlAjax,
+                    dataType: 'json',
+                    data: { 
+                        userName : $('#userName').val(),
+                        lastName: $('#lastName').val(),
+                        email: $('#email').val(),
+                        password: $('#password').val(),
+                        password2: $('#password2').val(),
+                        phone: $('#phone').val(),
+                        companyName: $('#companyName').val(),
+                        companyAddress: $('#companyAddress').val()
+                    },
+                    success: function(result){
 
-            $.ajax({
-                url: urlAjax,
-                dataType: 'json',
-                data: { 
-                    userName : $('#userName').val(),
-                    lastName: $('#lastName').val(),
-                    email: $('#email').val(),
-                    password: $('#password').val(),
-                    password2: $('#password2').val(),
-                    phone: $('#phone').val(),
-                    companyName: $('#companyName').val(),
-                    companyAddress: $('#companyAddress').val()
-                },
-                success: function(result){
+                        if (!result.status){
+                            Swal.fire(
+                            result.message,
+                            "",
+                            "error"
+                            )      
+                        }else{
+                            Swal.fire(
+                            result.message,
+                            "",
+                            "success"
+                            )    
 
-                    if (!result.status){
-                        Swal.fire(
-                        result.message,
-                        "",
-                        "error"
-                        )      
-                    }else{
-                        Swal.fire(
-                        result.message,
-                        "",
-                        "success"
-                        )    
-
-                        let path = "{{ path('panel') }}"
-                        setTimeout(function(){ window.location.href = path }, 1500);
+                            let path = "{{ path('panel') }}"
+                            setTimeout(function(){ window.location.href = path }, 1500);
+                            
+                        }
+                        
                         
                     }
-                    
-                    
-                }
-            });
+                });
     });
     </script>
 {% endblock %}

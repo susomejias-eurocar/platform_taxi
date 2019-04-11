@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +26,6 @@ class CompanyController extends Controller
     /**
      * Registra una comapañia
      *
-     * @param Request $request
      */
     public function registerAjaxAction(Request $request)
     {
@@ -120,7 +118,6 @@ class CompanyController extends Controller
 
     /**
      * Register user
-     * @param Request $request
      */
     public function registerUserAjaxAction(Request $request)
     {
@@ -198,7 +195,6 @@ class CompanyController extends Controller
     /**
      * Show the view for the datatable.
      *
-     * @return void
      */
     public function showCarsAction()
     {
@@ -217,7 +213,6 @@ class CompanyController extends Controller
      * Make a request for ajax and get all the cars of a company.
      *
      * @param Request $request
-     * @return void
      */
     public function listCarsAction(Request $request)
     {
@@ -254,7 +249,6 @@ class CompanyController extends Controller
      * Make a request for ajax and get all the drivers of a company.
      *
      * @param Request $request
-     * @return void
      */
     public function listDriversAction(Request $request)
     {
@@ -275,7 +269,6 @@ class CompanyController extends Controller
      * Show view to create a driver.
      *
      * @param Request $request
-     * @return void
      */
     public function registerDriverAction(Request $request)
     {
@@ -293,7 +286,6 @@ class CompanyController extends Controller
      * Receives form data by ajax by post
      *
      * @param Request $request
-     * @return void
      */
     public function addDriverAction(Request $request)
     {
@@ -377,7 +369,6 @@ class CompanyController extends Controller
     /**
      * Get all avalaible driverss
      *
-     * @return void
      */
     public function listAllDriversAction()
     {
@@ -501,16 +492,22 @@ class CompanyController extends Controller
         return $this->render('company/content-panel-showMap.html.twig', array());
     }
 
+    /**
+     * show form for edit info company
+     *
+     */
     public function showEditCompanyAction()
     {
         return $this->render('company/content-panel-editCompany.html.twig', array());
     }
 
+    /**
+     * Edit info for company and user
+     *
+     * @param Request $request
+     */
     public function editCompanyAction(Request $request)
     {
-        // obtener datos por ajax
-
-        //dump($request->request->All());
         $em = $this->getDoctrine()->getManager();
         $userName = $request->get('userName');
         $lastName= $request->get('lastName');
@@ -519,7 +516,7 @@ class CompanyController extends Controller
         $password = $request->get('password');
         $password2 = $request->get('password2');
         $companyName = $request->get('companyName');
-        $companyAdress = $request->get('companyAddress');
+        $companyAddress = $request->get('companyAddress');
         $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
@@ -532,8 +529,13 @@ class CompanyController extends Controller
                 "status" => false,
                 "message" => "Rellene los campos"
             );
-        }else  {
-        
+        }else if($password !== $password2){
+            $response = array(
+                "status" => false,
+                "message" => "Las contraseñas no coinciden"
+            );
+        }
+        else  {
                 try{
                     $user->setName($userName);
                     $user->setActive(1);
@@ -547,7 +549,7 @@ class CompanyController extends Controller
                     $user->setPhone($phone);
                     $company = $em->getRepository('AppBundle:Company')->findOneById($user->getCompanys()->getId());
                     $company->setName($companyName);
-                    $company->setAddress($companyAdress);
+                    $company->setAddress($companyAddress);
                     $em->persist($user);
                     $em->persist($company);
                     $response = array(
@@ -558,7 +560,7 @@ class CompanyController extends Controller
                 }catch (\Doctrine\DBAL\DBALException $e){
                     $response = array(
                         "status" => false,
-                        "message" => "EL correo introducio ya existe"
+                        "message" => "EL correo o nombre de compañia introducidos ya existen"
                     );
                 }
         }
