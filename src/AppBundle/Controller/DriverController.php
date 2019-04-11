@@ -20,10 +20,10 @@ class DriverController extends Controller
         $companyId = $user->getCompanys()->getId();
         $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
         $companyService = $this->container->get("company_service");
-        if($driver == null)
+        if ($driver == null)
             return $this->redirectToRoute('show_drivers');
         $idDriver = $driver->getId();
-        if($companyService->existDriver($companyId,$idDriver))
+        if ($companyService->existDriver($companyId, $idDriver))
             return $this->redirectToRoute('show_drivers');
         $user = $em->getRepository("AppBundle:User")->findOneById($driver->getUser());
         $carDriver = $em->getRepository("AppBundle:Car")->findOneById($driver->getCar());
@@ -51,36 +51,52 @@ class DriverController extends Controller
         $state = $request->get('state');
         $password1 = $request->get('password1');
         $password2 = $request->get('password2');
+
         if ($password1 != $password2) {
             $response = array(
                 "status" => false,
                 "message" => "Las contraseñas no coinciden"
             );
+        } elseif (empty($name) || empty($lastName) || empty($email) || empty($phone)) {
+            $response = array(
+                "status" => false,
+                "message" => "Rellene los campos"
+            );
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $response = array(
+                "status" => false,
+                "message" => "El email no tiene un formato válido"
+            );
+        } elseif (strlen($phone) < 6) {
+            $response = array(
+                "status" => false,
+                "message" => "El teléfono no puede tener de 6 caracteres"
+            );
         } else {
             $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
-            $carDriver = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:Car")->findOneById($idCar);
-            $user = $this->getDoctrine()->getEntityManager()->getRepository("AppBundle:User")->findOneById($idUser);
-            $user->setName($name);
-            $user->setLastName($lastName);
-            $user->setEmail($email);
-            $user->setPhone($phone);
-            if(!empty($password1)){
-                if($password1!=$password2){
+            $carDriver = $em->getRepository("AppBundle:Car")->findOneById($idCar);
+            $user = $em->getRepository("AppBundle:User")->findOneById($idUser);
+            if (!empty($password1)) {
+                if ($password1 != $password2) {
                     $response = array(
                         "status" => false,
                         "message" => "Las contraseñas no coinciden"
                     );
-                }
-                elseif(strlen($password1) < 4){
+                } elseif (strlen($password1) < 4) {
                     $response = array(
                         "status" => false,
                         "message" => "La contraseña no puede tener menos de 4 caracteres"
-                    );                    
+                    );
+                } else {
+                    $encoder = $this->container->get('security.password_encoder');
+                    $encoded = $encoder->encodePassword($user, $password1);
+                    $user->setPassword($encoded);
                 }
-                $encoder = $this->container->get('security.password_encoder');
-                $encoded = $encoder->encodePassword($user, $password1);
-                $user->setPassword($encoded);
             }
+            $user->setName($name);
+            $user->setLastName($lastName);
+            $user->setEmail($email);
+            $user->setPhone($phone);
             $driver->setCar($carDriver);
             $driver->setState($state);
             $em->persist($driver);
@@ -157,7 +173,8 @@ class DriverController extends Controller
     /**
      * Unassign car to a driver
      */
-    public function unassignCarAction(Request $request){
+    public function unassignCarAction(Request $request)
+    {
         $idDriver = $request->get('idDriver');
         $em = $this->getDoctrine()->getEntityManager();
         $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
@@ -169,8 +186,6 @@ class DriverController extends Controller
             "message" => "Coche desasignado correctamente"
         );
         return new JsonResponse($response);
-
-
     }
 
     /**
@@ -189,5 +204,4 @@ class DriverController extends Controller
         $idDriver = $this->container->get("driver_service")->getId($user->getId());
         return $this->render('driver/content-panel-showMap.html.twig', array('idDriver' => $idDriver));
     }
-
 }
