@@ -143,7 +143,7 @@ class CompanyController extends Controller
                 "status" => false,
                 "message" => "Las contraseñas no coinciden"
             );
-        } elseif (empty($email) or empty($phone) or empty($password1) or empty($password2)) {
+        } elseif (empty($name) or empty($lastName) or empty($email) or empty($phone) or empty($password1) or empty($password2)) {
             $response = array(
                 "status" => false,
                 "message" => "Rellene los campos"
@@ -153,7 +153,7 @@ class CompanyController extends Controller
                 "status" => false,
                 "message" => "Formato del teléfono no válido, mínimo 6 números"
             );
-        } else if(!preg_match("/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/", $email)){
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $response = array(
                 "status" => false,
                 "message" => "El email no tiene un formato válido"
