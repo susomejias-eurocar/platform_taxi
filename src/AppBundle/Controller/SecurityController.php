@@ -45,6 +45,9 @@ class SecurityController extends Controller
         $user->setExpirationTokenRegister(null);
         $em->persist($user);
         $em->flush();
+        $mailService = $this->container->get('mail_service');
+
+        $mailService->send('register');
         $response = array(
             "status" => true,
             "message" => "El registro de ha confirmado correctamente"

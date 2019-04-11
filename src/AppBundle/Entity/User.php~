@@ -165,7 +165,8 @@ class User implements UserInterface
     public function __construct()
     {
         $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->expirationTokenRegister = date((date("d-m-Y")."+ 1 days"));
+        $this->expirationTokenRegister = date("d-m-Y",strtotime(date("d-m-Y")."+ 1 days")); 
+        $this->tokenRegister = bin2hex(random_bytes(64));
         $this->active = 0;
     }
 
@@ -248,28 +249,6 @@ class User implements UserInterface
         return $this->phone;
     }
 
-    /**
-     * Set permission
-     *
-     * @param \AppBundle\Entity\Permission $permission
-     * @return User
-     */
-    public function setPermission(\AppBundle\Entity\Permission $permission = null)
-    {
-        $this->permission = $permission;
-
-        return $this;
-    }
-
-    /**
-     * Get permission
-     *
-     * @return \AppBundle\Entity\Permission 
-     */
-    public function getPermission()
-    {
-        return $this->permission;
-    }
 
     /**
      * Set id
@@ -393,5 +372,97 @@ class User implements UserInterface
         $this->companys = $companys;
 
         return $this;
+    }
+
+    /**
+     * Set tokenRegister
+     *
+     * @param string $tokenRegister
+     * @return User
+     */
+    public function setTokenRegister($tokenRegister)
+    {
+        $this->tokenRegister = $tokenRegister;
+
+        return $this;
+    }
+
+    /**
+     * Get tokenRegister
+     *
+     * @return string 
+     */
+    public function getTokenRegister()
+    {
+        return $this->tokenRegister;
+    }
+
+    /**
+     * Set tokenPassword
+     *
+     * @param string $tokenPassword
+     * @return User
+     */
+    public function setTokenPassword($tokenPassword)
+    {
+        $this->tokenPassword = $tokenPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get tokenPassword
+     *
+     * @return string 
+     */
+    public function getTokenPassword()
+    {
+        return $this->tokenPassword;
+    }
+
+    /**
+     * Set expirationTokenRegister
+     *
+     * @param string $expirationTokenRegister
+     * @return User
+     */
+    public function setExpirationTokenRegister($expirationTokenRegister)
+    {
+        $this->expirationTokenRegister = $expirationTokenRegister;
+
+        return $this;
+    }
+
+    /**
+     * Get expirationTokenRegister
+     *
+     * @return string 
+     */
+    public function getExpirationTokenRegister()
+    {
+        return $this->expirationTokenRegister;
+    }
+
+    /**
+     * Set expirationTokenPassword
+     *
+     * @param string $expirationTokenPassword
+     * @return User
+     */
+    public function setExpirationTokenPassword($expirationTokenPassword)
+    {
+        $this->expirationTokenPassword = $expirationTokenPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get expirationTokenPassword
+     *
+     * @return string 
+     */
+    public function getExpirationTokenPassword()
+    {
+        return $this->expirationTokenPassword;
     }
 }
