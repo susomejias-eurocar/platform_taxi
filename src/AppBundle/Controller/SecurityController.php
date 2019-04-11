@@ -174,4 +174,25 @@ class SecurityController extends Controller
     {
         return $this->render('security/recovery-password.html.twig', array());
     }
+
+    public function sendForgetPasswordAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $email = $request->get('email');
+        $user = $em->getRepository('AppBundle:User')->findOneByEmail($email);
+        if($user){
+            $mailService = $this->container->get("mail_service");
+            $mailService->send('reset-password',$email,$user->getName(), 'http://localhost/platform_taxi/web/app_dev.php/password-reset/restore?tokenPassword=',  $user->getTokenRegister());
+            return new JsonResponse(array(
+                "status" => true,
+                "message" => "Email correcto",
+                "text" => "Para completar el cambio de contraseña revise su correo electrónico </br></br>" . $email
+            ));
+        }else{
+            return new JsonResponse(array(
+                "status" => false,
+                "message" => "El correo no existe en el sistema"
+            ));
+        }
+    }
 }
