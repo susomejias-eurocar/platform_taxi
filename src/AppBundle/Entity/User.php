@@ -67,14 +67,6 @@ class User implements UserInterface
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Permission", inversedBy="user")
-     * @ORM\JoinColumn(name="permission_id", referencedColumnName="id")
-     */
-    private $permission;
-
-    /**
-     * @var int
-     *
      * @ORM\ManyToOne(targetEntity="Company", inversedBy="users")
      */
     private $companys;
@@ -85,6 +77,34 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="Driver", mappedBy="user")
      */
     private $drivers;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tokenRegister", type="string", length=255, nullable=true)
+     */
+    private $tokenRegister;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tokenPassword", type="string", length=255, nullable=true)
+     */    
+    private $tokenPassword;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="expirationTokenRegister", type="string", nullable=true)
+     */    
+    private $expirationTokenRegister;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="expirationTokenPassword", type="string", nullable=true)
+     */    
+    private $expirationTokenPassword;
 
     /**
     * @ORM\Column(type="json_array")
@@ -145,6 +165,9 @@ class User implements UserInterface
     public function __construct()
     {
         $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->expirationTokenRegister = date("d-m-Y",strtotime(date("d-m-Y")."+ 1 days")); 
+        $this->tokenRegister = bin2hex(random_bytes(64));
+        $this->active = 0;
     }
 
     /**
@@ -371,5 +394,97 @@ class User implements UserInterface
         $this->companys = $companys;
 
         return $this;
+    }
+
+    /**
+     * Set tokenRegister
+     *
+     * @param string $tokenRegister
+     * @return User
+     */
+    public function setTokenRegister($tokenRegister)
+    {
+        $this->tokenRegister = $tokenRegister;
+
+        return $this;
+    }
+
+    /**
+     * Get tokenRegister
+     *
+     * @return string 
+     */
+    public function getTokenRegister()
+    {
+        return $this->tokenRegister;
+    }
+
+    /**
+     * Set tokenPassword
+     *
+     * @param string $tokenPassword
+     * @return User
+     */
+    public function setTokenPassword($tokenPassword)
+    {
+        $this->tokenPassword = $tokenPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get tokenPassword
+     *
+     * @return string 
+     */
+    public function getTokenPassword()
+    {
+        return $this->tokenPassword;
+    }
+
+    /**
+     * Set expirationTokenRegister
+     *
+     * @param string $expirationTokenRegister
+     * @return User
+     */
+    public function setExpirationTokenRegister($expirationTokenRegister)
+    {
+        $this->expirationTokenRegister = $expirationTokenRegister;
+
+        return $this;
+    }
+
+    /**
+     * Get expirationTokenRegister
+     *
+     * @return string 
+     */
+    public function getExpirationTokenRegister()
+    {
+        return $this->expirationTokenRegister;
+    }
+
+    /**
+     * Set expirationTokenPassword
+     *
+     * @param string $expirationTokenPassword
+     * @return User
+     */
+    public function setExpirationTokenPassword($expirationTokenPassword)
+    {
+        $this->expirationTokenPassword = $expirationTokenPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get expirationTokenPassword
+     *
+     * @return string 
+     */
+    public function getExpirationTokenPassword()
+    {
+        return $this->expirationTokenPassword;
     }
 }

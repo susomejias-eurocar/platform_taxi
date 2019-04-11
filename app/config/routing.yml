@@ -161,5 +161,9 @@ edit_company:
     path:  /company/editAjax
     defaults:  { _controller: AppBundle:Company:editCompany }
 
+email_confirmation:
+    path:  /emailConfirmation
+    defaults:  { _controller: AppBundle:Security:emailConfirmation }
+
 
 

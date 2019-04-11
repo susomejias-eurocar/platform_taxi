@@ -49,6 +49,17 @@
                 "error"
             );       
 
+        
+    {% endif %}
+    {% if responseToken is defined %}
+    alert("a");
+        
+            Swal.fire(
+                responseToken.message
+                "",
+                "error"
+            );       
+
         </script>
     {% endif %}
 {% endblock %}

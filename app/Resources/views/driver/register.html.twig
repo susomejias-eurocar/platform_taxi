@@ -107,6 +107,8 @@
                 return invalidFormSwal("Las contraseñas no pueden estar vacías");            
         if($("#password1").val()!=$("#password2").val())
             return invalidFormSwal("Las contraseñas no coincide");
+        if($("#password1").val()!="" && $("#password2").val()!="" && !$("#password1").val().match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/))
+            return invalidFormSwal("La contraseña debe contener al menos una mayúscula, una miníscula, un número, un caracter especial y 8 caracteres");
         else if($("#email").val()=="")
             return invalidFormSwal("El email no puede estar vacío");
         else if(!$("#email").val().match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/))
