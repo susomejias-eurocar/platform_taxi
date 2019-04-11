@@ -27,7 +27,8 @@ class DriverController extends Controller
             return $this->redirectToRoute('show_drivers');
         $user = $em->getRepository("AppBundle:User")->findOneById($driver->getUser());
         $carDriver = $em->getRepository("AppBundle:Car")->findOneById($driver->getCar());
-        $cars = $this->get("company_service")->getCarWithoutDriver($companyId);
+        $carService = $this->get("company_service");
+        $cars = $carService->getCarWithoutDriver($companyId);
 
         return $this->render('company/content-panel-createDriver.html.twig', array("idDriver" => $idDriver, "carDriver" => $carDriver, "cars" => $cars, "driver" => $driver, "user" => $user, "user_type" => "company", "companyId" => $companyId, "driverId" => $driver->getid()));
     }

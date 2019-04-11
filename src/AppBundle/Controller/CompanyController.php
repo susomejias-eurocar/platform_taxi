@@ -64,9 +64,9 @@ class CompanyController extends Controller
             );
         } else {
             try {
-                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                /*$permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => 1)
-                );
+                );*/
                 $company = new Company();
                 $company->setName($companyName);
                 $company->setAddress($companyAddress);
@@ -81,9 +81,9 @@ class CompanyController extends Controller
                 $encoded = $encoder->encodePassword($user, $password1);
                 $user->setPassword($encoded);
                 $user->setPhone($phone);
-                $user->setActive(0);
+                //$user->setActive(0);
                 $user->setCompanys($company);
-                $user->setPermission($permissionFull);
+                //$user->setPermission($permissionFull);
                 $em->persist($user);
                 $em->flush();
             } catch (\Doctrine\DBAL\DBALException $e) {
@@ -164,9 +164,9 @@ class CompanyController extends Controller
         }
           else {
             try {
-                $permission = $em->getRepository('AppBundle:Permission')->findOneBy(
+                /*$permission = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => $permissionsId)
-                );
+                );*/
                 $company = $em->getRepository('AppBundle:Company')->findOneBy(
                     array('id' => $companyId)
                 );
@@ -178,8 +178,7 @@ class CompanyController extends Controller
                 $user->setEmail($email);
                 $user->setPassword($encoded);
                 $user->setPhone($phone);
-                $user->setActive(0);
-                $user->setPermission($permission);
+                //$user->setPermission($permission);
                 $user->setCompanys($company);
                 $user->setRoles(array("ROLE_DRIVER"));
                 $em->persist($user);
@@ -337,9 +336,9 @@ class CompanyController extends Controller
             );
         } else {
             try {
-                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                /*$permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => 1)
-                );
+                );*/
                 $user = new User();
                 $user->setName($driverName);
                 $user->setLastName($driverLastName);
@@ -349,7 +348,7 @@ class CompanyController extends Controller
                 $encoded = $encoder->encodePassword($user, $password1);
                 $user->setPassword($encoded);
                 $user->setPhone($phone);
-                $user->setActive(1);
+                //$user->setActive(0);
                 $user->setCompanys($this->container->get('company_service')->getCompany($idCompany));
                 $em->persist($user);
                 $driver = new Driver();
@@ -365,7 +364,7 @@ class CompanyController extends Controller
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $response = array(
                     "status" => false,
-                    "message" => "El correo ya está registrado"
+                    "message" => $e->getMessage()
                 );
                 return new JsonResponse($response);
             }
@@ -426,9 +425,9 @@ class CompanyController extends Controller
             );
         } else {
             try {
-                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                /*$permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => 1)
-                );
+                );*/
                 $car = new Car();
                 $car->setPlate($plate);
                 $car->setTrademark($trademark);
@@ -545,7 +544,7 @@ class CompanyController extends Controller
         else  {
                 try{
                     $user->setName($userName);
-                    $user->setActive(1);
+                    //$user->setActive(0);
                     $user->setLastName($lastName);
                     $user->setEmail($email);
                     if ($password === $password2 and !empty($password) and !empty($password2)){

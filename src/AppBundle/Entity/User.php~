@@ -67,14 +67,6 @@ class User implements UserInterface
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Permission", inversedBy="user")
-     * @ORM\JoinColumn(name="permission_id", referencedColumnName="id")
-     */
-    private $permission;
-
-    /**
-     * @var int
-     *
      * @ORM\ManyToOne(targetEntity="Company", inversedBy="users")
      */
     private $companys;
@@ -85,6 +77,34 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="Driver", mappedBy="user")
      */
     private $drivers;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tokenRegister", type="string", length=255, nullable=true)
+     */
+    private $tokenRegister;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tokenPassword", type="string", length=255, nullable=true)
+     */    
+    private $tokenPassword;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="expirationTokenRegister", type="string", nullable=true)
+     */    
+    private $expirationTokenRegister;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="expirationTokenPassword", type="string", nullable=true)
+     */    
+    private $expirationTokenPassword;
 
     /**
     * @ORM\Column(type="json_array")
@@ -145,6 +165,8 @@ class User implements UserInterface
     public function __construct()
     {
         $this->drivers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->expirationTokenRegister = date((date("d-m-Y")."+ 1 days"));
+        $this->active = 0;
     }
 
     /**
