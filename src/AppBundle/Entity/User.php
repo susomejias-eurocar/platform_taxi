@@ -249,28 +249,6 @@ class User implements UserInterface
         return $this->phone;
     }
 
-    /**
-     * Set permission
-     *
-     * @param \AppBundle\Entity\Permission $permission
-     * @return User
-     */
-    public function setPermission(\AppBundle\Entity\Permission $permission = null)
-    {
-        $this->permission = $permission;
-
-        return $this;
-    }
-
-    /**
-     * Get permission
-     *
-     * @return \AppBundle\Entity\Permission 
-     */
-    public function getPermission()
-    {
-        return $this->permission;
-    }
 
     /**
      * Set id

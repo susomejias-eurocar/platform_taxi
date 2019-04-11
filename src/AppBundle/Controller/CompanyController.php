@@ -74,7 +74,7 @@ class CompanyController extends Controller
                 $user = new User();
                 $user->setName($name);
                 $user->setLastName($lastName);
-
+                $user->setActive(0);
                 $user->setRoles(array("ROLE_COMPANY"));
                 $user->setEmail($email);
                 $encoder = $this->container->get('security.password_encoder');
@@ -95,9 +95,11 @@ class CompanyController extends Controller
             }
             $response = array(
                 "status" => true,
-                "message" => "Registro correcto"
+                "message" => "Registro correcto",
+                "text" => "Para completar el registro revise su correo electrónico </br></br>" . $email
             );
-
+            $mailService = $this->container->get("mail_service");
+            $mailService->send('register',$email,$name, 'http://localhost/platform_taxi/web/app_dev.php/register/confirm&token=',  $user->getTokenRegister());
             return new JsonResponse($response);
         }
     }
