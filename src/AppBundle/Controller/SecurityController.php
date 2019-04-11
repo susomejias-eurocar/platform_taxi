@@ -69,7 +69,7 @@ class SecurityController extends Controller
         $user->setExpirationTokenRegister(null);
         $em->persist($user);
         $em->flush();
-        return $this->redirectToRoute("login", array(
+           return $this->redirectToRoute("login", array(
             "status" => true,
             "message" => "El registro de ha confirmado correctamente"
         ));
