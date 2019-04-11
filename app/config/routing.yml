@@ -166,7 +166,7 @@ email_confirmation:
     defaults:  { _controller: AppBundle:Security:emailConfirmation }
 
 send_email_confirmation:
-    path:  /sendEmail
+    path:  /sendEmailConfirmation
     defaults:  { _controller: AppBundle:Security:sendEmailConfirmation }
 
 
