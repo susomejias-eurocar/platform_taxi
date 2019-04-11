@@ -58,7 +58,7 @@ class CarController extends Controller
         }else if (empty($plate) or empty($trademark) or empty($model) or empty($version) or empty($state) or empty($idCar)){
             $response = array(
                 "status" => false,
-                "message" => "rellene los campos"
+                "message" => "Rellene los campos"
             );
         }else{
             try{

@@ -65,6 +65,18 @@ class DriverController extends Controller
             $user->setEmail($email);
             $user->setPhone($phone);
             if(!empty($password1)){
+                if($password1!=$password2){
+                    $response = array(
+                        "status" => false,
+                        "message" => "Las contraseñas no coinciden"
+                    );
+                }
+                elseif(strlen($password1) < 4){
+                    $response = array(
+                        "status" => false,
+                        "message" => "La contraseña no puede tener menos de 4 caracteres"
+                    );                    
+                }
                 $encoder = $this->container->get('security.password_encoder');
                 $encoded = $encoder->encodePassword($user, $password1);
                 $user->setPassword($encoded);

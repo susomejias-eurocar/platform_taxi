@@ -153,12 +153,19 @@ class CompanyController extends Controller
                 "status" => false,
                 "message" => "Formato del teléfono no válido, mínimo 6 números"
             );
-        } elseif (strlen($password1) < 4) {
+        } else if(!preg_match("/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/", $email)){
             $response = array(
                 "status" => false,
-                "message" => "Contraseña demasiado corta, mínimo 4 caractres"
+                "message" => "El email no tiene un formato válido"
+            );            
+        }
+         elseif (strlen($password1) < 4) {
+            $response = array(
+                "status" => false,
+                "message" => "Contraseña demasiado corta, mínimo 4 caracteres"
             );
-        } else {
+        }
+          else {
             try {
                 $permission = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => $permissionsId)
