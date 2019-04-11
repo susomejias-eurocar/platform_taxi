@@ -122,7 +122,10 @@ class DriverController extends Controller
         $idDriver = $request->get('idDriver');
         $em = $this->getDoctrine()->getEntityManager();
         $driver = $em->getRepository("AppBundle:Driver")->findOneById($idDriver);
-        $em->remove($driver);
+        $user = $driver->getUser();
+        //$em->remove($driver);
+        $user->setActive(0);
+        $em->persist($driver);
         $em->flush();
         return new JsonResponse(array(
             "status" => true,
