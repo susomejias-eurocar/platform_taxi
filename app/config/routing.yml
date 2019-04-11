@@ -153,6 +153,13 @@ panel:
     path:      /panel
     defaults:  { _controller: AppBundle:User:panel }
 
+show_edit_company:
+    path:  /company/edit
+    defaults:  { _controller: AppBundle:Company:showEditCompany }
+
+edit_company:
+    path:  /company/editAjax
+    defaults:  { _controller: AppBundle:Company:editCompany }
 
 
 

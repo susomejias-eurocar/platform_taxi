@@ -207,7 +207,7 @@ class CompanyController extends Controller
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
         if ($user) {
-            if ($this->get('security.authorization_checker')->isGranted('ROLE_COMPANY')) {
+            if ($this->get('security.context')->isGranted('ROLE_COMPANY')) {
                 return $this->render('company/content-panel-showCars.html.twig', array("user_type" => "company"));
             }
         }
@@ -499,5 +499,71 @@ class CompanyController extends Controller
     public function openMapAction(Request $request)
     {
         return $this->render('company/content-panel-showMap.html.twig', array());
+    }
+
+    public function showEditCompanyAction()
+    {
+        return $this->render('company/content-panel-editCompany.html.twig', array());
+    }
+
+    public function editCompanyAction(Request $request)
+    {
+        // obtener datos por ajax
+
+        //dump($request->request->All());
+        $em = $this->getDoctrine()->getManager();
+        $userName = $request->get('userName');
+        $lastName= $request->get('lastName');
+        $email = $request->get('email');
+        $phone = $request->get('phone');
+        $password = $request->get('password');
+        $password2 = $request->get('password2');
+        $companyName = $request->get('companyName');
+        $companyAdress = $request->get('companyAddress');
+        $security_context = $this->get('security.token_storage');
+        $security_token = $security_context->getToken();
+        $user = $security_token->getUser();
+        $response = array(
+            "status" => false,
+            "message" => "Error"
+        );
+        if (empty($userName) or empty($lastName) or empty($email) or empty($phone) ){
+            $response = array(
+                "status" => false,
+                "message" => "Rellene los campos"
+            );
+        }else  {
+        
+                try{
+                    $user->setName($userName);
+                    $user->setActive(1);
+                    $user->setLastName($lastName);
+                    $user->setEmail($email);
+                    if ($password === $password2 and !empty($password) and !empty($password2)){
+                        $encoder = $this->container->get('security.password_encoder');
+                        $encoded = $encoder->encodePassword($user, $password);
+                        $user->setPassword($encoded);
+                    }
+                    $user->setPhone($phone);
+                    $company = $em->getRepository('AppBundle:Company')->findOneById($user->getCompanys()->getId());
+                    $company->setName($companyName);
+                    $company->setAddress($companyAdress);
+                    $em->persist($user);
+                    $em->persist($company);
+                    $response = array(
+                        "status" => true,
+                        "message" => "Edición completada con éxito"
+                    );
+                    
+                }catch (\Doctrine\DBAL\DBALException $e){
+                    $response = array(
+                        "status" => false,
+                        "message" => "EL correo introducio ya existe"
+                    );
+                }
+        }
+        $em->flush();
+
+        return new JsonResponse($response);
     }
 }

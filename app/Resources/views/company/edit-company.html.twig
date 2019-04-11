@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+       <main>
+        <div class="container col-lg-12" style="padding:0px 30px;min-height:100vh;display:flex;align-items:center;">
+            <div class="card col-lg-7 offset-lg-2">
+
+                <div class="card-body" style="padding:0px">
+
+                    <div class="row" style="background:#263238;color:#fff">
+                        <h1 style="font-weight:bold; padding:20px">Editar mi perfil</h1>
+                    </div>
+                    <div class="row" style="padding:30px">
+
+                        <div class="col">
+                            <h2>Usuario</h2>
+                            <div class="form-group">
+                                <label class=" boldText" for="trademark">Nombre</label>
+                                <input required name="trademark" type="text" class="form-control" id="userName" placeholder="Introduce nombre" value={{app.user.name}}>
+                            </div>
+
+                            <div class="form-group">
+                                <label class=" boldText" for="model">Apellidos</label>
+                                <input required name="model" type="text" class="form-control" id="lastName" placeholder="Introduce apellido" value={{app.user.lastName}}>
+                            </div>
+                            <div class="form-group">
+                                <label class="boldText" for="plate">Email</label>
+                                <input required name="plate" type="email" class="form-control plate" id="email" aria-describedby="emailHelp" placeholder="Introduce email" value="{{app.user.email}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="boldText" for="plate">Contraseña</label>
+                                <input required name="plate" type="password" class="form-control plate" id="password" aria-describedby="emailHelp" placeholder="Introduce contraseña" >
+                            </div>
+
+                            <div class="form-group">
+                                <label class="boldText" for="plate">Repita contraseña</label>
+                                <input required name="plate" type="password" class="form-control plate" id="password2" aria-describedby="emailHelp" placeholder="Introduce contraseña">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="boldText" for="plate">Teléfono</label>
+                                <input required name="plate" type="tel" class="form-control plate" id="phone" aria-describedby="phoneHelp" placeholder="Introduce email" value="{{app.user.phone}}">
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <h2>Empresa</h2>
+                            <div class="form-group">
+                                <label class=" boldText" for="version">Nombre</label>
+                                <input required name="version" type="text" class="form-control" id="companyName" placeholder="Introduce nombre compañia" value={{app.user.companys.name}}>
+                            </div>
+
+                            <div class="form-group">
+                                <label class=" boldText" for="version">Dirección</label>
+                                <input required name="version" type="text" class="form-control" id="companyAddress" placeholder="Introduce nombre compañia" value={{app.user.companys.address}}>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="row" style="padding:30px">
+                            <button class="btn" id="btnEdit" style="background:#263238;color:#fff;font-weight:bold;font-size:1.1rem">
+                                Editar
+                            </button>
+                            <a class="btn" style="margin-left:10px; background:#263238;color:#fff;font-weight:bold;font-size:1.1rem" href="{{ path('panel')}}">Volver</a>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+    <script>
+    $('#btnEdit').click(()=>{
+            
+            let urlAjax = "{{ path('edit_company') }}";
+
+            $.ajax({
+                url: urlAjax,
+                dataType: 'json',
+                data: { 
+                    userName : $('#userName').val(),
+                    lastName: $('#lastName').val(),
+                    email: $('#email').val(),
+                    password: $('#password').val(),
+                    password2: $('#password2').val(),
+                    phone: $('#phone').val(),
+                    companyName: $('#companyName').val(),
+                    companyAddress: $('#companyAddress').val()
+                },
+                success: function(result){
+
+                    if (!result.status){
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "error"
+                        )      
+                    }else{
+                        Swal.fire(
+                        result.message,
+                        "",
+                        "success"
+                        )    
+
+                        let path = "{{ path('panel') }}"
+                        setTimeout(function(){ window.location.href = path }, 1500);
+                        
+                    }
+                    
+                    
+                }
+            });
+    });
+    </script>
+{% endblock %}
