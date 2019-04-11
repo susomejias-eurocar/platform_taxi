@@ -162,12 +162,21 @@ edit_company:
     defaults:  { _controller: AppBundle:Company:editCompany }
 
 email_confirmation:
-    path:  /emailConfirmation
-    defaults:  { _controller: AppBundle:Security:emailConfirmation }
+    path:  /register/confirm
+    defaults:  { _controller: AppBundle:Security:registerConfirmation }
 
 send_email_confirmation:
-    path:  /sendEmailConfirmation
+    path:  /register/sendEmail
     defaults:  { _controller: AppBundle:Security:sendEmailConfirmation }
 
+password_reset_create_token:
+    path:  /password-reset
+    defaults:  { _controller: AppBundle:Security:createTokenPassword }
 
+password_reset_show_form:
+    path:  /password-reset/restore
+    defaults:  { _controller: AppBundle:Security:showFormRestorePassword }
 
+password_reset_show_form:
+    path:  /password-reset/change
+    defaults:  { _controller: AppBundle:Security:changePassword }    
