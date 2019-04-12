@@ -17,16 +17,16 @@ use Doctrine\ORM\EntityManagerInterface;
             $this->templating = $templating;
         }
 
-
-        public function send($view, $email,$username, $url, $token){            
-            $message = (new \Swift_Message('Hello Email'))
+        public function send($view, $email,$username, $url, $token){
+            
+            $message = (new \Swift_Message('Hola ' . $username ))
                 ->setFrom('jesusmejias.eurocar@gmail.com')
                 ->setTo($email)
                 ->setBody(
                         $this->templating->render(
                             'mail/'. $view .'.html.twig',
                             array('username' => $username, 'url' => $url. '' .$token)
-                        ));
+                        ), 'text/html');
                 $this->mailer->send($message);
                 return;
         }

@@ -180,3 +180,22 @@ password_reset_show_form:
 password_reset_show_form:
     path:  /password-reset/change
     defaults:  { _controller: AppBundle:Security:changePassword }    
+
+test_template:
+    path:  /testTemplate
+    defaults:  { _controller: AppBundle:Security:testTemplateEmail }
+
+
+
+    
+show_forget_password:
+    path:  /forgetPassword
+    defaults:  { _controller: AppBundle:Security:showForgetPassword } 
+
+send_forget_password:
+    path:  /sendForgetPassword
+    defaults:  { _controller: AppBundle:Security:sendForgetPassword }
+
+show_recovery_password:
+    path:  /recoveryPassword
+    defaults:  { _controller: AppBundle:Security:showRecoveryPassword }

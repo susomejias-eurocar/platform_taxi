@@ -99,7 +99,7 @@ class CompanyController extends Controller
                 "text" => "Para completar el registro revise su correo electrónico </br></br>" . $email
             );
             $mailService = $this->container->get("mail_service");
-            $mailService->send('register', $email, $name, 'http://localhost/platform_taxi/web/app_dev.php/register/confirm&token=',  $user->getTokenRegister());
+            $mailService->send('register',$email,$name, 'http://localhost/platform_taxi/web/app_dev.php/register/confirm?tokenRegister=',  $user->getTokenRegister());
             return new JsonResponse($response);
         }
     }
