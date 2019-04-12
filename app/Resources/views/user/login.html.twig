@@ -11,6 +11,8 @@
         <div class="container col-lg-12 col-sm-12 background-city" style="padding:50px;min-height:100vh;display:flex;align-items:center;" >
             <div class="card col-lg-4 offset-lg-4 transparent  animated jackInTheBox">
                <form action="{{ path('login') }}" method="POST">
+               {% if msgError is defined %}
+               {% endif %}
                 <div class="card-body">
                  <h1 class="text-light" style="font-weight:bold; padding:10px">Platform Taxi</h1>
                         <div class="form-group">
@@ -42,27 +44,21 @@
     </main>
 {% endblock %}
 {% block javascripts %}
-    {% if msgError is defined %}
-
-        {{ parent() }}
-        <script>
+{{ parent() }}
+<script>
+    {% if msgError is defined and msgError != "" %}
             Swal.fire(
-                'Usuario o contraseña incorrectos',
+                '{{ msgError }}',
                 "",
                 "error"
-            );       
-
-        
+            );
     {% endif %}
     {% if responseToken is defined %}
-    alert("a");
-        
             Swal.fire(
                 responseToken.message
                 "",
                 "error"
             );       
-
-        </script>
     {% endif %}
+</script>
 {% endblock %}
