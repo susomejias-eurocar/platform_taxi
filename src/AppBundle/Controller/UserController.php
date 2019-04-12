@@ -2,19 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\User;
-use AppBundle\Entity\Company;
-use Symfony\Component\HttpFoundation\Response;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\Security\Acl\Exception\Exception;
 
 
 class UserController extends Controller
 {
-
     /**
      * Login action
      * 
@@ -53,7 +47,6 @@ class UserController extends Controller
     /**
      * Render login view with message
      *
-     * @return void
      */
     public function loginFailureAction()
     {        
@@ -73,8 +66,6 @@ class UserController extends Controller
         $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
-        $usersService = $this->get('user_service');
-        
         if(!$user->getActive()){ 
             return $this->redirect($this->generateUrl('login', array('msgError' => 'El usuario esta inactivo en el sistema.')));
         }
@@ -90,5 +81,4 @@ class UserController extends Controller
         }
         return $this->redirect("login");
     }
-
 }
