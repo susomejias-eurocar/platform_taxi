@@ -25,7 +25,7 @@ class UserController extends Controller
         $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
-        if ($user != "anon."){
+        if ($user != "anon." && $user->getActive()){
             return $this->redirect($this->generateUrl('panel'));
         }
         $authenticationUtils = $this->get('security.authentication_utils');
@@ -45,6 +45,11 @@ class UserController extends Controller
         ));        
     }
 
+    /**
+     * Render login view with message
+     *
+     * @return void
+     */
     public function loginFailureAction()
     {        
         return $this->render(
@@ -52,9 +57,6 @@ class UserController extends Controller
                     'msgError' => 'Usuario o contraseña incorrecta'
         ));        
     }
-
-
-
 
     /**
      * Open panel for driver or company
@@ -71,7 +73,6 @@ class UserController extends Controller
         if($user->getActive()==false)
             return $this->redirect('logout');
         if($user){
-            //$mailService = $this->get('mail_service')->send('register');
             if($this->get('security.context')->isGranted('ROLE_COMPANY')){
                 return $this->render('user/panel.html.twig', array());
             }else if ($this->get('security.context')->isGranted('ROLE_DRIVER')){
@@ -81,7 +82,6 @@ class UserController extends Controller
             }
 
         }
-        $hasError = false;
         return $this->redirect("logout");
     }
 
