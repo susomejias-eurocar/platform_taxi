@@ -30,8 +30,8 @@ class SecurityController extends Controller
         $username = $user->getUsername();
         $serviceMailer = $this->container->get("mail_service");
         //Enviamos el email al usuario y lo devolvemos a la pantalla de login
-        $serviceMailer->send("register", $username, $email, $tokenRegister);
-        return $this->redirect('login');
+        $serviceMailer->send("register", $username, $email,"http://localhost:8000/register/confirm?tokenRegister=", $tokenRegister);
+        return $this->redirectToRoute('login');
     }
 
     /**
@@ -44,7 +44,7 @@ class SecurityController extends Controller
     {
         //Comprobamos que nos llegue el token via GET, si no es así, redirigimos al login
         if (!$tokenRegister = $request->get('tokenRegister')) {
-            return $this->redirect("logout");
+            //return $this->redirectToRoute("logout");
         }
         $em = $this->getDoctrine()->getManager();
         //Obtenemos el usuario a partir del token, si no existe, no continuamos        
@@ -56,9 +56,10 @@ class SecurityController extends Controller
         }
         //Si la fecha actual es mayor a la fecha de vencimiento del token, no continuamos
         elseif (strtotime(date("d-m-Y")) > strtotime($user->getExpirationTokenRegister())) {
+            $this->reGenerateTokenRegisterAction($user->getEmail());
             return new JsonResponse(array(
                 "status" => false,
-                "message" => "El token ha vencido, se le enviará otro al correo electrónico"
+                "message" => "El token ha vencido, se le ha enviado otro al correo electrónico"
             ));
         }
         //Activamos el usuario y ponemos el token y fecha de registro null
@@ -68,10 +69,34 @@ class SecurityController extends Controller
         //Persistimos el usuario en la bbdd
         $em->persist($user);
         $em->flush();
-           return $this->redirectToRoute("login", array(
+           return $this->redirectToRoute("logout", array(
             "status" => true,
             "message" => "El registro de ha confirmado correctamente"
         ));
+    }
+
+
+    /**
+     * Si el token de registro ha caducado, debemos generar otro y enviar otro correo electrónico
+     *
+     * @param [type] $email
+     * @return void
+     */
+    public function reGenerateTokenRegisterAction($email){
+        $em = $this->getDoctrine()->getManager();
+        if (!$user = $em->getRepository('AppBundle:User')->findOneByEmail($email)) {
+            return new JsonResponse(array(
+                "status" => false,
+                "message" => "El correo electrónico no existe"
+            ));
+        }
+        $user->setTokenRegister(bin2hex(random_bytes(64)));
+        $user->setExpirationTokenRegister(date("d-m-Y",strtotime(date("d-m-Y")."+ 1 days")));
+        //Persistimos en la bbdd
+        $em->persist($user);
+        $em->flush($user);
+        $mailService = $this->container->get("mail_service");
+        $mailService->send("register", $user->getUsername(), $email,"http://localhost:8000/register/confirm?tokenRegister=", $user->getTokenRegister());
     }
 
     /**
@@ -86,7 +111,7 @@ class SecurityController extends Controller
         if($email=="")
             return new JsonResponse(array(
                 "status" => false,
-                "message" => "No existe ninguna cuenta con ese email"
+                "message" => "El email no puede estar vacío"
             ));
         elseif (!$user = $em->getRepository('AppBundle:User')->findOneByEmail($email)) {
             return new JsonResponse(array(
@@ -94,9 +119,13 @@ class SecurityController extends Controller
                 "message" => "No existe ninguna cuenta con ese email"
             ));
         }
+        elseif(!$user->getActive())
+            return new JsonResponse(array(
+                "status" => false,
+                "message" => "El usuario aún no está activo, no puedes cambiar la contraseña"
+            ));
         //Creamos el token y la fecha de vencimiento de este
-        $tokenPassword = bin2hex(random_bytes(64));
-        $user->setTokenPassword($tokenPassword);
+        $user->setTokenPassword(bin2hex(random_bytes(64)));
         $user->setExpirationTokenPassword(date("d-m-Y",strtotime(date("d-m-Y")."+ 1 days")));
         //Persistimos en la bbdd
         $em->persist($user);
@@ -222,7 +251,7 @@ class SecurityController extends Controller
         $user = $em->getRepository('AppBundle:User')->findOneByEmail($email);
         if($user){
             $mailService = $this->container->get("mail_service");
-            $mailService->send('reset-password',$email,$user->getName(), 'http://localhost/platform_taxi/web/app_dev.php/password-reset/restore?tokenPassword=',  $user->getTokenRegister());
+            $mailService->send('reset-password',$email,$user->getName(), 'http://localhost/platform_taxi/web/app_dev.php/password-reset/restore?tokenPassword=',  $user->getTokenPassword());
             return new JsonResponse(array(
                 "status" => true,
                 "message" => "Email correcto",
