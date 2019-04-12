@@ -187,7 +187,6 @@ test_template:
 
 
 
-    
 show_forget_password:
     path:  /forgetPassword
     defaults:  { _controller: AppBundle:Security:showForgetPassword } 
