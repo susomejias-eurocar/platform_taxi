@@ -220,7 +220,7 @@ class SecurityController extends Controller
         $em->persist($user);
         $em->flush();
         return new JsonResponse(array(
-            "status" => false,
+            "status" => true,
             "message" => "La contraseña se ha cambiado correctamente"
         ));
     }
