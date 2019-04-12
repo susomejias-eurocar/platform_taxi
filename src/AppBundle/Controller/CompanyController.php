@@ -102,7 +102,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Show form for register
+     * Muestra el formulario de registro
      */
     public function registerUserAction()
     {
@@ -116,7 +116,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Register user
+     * Registra el usuario
      */
     public function registerUserAjaxAction(Request $request)
     {
@@ -125,15 +125,15 @@ class CompanyController extends Controller
             "message" => "ERROR"
         );
         $em = $this->getDoctrine()->getManager();
+        //Recogemos los datos del request
         $name = $request->get('name');
         $lastName = $request->get('lastName');
         $email = $request->get('email');
         $password1 = $request->get('password1');
         $password2 = $request->get('password2');
         $phone = $request->get('phone');
-        $permissionsId = $request->get('companyName');
         $companyId = $request->get('idCompany');
-
+        //Hacemos las comprobaciones pertinentes
         if ($password1 != $password2) {
             $response = array(
                 "status" => false,
@@ -161,12 +161,8 @@ class CompanyController extends Controller
             );
         } else {
             try {
-                /*$permission = $em->getRepository('AppBundle:Permission')->findOneBy(
-                    array('id' => $permissionsId)
-                );*/
-                $company = $em->getRepository('AppBundle:Company')->findOneBy(
-                    array('id' => $companyId)
-                );
+
+                $company = $em->getRepository('AppBundle:Company')->findOneById($companyId);
                 $user = new User();
                 $encoder = $this->container->get('security.password_encoder');
                 $encoded = $encoder->encodePassword($user, $password1);
@@ -195,7 +191,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Show the view for the datatable.
+     * Muestra la vista de todos los coches.
      *
      */
     public function showCarsAction()
@@ -203,7 +199,6 @@ class CompanyController extends Controller
         $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
-        $usersService = $this->get('user_service');
         if ($user) {
             if ($this->get('security.context')->isGranted('ROLE_COMPANY')) {
                 return $this->render('company/content-panel-showCars.html.twig', array("user_type" => "company"));
@@ -212,7 +207,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Make a request for ajax and get all the cars of a company.
+     * Devuelve la lista de todos los coches para mostrarlo en el datatables
      *
      * @param Request $request
      */
@@ -233,7 +228,7 @@ class CompanyController extends Controller
 
 
     /**
-     * Show the view for the datatable.
+     * Muestra la vista con todos los conductores
      *
      */
     public function showDriversAction()
@@ -248,7 +243,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Make a request for ajax and get all the drivers of a company.
+     * Devuelve la lista de todos los conductores para mostrarlo en el datatables
      *
      * @param Request $request
      */
@@ -268,7 +263,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Show view to create a driver.
+     * Muestra el formulario para crear un coche
      *
      * @param Request $request
      */
@@ -285,7 +280,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Receives form data by ajax by post
+     * Añade un conductor a la compañia
      *
      * @param Request $request
      */
@@ -296,6 +291,7 @@ class CompanyController extends Controller
             "message" => "ERROR"
         );
         $em = $this->getDoctrine()->getManager();
+        //Recogemos los datos del request
         $email = $request->get('email');
         $password1 = $request->get('password1');
         $password2 = $request->get('password2');
@@ -304,12 +300,11 @@ class CompanyController extends Controller
         $driverLastName = $request->get('driverLastName');
         $idCar = $request->get('car');
         $idCompany = $request->get('idCompany');
+        //Hacemos las comprobaciones pertinentes
         if ($idCar == 0)
             $car = null;
         else
             $car = $this->container->get('car_service')->getCar($idCar);
-
-
         if ($password1 != $password2) {
             $response = array(
                 "status" => false,
@@ -333,9 +328,7 @@ class CompanyController extends Controller
             );
         } else {
             try {
-                /*$permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
-                    array('id' => 1)
-                );*/
+                //Creamos las entidades Usuario y Conductor para meterlas en la bbdd
                 $user = new User();
                 $user->setName($driverName);
                 $user->setLastName($driverLastName);
@@ -345,7 +338,6 @@ class CompanyController extends Controller
                 $encoded = $encoder->encodePassword($user, $password1);
                 $user->setPassword($encoded);
                 $user->setPhone($phone);
-                //$user->setActive(0);
                 $user->setCompanys($this->container->get('company_service')->getCompany($idCompany));
                 $em->persist($user);
                 $driver = new Driver();
@@ -358,6 +350,7 @@ class CompanyController extends Controller
                     "status" => true,
                     "message" => "Registro correcto"
                 );
+                //Controlamos que no se repitan los campos unique
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $response = array(
                     "status" => false,
@@ -381,7 +374,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * show form register car
+     * Muestra el formulario de registrar un coche
      */
     public function registerCarAction()
     {
@@ -394,7 +387,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Insert car 
+     * Añade un coche a la compañia
      * @param Request $request
      */
     public function addCarAction(Request $request)
@@ -403,6 +396,7 @@ class CompanyController extends Controller
             "status" => false,
             "message" => "ERROR"
         );
+        //Obtenemos los datos del request
         $em = $this->getDoctrine()->getManager();
         $plate = $request->get('plate');
         $trademark = $request->get('trademark');
@@ -410,6 +404,7 @@ class CompanyController extends Controller
         $version = $request->get('version');
         $state = $request->get('state');
         $idCompany = $request->get('idCompany');
+        //Hacemos las comprobaciones pertinentes
         if (!preg_match("/^\d{4}[A-Z]{3}/", $plate)) {
             $response = array(
                 "status" => false,
@@ -422,9 +417,6 @@ class CompanyController extends Controller
             );
         } else {
             try {
-                /*$permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
-                    array('id' => 1)
-                );*/
                 $car = new Car();
                 $car->setPlate($plate);
                 $car->setTrademark($trademark);
@@ -439,6 +431,7 @@ class CompanyController extends Controller
                     "message" => "Registro correcto"
                 );
                 return new JsonResponse($response);
+                //Controlamos que no se repitan los campos unique
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $response = array(
                     "status" => false,
@@ -451,14 +444,13 @@ class CompanyController extends Controller
     }
 
     /**
-     * Assign a car to a driver
+     * Muestra el formulario de asignación de coche
      */
     public function asignCarToDriverAction()
     {
         $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
-        $usersService = $this->get('user_service');
         $companyService = $this->get('company_service');
         $companyId = $user->getCompanys()->getId();
         $cars = $companyService->getCarWithoutDriver($companyId);
@@ -467,7 +459,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Asign car to driver
+     * Asigna un coche a un conuctor
      * @param Request $request
      */
     public function asignCarAction(Request $request)
@@ -488,7 +480,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Open the map view for comapany
+     * Muestra la vista del mapa
      */
     public function openMapAction(Request $request)
     {
@@ -496,7 +488,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * show form for edit info company
+     * Muestra el formulario de edición de la compañia
      *
      */
     public function showEditCompanyAction()
@@ -505,13 +497,14 @@ class CompanyController extends Controller
     }
 
     /**
-     * Edit info for company and user
+     * Edita la información de la compañia
      *
      * @param Request $request
      */
     public function editCompanyAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        //Recogemos los datos del request
         $userName = $request->get('userName');
         $lastName = $request->get('lastName');
         $email = $request->get('email');
