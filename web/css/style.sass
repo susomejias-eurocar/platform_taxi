@@ -5,15 +5,17 @@ body
     font-family: 'Lato', sans-serif;
 
 
+
 .border-transparent
     border: 2px solid rgba(0, 0, 0, .6) !important
 .background-city
-    background-image: url("../images/city.jpeg")
-    background-repeat: no-repeat
-    background-size: cover
+    background-image: url("../images/ep_naturalblack.png")
+    *background-repeat: no-repeat
+    *background-size: cover
 
 .transparent
-    background: rgba(0, 0, 0, .4)
+    background: rgba(0, 0, 0, .2)
+
 
 .inputTransparent
     background: rgba(0, 0, 0, .6)
@@ -74,6 +76,9 @@ input:focus
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
 
+.gradient-company-card
+    background-image: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)
+    opacity: 0.1
 
 .gradient-driver
     background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%)
@@ -90,3 +95,11 @@ input:focus
 
 #imgLogout
     opacity: 0.6
+
+.gradient-company-btn
+    background-image: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 5%, #FF719A 100%)
+    border: none
+    color: #fff
+    
+#carIcon
+    margin-bottom: 40px
