@@ -24,7 +24,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Registra una comapañia
+     * Registra una compañia
      *
      */
     public function registerAjaxAction(Request $request)
@@ -57,16 +57,17 @@ class CompanyController extends Controller
                 "status" => false,
                 "message" => "Formato del teléfono no válido, mínimo 6 números"
             );
-        } elseif (strlen($password1) < 4) {
+        } elseif (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/", $password1)) {
             $response = array(
                 "status" => false,
-                "message" => "Contraseña demasiado corta, mínimo 4 caractres"
+                "message" => "La contraseña debe contener al menos una maýuscula, una mínúscula, un número y al menos 8 caracteres"
+
             );
         } else {
             try {
-                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                /*$permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => 1)
-                );
+                );*/
                 $company = new Company();
                 $company->setName($companyName);
                 $company->setAddress($companyAddress);
@@ -74,16 +75,15 @@ class CompanyController extends Controller
                 $user = new User();
                 $user->setName($name);
                 $user->setLastName($lastName);
-
+                $user->setActive(0);
                 $user->setRoles(array("ROLE_COMPANY"));
                 $user->setEmail($email);
                 $encoder = $this->container->get('security.password_encoder');
                 $encoded = $encoder->encodePassword($user, $password1);
                 $user->setPassword($encoded);
                 $user->setPhone($phone);
-                $user->setActive(0);
+                //$user->setActive(0);
                 $user->setCompanys($company);
-                $user->setPermission($permissionFull);
                 $em->persist($user);
                 $em->flush();
             } catch (\Doctrine\DBAL\DBALException $e) {
@@ -95,9 +95,11 @@ class CompanyController extends Controller
             }
             $response = array(
                 "status" => true,
-                "message" => "Registro correcto"
+                "message" => "Registro correcto",
+                "text" => "Para completar el registro revise su correo electrónico </br></br>" . $email
             );
-
+            $mailService = $this->container->get("mail_service");
+            $mailService->send('register',$email,$name, 'http://localhost/platform_taxi/web/app_dev.php/register/confirm?tokenRegister=',  $user->getTokenRegister());
             return new JsonResponse($response);
         }
     }
@@ -154,19 +156,17 @@ class CompanyController extends Controller
             $response = array(
                 "status" => false,
                 "message" => "El email no tiene un formato válido"
-            );            
-        }
-         elseif (strlen($password1) < 4) {
+            );
+        } elseif (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/", $password1)) {
             $response = array(
                 "status" => false,
                 "message" => "Contraseña demasiado corta, mínimo 4 caracteres"
             );
-        }
-          else {
+        } else {
             try {
-                $permission = $em->getRepository('AppBundle:Permission')->findOneBy(
+                /*$permission = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => $permissionsId)
-                );
+                );*/
                 $company = $em->getRepository('AppBundle:Company')->findOneBy(
                     array('id' => $companyId)
                 );
@@ -178,8 +178,6 @@ class CompanyController extends Controller
                 $user->setEmail($email);
                 $user->setPassword($encoded);
                 $user->setPhone($phone);
-                $user->setActive(0);
-                $user->setPermission($permission);
                 $user->setCompanys($company);
                 $user->setRoles(array("ROLE_DRIVER"));
                 $em->persist($user);
@@ -330,16 +328,17 @@ class CompanyController extends Controller
                 "status" => false,
                 "message" => "Formato del teléfono no válido, mínimo 6 números"
             );
-        } elseif (strlen($password1) < 4) {
+        } elseif (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/", $password1)) {
             $response = array(
                 "status" => false,
-                "message" => "Contraseña demasiado corta, mínimo 4 caractres"
+                "message" => "La contraseña debe contener al menos una maýuscula, una mínúscula, un número y al menos 8 caracteres"
+
             );
         } else {
             try {
-                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                /*$permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => 1)
-                );
+                );*/
                 $user = new User();
                 $user->setName($driverName);
                 $user->setLastName($driverLastName);
@@ -349,7 +348,7 @@ class CompanyController extends Controller
                 $encoded = $encoder->encodePassword($user, $password1);
                 $user->setPassword($encoded);
                 $user->setPhone($phone);
-                $user->setActive(1);
+                //$user->setActive(0);
                 $user->setCompanys($this->container->get('company_service')->getCompany($idCompany));
                 $em->persist($user);
                 $driver = new Driver();
@@ -365,7 +364,7 @@ class CompanyController extends Controller
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $response = array(
                     "status" => false,
-                    "message" => "El correo ya está registrado"
+                    "message" => $e->getMessage()
                 );
                 return new JsonResponse($response);
             }
@@ -426,9 +425,9 @@ class CompanyController extends Controller
             );
         } else {
             try {
-                $permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
+                /*$permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
                     array('id' => 1)
-                );
+                );*/
                 $car = new Car();
                 $car->setPlate($plate);
                 $car->setTrademark($trademark);
@@ -517,7 +516,7 @@ class CompanyController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $userName = $request->get('userName');
-        $lastName= $request->get('lastName');
+        $lastName = $request->get('lastName');
         $email = $request->get('email');
         $phone = $request->get('phone');
         $password = $request->get('password');
@@ -531,45 +530,43 @@ class CompanyController extends Controller
             "status" => false,
             "message" => "Error"
         );
-        if (empty($userName) or empty($lastName) or empty($email) or empty($phone) ){
+        if (empty($userName) or empty($lastName) or empty($email) or empty($phone)) {
             $response = array(
                 "status" => false,
                 "message" => "Rellene los campos"
             );
-        }else if($password !== $password2){
+        } else if ($password !== $password2) {
             $response = array(
                 "status" => false,
                 "message" => "Las contraseñas no coinciden"
             );
-        }
-        else  {
-                try{
-                    $user->setName($userName);
-                    $user->setActive(1);
-                    $user->setLastName($lastName);
-                    $user->setEmail($email);
-                    if ($password === $password2 and !empty($password) and !empty($password2)){
-                        $encoder = $this->container->get('security.password_encoder');
-                        $encoded = $encoder->encodePassword($user, $password);
-                        $user->setPassword($encoded);
-                    }
-                    $user->setPhone($phone);
-                    $company = $em->getRepository('AppBundle:Company')->findOneById($user->getCompanys()->getId());
-                    $company->setName($companyName);
-                    $company->setAddress($companyAddress);
-                    $em->persist($user);
-                    $em->persist($company);
-                    $response = array(
-                        "status" => true,
-                        "message" => "Edición completada con éxito"
-                    );
-                    
-                }catch (\Doctrine\DBAL\DBALException $e){
-                    $response = array(
-                        "status" => false,
-                        "message" => "EL correo o nombre de compañia introducidos ya existen"
-                    );
+        } else {
+            try {
+                $user->setName($userName);
+                //$user->setActive(0);
+                $user->setLastName($lastName);
+                $user->setEmail($email);
+                if ($password === $password2 and !empty($password) and !empty($password2)) {
+                    $encoder = $this->container->get('security.password_encoder');
+                    $encoded = $encoder->encodePassword($user, $password);
+                    $user->setPassword($encoded);
                 }
+                $user->setPhone($phone);
+                $company = $em->getRepository('AppBundle:Company')->findOneById($user->getCompanys()->getId());
+                $company->setName($companyName);
+                $company->setAddress($companyAddress);
+                $em->persist($user);
+                $em->persist($company);
+                $response = array(
+                    "status" => true,
+                    "message" => "Edición completada con éxito"
+                );
+            } catch (\Doctrine\DBAL\DBALException $e) {
+                $response = array(
+                    "status" => false,
+                    "message" => "EL correo o nombre de compañia introducidos ya existen"
+                );
+            }
         }
         $em->flush();
 

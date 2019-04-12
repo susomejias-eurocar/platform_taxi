@@ -22,10 +22,14 @@ class UserController extends Controller
      */
     public function loginAction(Request $request)
     {
+        $msgError = "";
+        if ($request->get('msgError')){
+            $msgError = $request->get('msgError');
+        };
         $security_context = $this->get('security.token_storage');
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
-        if ($user != "anon."){
+        if ($user != "anon." && $user->getActive()){
             return $this->redirect($this->generateUrl('panel'));
         }
         $authenticationUtils = $this->get('security.authentication_utils');
@@ -41,10 +45,16 @@ class UserController extends Controller
                 'user/login.html.twig', array(
                     'last_username' => $lastUsername,
                     'error' => $error,
-                    'hasError' => $hasError
+                    'hasError' => $hasError,
+                    'msgError' => $msgError
         ));        
     }
 
+    /**
+     * Render login view with message
+     *
+     * @return void
+     */
     public function loginFailureAction()
     {        
         return $this->render(
@@ -52,9 +62,6 @@ class UserController extends Controller
                     'msgError' => 'Usuario o contraseña incorrecta'
         ));        
     }
-
-
-
 
     /**
      * Open panel for driver or company
@@ -67,7 +74,11 @@ class UserController extends Controller
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
-        if($user){
+        
+        if(!$user->getActive()){ 
+            return $this->redirect($this->generateUrl('login', array('msgError' => 'El usuario esta inactivo en el sistema.')));
+        }
+            if($user){
             if($this->get('security.context')->isGranted('ROLE_COMPANY')){
                 return $this->render('user/panel.html.twig', array());
             }else if ($this->get('security.context')->isGranted('ROLE_DRIVER')){
@@ -77,7 +88,6 @@ class UserController extends Controller
             }
 
         }
-        $hasError = false;
         return $this->redirect("logout");
     }
 

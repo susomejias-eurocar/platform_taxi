@@ -101,16 +101,12 @@
                         "",
                         "error"
                         )       
-                        console.log(result);       
                     }else{
                         Swal.fire(
                         result.message,
-                        "",
+                        result.text,
                         "success"
-                        )    
-
-                        setTimeout(function(){ window.location.href = "login" }, 1500);
-                        
+                        )                        
                     }
                     
                     

@@ -252,17 +252,26 @@ let driversTable = $("#driversTable").DataTable({
             extend: 'excelHtml5',
             messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
             title: 'Data export',
-            className: 'btn-success'
+            className: 'btn-success',
+            exportOptions: {
+                columns: 'th:not(:last-child)'
+            }
         },
         {
             extend: 'csvHtml5',
-            className: 'btn-secondary'
+            className: 'btn-secondary',
+            exportOptions: {
+                columns: 'th:not(:last-child)'
+            }
         },
         {
             extend: 'pdfHtml5',
             orientation: 'landscape',
             pageSize: 'LEGAL',
-            className: 'btn-danger'
+            className: 'btn-danger',
+            exportOptions: {
+                columns: 'th:not(:last-child)'
+            }
         }
     ],
     rowId: 'idRow',

@@ -161,5 +161,40 @@ edit_company:
     path:  /company/editAjax
     defaults:  { _controller: AppBundle:Company:editCompany }
 
+email_confirmation:
+    path:  /register/confirm
+    defaults:  { _controller: AppBundle:Security:registerConfirmation }
+
+send_email_confirmation:
+    path:  /register/sendEmail
+    defaults:  { _controller: AppBundle:Security:sendEmailConfirmation }
+
+password_reset_create_token:
+    path:  /password-reset
+    defaults:  { _controller: AppBundle:Security:createTokenPassword }
+
+password_reset_show_form:
+    path:  /password-reset/restore
+    defaults:  { _controller: AppBundle:Security:showFormRestorePassword }
+
+password_reset_show_form:
+    path:  /password-reset/change
+    defaults:  { _controller: AppBundle:Security:changePassword }    
+
+test_template:
+    path:  /testTemplate
+    defaults:  { _controller: AppBundle:Security:testTemplateEmail }
 
 
+
+show_forget_password:
+    path:  /forgetPassword
+    defaults:  { _controller: AppBundle:Security:showForgetPassword } 
+
+send_forget_password:
+    path:  /sendForgetPassword
+    defaults:  { _controller: AppBundle:Security:sendForgetPassword }
+
+show_recovery_password:
+    path:  /recoveryPassword
+    defaults:  { _controller: AppBundle:Security:showRecoveryPassword }
