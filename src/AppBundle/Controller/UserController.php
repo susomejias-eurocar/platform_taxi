@@ -67,6 +67,9 @@ class UserController extends Controller
         $security_token = $security_context->getToken();
         $user = $security_token->getUser();
         $usersService = $this->get('user_service');
+        
+        if($user->getActive()==false)
+            return $this->redirect('logout');
         if($user){
             //$mailService = $this->get('mail_service')->send('register');
             if($this->get('security.context')->isGranted('ROLE_COMPANY')){
