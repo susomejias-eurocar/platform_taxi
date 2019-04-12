@@ -88,7 +88,7 @@ class UserController extends Controller
             }
 
         }
-        return $this->redirect("logout");
+        return $this->redirect("login");
     }
 
 }

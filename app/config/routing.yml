@@ -177,7 +177,7 @@ password_reset_show_form:
     path:  /password-reset/restore
     defaults:  { _controller: AppBundle:Security:showFormRestorePassword }
 
-password_reset_show_form:
+password_reset_change:
     path:  /password-reset/change
     defaults:  { _controller: AppBundle:Security:changePassword }    
 
@@ -188,7 +188,7 @@ test_template:
 
 
 show_forget_password:
-    path:  /forgetPassword
+    path:  /password-reset/forgot
     defaults:  { _controller: AppBundle:Security:showForgetPassword } 
 
 send_forget_password:

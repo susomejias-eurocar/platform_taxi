@@ -29,11 +29,8 @@ class CompanyController extends Controller
      */
     public function registerAjaxAction(Request $request)
     {
-        $response = array(
-            "status" => false,
-            "message" => "ERROR"
-        );
         $em = $this->getDoctrine()->getManager();
+        //Obtenemos los datos del request
         $name = $request->get('name');
         $lastName = $request->get('lastName');
         $email = $request->get('email');
@@ -42,6 +39,7 @@ class CompanyController extends Controller
         $phone = $request->get('phone');
         $companyName = $request->get('companyName');
         $companyAddress = $request->get('companyAdress');
+        //Hacemos las comprobaciones pertinentes
         if ($password1 != $password2) {
             $response = array(
                 "status" => false,
@@ -65,9 +63,7 @@ class CompanyController extends Controller
             );
         } else {
             try {
-                /*$permissionFull = $em->getRepository('AppBundle:Permission')->findOneBy(
-                    array('id' => 1)
-                );*/
+                //Creamos la entidad Compañia y Usuario y las seteamos
                 $company = new Company();
                 $company->setName($companyName);
                 $company->setAddress($companyAddress);
@@ -82,10 +78,10 @@ class CompanyController extends Controller
                 $encoded = $encoder->encodePassword($user, $password1);
                 $user->setPassword($encoded);
                 $user->setPhone($phone);
-                //$user->setActive(0);
                 $user->setCompanys($company);
                 $em->persist($user);
                 $em->flush();
+                //Comprobamos que los atributos unique no se repiten
             } catch (\Doctrine\DBAL\DBALException $e) {
                 $response = array(
                     "status" => false,
@@ -98,6 +94,7 @@ class CompanyController extends Controller
                 "message" => "Registro correcto",
                 "text" => "Para completar el registro revise su correo electrónico </br></br>" . $email
             );
+            //Enviamos el correo de confirmación de registro
             $mailService = $this->container->get("mail_service");
             $mailService->send('register',$email,$name, 'http://localhost/platform_taxi/web/app_dev.php/register/confirm?tokenRegister=',  $user->getTokenRegister());
             return new JsonResponse($response);
