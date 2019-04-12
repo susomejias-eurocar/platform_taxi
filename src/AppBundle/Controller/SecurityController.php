@@ -165,16 +165,20 @@ class SecurityController extends Controller
         return $this->render('mail/register.html.twig', array());
     }
 
+    
+
+
+    /**
+     * show form for forget password
+     */
     public function showForgetPasswordAction()
     {
         return $this->render('security/forget-password.html.twig', array());
     }
 
-    public function showRecoveryPasswordAction()
-    {
-        return $this->render('security/recovery-password.html.twig', array());
-    }
-
+    /**
+     * send mail for recovery password
+     */
     public function sendForgetPasswordAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -194,5 +198,14 @@ class SecurityController extends Controller
                 "message" => "El correo no existe en el sistema"
             ));
         }
+    }
+
+    
+    /**
+     * show form for recovery password
+     */
+    public function showRecoveryPasswordAction()
+    {
+        return $this->render('security/recovery-password.html.twig', array());
     }
 }
