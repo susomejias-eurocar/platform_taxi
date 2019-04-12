@@ -95,11 +95,14 @@ class SecurityController extends Controller
             ));
         }
         //Creamos el token y la fecha de vencimiento de este
-        $user->setTokenPassword(bin2hex(random_bytes(64)));
+        $tokenPassword = bin2hex(random_bytes(64));
+        $user->setTokenPassword($tokenPassword);
         $user->setExpirationTokenPassword(date("d-m-Y",strtotime(date("d-m-Y")."+ 1 days")));
         //Persistimos en la bbdd
         $em->persist($user);
         $em->flush($user);
+        $mailService = $this->container->get("mail_service");
+        $mailService->send('reset-password',$email,$user->getName(), 'http://localhost/platform_taxi/web/app_dev.php/password-reset/restore?tokenPassword=',  $user->getTokenPassword());
         return new JsonResponse(array(
             "status" => false,
             "message" => "Se ha enviado un correo electrónico para restablecer la contraseña"
@@ -135,7 +138,7 @@ class SecurityController extends Controller
                 "message" => "El token ha vencido, se enviará otro correo electrónico con uno nuevo"
             ));
         }
-        return $this->render(".html.twig", array("user"=>$user, "token" => $tokenPassword));
+        return $this->render("security/recovery-password.html.twig", array("user"=>$user, "tokenPassword" => $tokenPassword, "email" => $user->getEmail()));
     }
 
     /**
@@ -144,7 +147,7 @@ class SecurityController extends Controller
      * @param Request $request
      * @return void
      */
-    public function changePaswordAction(Request $request){
+    public function changePasswordAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $password1 = $request->get('password1');
         $password2 = $request->get('password2');
@@ -169,13 +172,20 @@ class SecurityController extends Controller
                 "status" => false,
                 "message" => "Las contraseñas no pueden estar vacías"
             ));
+        elseif($password1!=$password2)
+        return new JsonResponse(array(
+            "status" => false,
+            "message" => "Las contraseñas deben ser iguales"
+        ));        
         elseif(!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/", $password1))        
             return new JsonResponse(array(
                 "status" => false,
                 "message" => "La contraseña debe contener al menos una maýuscula, una mínúscula, un número y al menos 8 caracteres"
             ));
         //Cambiamos la contraseña del usuario y quitamos el token de contraseña y sy fecha de vencimiento
-        $user->setPassword($password1);
+        $encoder = $this->container->get('security.password_encoder');
+        $encoded = $encoder->encodePassword($user, $password1);
+        $user->setPassword($encoded);
         $user->setTokenPassword(null);
         $user->setExpirationTokenPassword(null);
         $em->persist($user);
